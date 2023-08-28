@@ -1,4 +1,4 @@
-$excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller.*'
+$excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller.*|.*store.*'
 
 $additionalApps = @(
     '*spotify*',
