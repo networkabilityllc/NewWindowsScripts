@@ -8,15 +8,12 @@ curl -o debloat.ps1 https://raw.githubusercontent.com/Sycnex/Windows10Debloater/
 :: Run the debloat.ps1 PowerShell script
 powershell -File "C:\prep\NewWindowsScripts\wrapper.ps1"
 
+:: Run the BoxStarter Windows Configuration
+powershell.exe -ExecutionPolicy bypass -File c:\prep\NewWindowsScripts\configure.ps1
+
 :: Run the Choco Installer 
 python c:\prep\NewWindowsScripts\install_apps.py
 
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy bypass -NoExit -Command "&'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'"
-Disable-UAC -Confirm:$false
-Disable-BingSearch
-Disable-GameBarTips
-Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives  -EnableShowFileExtensions
-Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
 
 
 

@@ -21,7 +21,7 @@ software_items = [
     ("mobaxterm", "--force"),
     ("mremoteng", "--force"),
     ("notepadplusplus", "--force"),
-    ("open-shell", "--force"),
+    (("open-shell", "--params=\"/StartMenu\""),
     ("openjdk", "--force"),
     ("powershell", "--force"),
     ("sysinternals", "-y"),
