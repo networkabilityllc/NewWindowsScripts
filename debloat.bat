@@ -11,11 +11,6 @@ powershell -File "C:\prep\NewWindowsScripts\wrapper.ps1"
 :: Run the BoxStarter Windows Configuration
 powershell.exe -ExecutionPolicy bypass -File c:\prep\NewWindowsScripts\configure.ps1
 
-:: Run the Choco Installer 
-python c:\prep\NewWindowsScripts\install_apps.py
-
-
-
 
 REM Download Splashtop SOS
 powershell -Command "Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'"
