@@ -15,15 +15,11 @@ powershell.exe -ExecutionPolicy bypass -File c:\prep\NewWindowsScripts\configure
 REM Download Splashtop SOS
 powershell -Command "Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'"
 
-REM Get a list of user profiles in C:\Users
-for /d %%A in (C:\Users\*) do (
-    REM Copy the application to each user's desktop
-    copy /Y "C:\Users\Default\Desktop\SplashtopSOS.exe" "%%A\Desktop\"
-)
 
 REM Optional: Display a message indicating success
 echo Application has been placed on all users' desktops.
 
 :: Run the Choco Installer 
+echo Starting Chocolatey App Installer
 start python c:\prep\NewWindowsScripts\install_apps.py
 pause
