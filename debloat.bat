@@ -8,7 +8,7 @@ REM Download Windows 10 Debloater Script
 powershell -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/Sycnex/Windows10Debloater/master/Windows10Debloater.ps1' -OutFile 'C:\prep\NewWindowsScripts\debloat.ps1'"
 
 REM Run the Debloater Script
-powershell -File "C:\prep\NewWindowsScripts\debloat.ps1"
+REM powershell -File "C:\prep\NewWindowsScripts\debloat.ps1"
 
 REM Run Windows Configuration Script
 powershell.exe -ExecutionPolicy Bypass -File "c:\prep\NewWindowsScripts\configure.ps1"
@@ -22,6 +22,9 @@ echo Application has been placed on all users' desktops.
 REM Run the Choco Installer using Python
 echo Starting Chocolatey App Installer
 python c:\prep\NewWindowsScripts\install_apps.py
+
+REM Call the cleanupapps.ps1 PowerShell script
+powershell.exe -ExecutionPolicy Bypass -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
 
 REM Pause to keep the command prompt window open
 pause
