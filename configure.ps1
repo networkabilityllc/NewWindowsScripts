@@ -16,7 +16,7 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 
 # Set the paths
-$shortcutPath = "C:\Users\Default\Desktop\MyShortcut.lnk"
+$shortcutPath = "C:\Users\Default\Desktop\Post User Install.lnk"
 $targetPath = "C:\prep\NewWindowsScripts\post-user-install.bat"
 $iconPath = "C:\prep\NewWindowsScripts\installme.ico"
 
