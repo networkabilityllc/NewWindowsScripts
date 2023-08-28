@@ -29,3 +29,6 @@ for /d %%A in (C:\Users\*) do (
 REM Optional: Display a message indicating success
 echo Application has been placed on all users' desktops.
 pause
+:: Run the Choco Installer 
+python c:\prep\NewWindowsScripts\install_apps.py
+pause
