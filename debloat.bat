@@ -21,7 +21,7 @@ echo Application has been placed on all users' desktops.
 
 REM Run the Choco Installer using Python
 echo Starting Chocolatey App Installer
-python c:\prep\NewWindowsScripts\install_apps.py
+C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 REM Call the cleanupapps.ps1 PowerShell script
 powershell.exe -ExecutionPolicy Bypass -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
