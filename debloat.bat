@@ -6,4 +6,29 @@ powershell -Command "Set-ExecutionPolicy Bypass -Scope LocalMachine -Force"
 curl -o debloat.ps1 https://raw.githubusercontent.com/Sycnex/Windows10Debloater/master/Windows10Debloater.ps1
 
 :: Run the debloat.ps1 PowerShell script
-powershell -File "C:\prep\NewWindowsScripts\debloat.ps1"
+powershell -File "C:\prep\NewWindowsScripts\wrapper.ps1"
+
+:: Run the Choco Installer 
+python c:\prep\NewWindowsScripts\install_apps.py
+
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy bypass -NoExit -Command "&'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'"
+Disable-UAC -Confirm:$false
+Disable-BingSearch
+Disable-GameBarTips
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives  -EnableShowFileExtensions
+Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
+
+
+
+REM Download Splashtop SOS
+powershell -Command "Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'"
+
+REM Get a list of user profiles in C:\Users
+for /d %%A in (C:\Users\*) do (
+    REM Copy the application to each user's desktop
+    copy /Y "C:\Users\Default\Desktop\SplashtopSOS.exe" "%%A\Desktop\"
+)
+
+REM Optional: Display a message indicating success
+echo Application has been placed on all users' desktops.
+pause
