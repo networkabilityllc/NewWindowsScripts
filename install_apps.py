@@ -3,30 +3,32 @@ import subprocess
 
 # List of software items and their installation parameters
 software_items = [
-    ("sysinternals", "-y"),
     ("7zip", "--force"),
-    ("firefox", "--force"),
-    ("everything", "--force"),
-    ("googlechrome", "--force"),
-    ("powershell", "--force"),
-    ("openjdk", "--force"),
-    ("javaruntime", "--force"),
-    ("hwinfo", "--force"),
-    ("cpu-z", "--force"),
-    ("ccleaner", "--force"),
-    ("open-shell", "--force --installArgs ADDLOCAL=StartMenu"),
     ("adobereader", "--force --params '/DesktopIcon /UpdateMode:4'"),
-    ("microsoft-edge", "--force"),
-    ("notepadplusplus", "--force"),
+    ("ccleaner", "--force"),
     ("choco-upgrade-all-at", "--force"),
-    ("vcredist-all", "--force"),
-    ("dotnetfx", "--force"),
+    ("cpu-z", "--force"),
     ("dotnet", "--force"),
-    ("vlc", "--force"),
-    ("mremoteng", "--force"),
+    ("dotnetfx", "--force"),
+    ("everything", "--force"),
+    ("firefox", "--force"),
+    ("googlechrome", "--force"),
+    ("hwinfo", "--force"),
+    ("javaruntime", "--force"),
+    ("libreoffice-fresh", "--force"),
+    ("lightshot", "--force"),
+    ("microsoft-edge", "--force"),
     ("mobaxterm", "--force"),
-    ("libreoffice-fresh", "--force")
+    ("mremoteng", "--force"),
+    ("notepadplusplus", "--force"),
+    ("open-shell", "--force"),
+    ("openjdk", "--force"),
+    ("powershell", "--force"),
+    ("sysinternals", "-y"),
+    ("vcredist-all", "--force"),
+    ("vlc", "--force")
 ]
+
 
 # Function to install selected software
 def install_selected():
