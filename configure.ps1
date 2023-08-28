@@ -16,8 +16,9 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\"
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 
 # Set the paths
-$shortcutPath = "C:\Users\Default\Desktop\Run After User Setup.lnk"
+$shortcutPath = "C:\Users\Default\Desktop\MyShortcut.lnk"
 $targetPath = "C:\prep\NewWindowsScripts\post-user-install.bat"
+$iconPath = "C:\prep\NewWindowsScripts\installme.ico"
 
 # Create the WScript Shell Object
 $WshShell = New-Object -comObject WScript.Shell
@@ -26,10 +27,13 @@ $WshShell = New-Object -comObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut($shortcutPath)
 $Shortcut.TargetPath = $targetPath
 
-# Additional optional settings
+# Set the shortcut's icon to the provided .ico file
+$Shortcut.IconLocation = $iconPath
+
+# Additional optional setting
 $Shortcut.Description = "Shortcut to Post-User-Install Script"
-$Shortcut.IconLocation = "$env:SystemRoot\System32\imageres.dll,2" # Example icon, you can change this
 
 # Save the shortcut
 $Shortcut.Save()
+
 
