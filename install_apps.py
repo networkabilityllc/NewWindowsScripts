@@ -20,6 +20,7 @@ software_items = [
     ("microsoft-edge", "--force"),
     ("mobaxterm", "--force"),
     ("mremoteng", "--force"),
+    ("naps2", "--force"),
     ("notepadplusplus", "--force"),
     ("open-shell", "--params=\"/StartMenu\""),
     ("openjdk", "--force"),
