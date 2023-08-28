@@ -29,13 +29,13 @@ software_items = [
     ("vcredist-all", "--force"),
     ("vlc", "--force")
 ]
-
+choco_path = r'c:\ProgramData\chocolatey\choco.exe'  # Chocolatey path
 
 # Function to install selected software
 def install_selected():
     for item, params, var in checkboxes:
         if var.get():
-            subprocess.run(["choco", "install", item, params])
+            subprocess.run([choco_path, "install", item, params])
 
 # Create the main window
 root = tk.Tk()
