@@ -61,5 +61,16 @@ for i, (item, params) in enumerate(software_items):
 install_button = tk.Button(root, text="Install Selected", command=install_selected)
 install_button.pack(pady=10)
 
+# Function to exit the application
+def exit_app():
+    root.destroy()
+    os._exit(0)  # Close the console window
+
+# Create exit button
+exit_button = tk.Button(root, text="Exit", command=exit_app)
+exit_button.pack(pady=10)
+
+# Start the main event loop
+root.mainloop()
 # Start the main event loop
 root.mainloop()
