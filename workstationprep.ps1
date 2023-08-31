@@ -1,44 +1,71 @@
-# Create directory and navigate to it
+# ------------------------------------------------------------
+# Create workstation prep working directory and navigate to it
+# ------------------------------------------------------------
 $prepDir = "C:\prep"
 if (-not (Test-Path $prepDir)) {
     New-Item -Path $prepDir -ItemType Directory
 }
 Set-Location -Path $prepDir
 # Set Execution Policy
+# ------------------------------------------------------------
+# Temporarily set script execution policy - this will be reversed once the program finishes
+# This prevents us from having to send the set execution bypass command every time we run a script
+# ------------------------------------------------------------
 Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
-
-# Download necessary files
-# Invoke-WebRequest -Uri "https://pastebin.com/raw/rnRbp37h" -OutFile "run-choco.bat"
-# Invoke-WebRequest -Uri "https://pastebin.com/raw/tH3ynJJg" -OutFile "get-choco.ps1"
-# Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/run-choco.bat" -OutFile "run-choco.bat"
-# Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
+# ------------------------------------------------------------
+# Download Splashtop SOS to c:\users\default\Desktop so that new users will have it available
+# ------------------------------------------------------------
 Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'
+Write-Host "------------------------------------------"
 Write-Host "Splashtop SOS installed for All New Users"
+Write-Host "------------------------------------------"
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
+Write-Host "------------------------------------------"
+Write-Host "Checking for Choco and BoxStarter"
+Write-Host "------------------------------------------"
+
+# ------------------------------------------------------------
+# Set the path to the chocolatey executable as an environment variable
+# ------------------------------------------------------------
 # Path to Chocolatey executable
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
+# ------------------------------------------------------------
 # Install Chocolatey if not already installed
+# ------------------------------------------------------------
 $chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
 
 if (-not $chocoInstalled) {
     # Install Chocolatey
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	# ------------------------------------------------------------
+	# Note: this path declaration has to be here because the previous iex command invokes a powershell
+	# session that does not have the previous declaration. Without it, the commands will fail
+	# ------------------------------------------------------------
 	$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
     # Enable global confirmation for Chocolatey
-    & C:\ProgramData\chocolatey\choco.exe feature enable -n allowGlobalConfirmation
+    & $chocoPath feature enable -n allowGlobalConfirmation
 }
 
-# Path to Chocolatey executable
-# Change this path to the actual location of choco.exe
+# ------------------------------------------------------------
+# Path to Chocolatey executable declared again because the previous iex flushed the declaration sometimes
+# ------------------------------------------------------------
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Install Boxstarter using Chocolatey
 & $chocoPath install boxstarter --force
 
+# ------------------------------------------------------------
+# Version 0.9 of this script uses Python 3.10.6 to present a checkbox screen for installing apps from chocolatey
+# This will probably be changed to pure Powershell later
 # Check if Python is already installed
+# ------------------------------------------------------------
 $pythonInstalled = Test-Path "C:\python310\python.exe"
 
+# ------------------------------------------------------------
+# This version of the script clones the repository using git
+# We may remove git later or figure out a way to not have it add itself to the context menu 
+# ------------------------------------------------------------
 # Check if Git is already installed
 $gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
 
@@ -49,11 +76,30 @@ if (-not $pythonInstalled) {
 
 # Install Git using Chocolatey if not already installed
 if (-not $gitInstalled) {
-    & $chocoPath install git --force
+    & C:\ProgramData\chocolatey\choco install git --force
+
+    # Define the list of registry paths to remove Git context menu entries
+    $registryPathsToRemove = @(
+        "HKCU:\Software\Classes\Directory\shell\git_gui",
+        "HKCU:\Software\Classes\Directory\shell\git_shell",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_gui",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_shell",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell"
+    )
+
+    # Loop through the list of registry paths and remove them
+    foreach ($path in $registryPathsToRemove) {
+        # Remove the registry key and its children
+        Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Git context menu entries removed from the registry."
 }
 
-
+# ------------------------------------------------------------
 # Check if the machine is running as a VMware virtual machine
+# ------------------------------------------------------------
 $vmwareVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object { $_.Manufacturer -eq "VMware, Inc." }
 
 if ($vmwareVm) {
@@ -64,23 +110,33 @@ if ($vmwareVm) {
 }
 
 
+# ------------------------------------------------------------
+# Set Path to git.exe
+# ------------------------------------------------------------
+$gitPath = "C:\Program Files\Git\bin\git.exe"
 
-# Path to git.exe
-$gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
-
-# Check if the repository has been cloned
+# ------------------------------------------------------------
+# Check if the repository has been cloned, if not, clone it.
+# ------------------------------------------------------------
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
     # Clone the GitHub repository
     $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
     Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
 } else {
+	# ------------------------------------------------------------
+	# If already cloned, do a git pull to refresh it in case we changed something
     # Update the repository
+	# ------------------------------------------------------------
     Set-Location -Path $repoPath
     & $gitPath pull
 }
 
 # Load the PresentationFramework assembly
+# ------------------------------------------------------------
+# This was being used for a graphical Powershell window using WPF. It is currently unused, 
+# but may be used in lieu of python in the future
+# ------------------------------------------------------------
 Add-Type -AssemblyName PresentationFramework
 
 # Run Boxstarter shell and enter interactive commands
