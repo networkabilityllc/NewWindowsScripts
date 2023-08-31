@@ -10,16 +10,33 @@ Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 # Download necessary files
 # Invoke-WebRequest -Uri "https://pastebin.com/raw/rnRbp37h" -OutFile "run-choco.bat"
 # Invoke-WebRequest -Uri "https://pastebin.com/raw/tH3ynJJg" -OutFile "get-choco.ps1"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/run-choco.bat" -OutFile "run-choco.bat"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
+# Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/run-choco.bat" -OutFile "run-choco.bat"
+# Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
 Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'
 Write-Host "Splashtop SOS installed for All New Users"
-
-# Execute run-choco.bat
-Start-Process -Wait -FilePath "run-choco.bat"
-
+# ----------------------------- Test for Choco and BoxStarter -------------------
 # Path to Chocolatey executable
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
+
+# Install Chocolatey if not already installed
+$chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
+
+if (-not $chocoInstalled) {
+    # Install Chocolatey
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+    # Enable global confirmation for Chocolatey
+    & $chocoPath feature enable -n allowGlobalConfirmation
+}
+
+# Install Boxstarter using Chocolatey
+& $chocoPath install boxstarter --force
+
+# Execute run-choco.bat
+# Start-Process -Wait -FilePath "run-choco.bat"
+
+
 
 # Install Python using Chocolatey
 #& $chocoPath install python310 --force
