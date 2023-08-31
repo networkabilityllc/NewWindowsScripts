@@ -27,11 +27,11 @@ if (-not $chocoInstalled) {
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
     # Enable global confirmation for Chocolatey
-    & $chocoPath feature enable -n allowGlobalConfirmation
+    & C:\ProgramData\chocolatey\choco.exe feature enable -n allowGlobalConfirmation
 }
 
 # Install Boxstarter using Chocolatey
-& $chocoPath install boxstarter --force
+& C:\ProgramData\chocolatey\choco.exe install boxstarter --force
 
 # Execute run-choco.bat
 # Start-Process -Wait -FilePath "run-choco.bat"
