@@ -26,8 +26,27 @@ if (-not $pythonInstalled) {
 
 # Install Git using Chocolatey if not already installed
 if (-not $gitInstalled) {
-    & $chocoPath install git --force
+    & C:\ProgramData\chocolatey\choco install git --force
+
+    # Define the list of registry paths to remove Git context menu entries
+    $registryPathsToRemove = @(
+        "HKCU:\Software\Classes\Directory\shell\git_gui",
+        "HKCU:\Software\Classes\Directory\shell\git_shell",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_gui",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_shell",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell"
+    )
+
+    # Loop through the list of registry paths and remove them
+    foreach ($path in $registryPathsToRemove) {
+        # Remove the registry key and its children
+        Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Git context menu entries removed from the registry."
 }
+
 
 
 # Load the PresentationFramework assembly
@@ -41,7 +60,11 @@ Disable-UAC -Confirm:$false
 Disable-BingSearch
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
-Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
+Set-BoxstarterTaskbarOptions -Size Large 
+Set-BoxstarterTaskbarOptions -Dock Bottom 
+Set-BoxstarterTaskbarOptions -DisableSearchBox 
+Set-BoxstarterTaskbarOptions -AlwaysShowIconsOn 
+Set-BoxstarterTaskbarOptions -Combine Always
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
