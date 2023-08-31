@@ -12,6 +12,22 @@ if (-not (Test-Path -Path $repoPath)) {
     Set-Location -Path $repoPath
     & $gitPath pull
 }
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+# Check if Python is already installed
+$pythonInstalled = (Get-Command python -ErrorAction SilentlyContinue) -ne $null
+
+# Check if Git is already installed
+$gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
+
+# Install Python using Chocolatey if not already installed
+if (-not $pythonInstalled) {
+    & $chocoPath install python310 --force
+}
+
+# Install Git using Chocolatey if not already installed
+if (-not $gitInstalled) {
+    & $chocoPath install git --force
+}
 
 # Load the PresentationFramework assembly
 Add-Type -AssemblyName PresentationFramework
