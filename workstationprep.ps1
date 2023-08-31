@@ -22,10 +22,27 @@ Start-Process -Wait -FilePath "run-choco.bat"
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
 
 # Install Python using Chocolatey
-& $chocoPath install python310 --force
+#& $chocoPath install python310 --force
 
 # Install Git using Chocolatey
-& $chocoPath install git --force
+#& $chocoPath install git --force
+
+# Check if Python is already installed
+$pythonInstalled = (Get-Command python -ErrorAction SilentlyContinue) -ne $null
+
+# Check if Git is already installed
+$gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
+
+# Install Python using Chocolatey if not already installed
+if (-not $pythonInstalled) {
+    & $chocoPath install python310 --force
+}
+
+# Install Git using Chocolatey if not already installed
+if (-not $gitInstalled) {
+    & $chocoPath install git --force
+}
+
 
 # Check if the machine is running as a VMware virtual machine
 $vmwareVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object { $_.Manufacturer -eq "VMware, Inc." }
