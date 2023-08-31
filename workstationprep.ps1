@@ -37,7 +37,7 @@ $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 & $chocoPath install boxstarter --force
 
 # Check if Python is already installed
-$pythonInstalled = (Get-Command python -ErrorAction SilentlyContinue) -ne $null
+$pythonInstalled = Test-Path "C:\python310\python.exe"
 
 # Check if Git is already installed
 $gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null

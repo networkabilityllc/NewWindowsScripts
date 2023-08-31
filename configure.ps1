@@ -14,7 +14,7 @@ if (-not (Test-Path -Path $repoPath)) {
 }
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Check if Python is already installed
-$pythonInstalled = (Get-Command python -ErrorAction SilentlyContinue) -ne $null
+$pythonInstalled = Test-Path "C:\python310\python.exe"
 
 # Check if Git is already installed
 $gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
@@ -28,6 +28,7 @@ if (-not $pythonInstalled) {
 if (-not $gitInstalled) {
     & $chocoPath install git --force
 }
+
 
 # Load the PresentationFramework assembly
 Add-Type -AssemblyName PresentationFramework
