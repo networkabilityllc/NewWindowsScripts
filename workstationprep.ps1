@@ -25,13 +25,13 @@ if (-not $chocoInstalled) {
     # Install Chocolatey
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
+	$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
     # Enable global confirmation for Chocolatey
     & C:\ProgramData\chocolatey\choco.exe feature enable -n allowGlobalConfirmation
 }
 
 # Path to Chocolatey executable
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
+# Change this path to the actual location of choco.exe
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Install Boxstarter using Chocolatey
 & $chocoPath install boxstarter --force
