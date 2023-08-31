@@ -14,9 +14,8 @@ Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 # Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
 Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'
 Write-Host "Splashtop SOS installed for All New Users"
+
 # ----------------------------- Test for Choco and BoxStarter -------------------
-# Path to Chocolatey executable
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
 
 # Install Chocolatey if not already installed
 $chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
@@ -29,6 +28,9 @@ if (-not $chocoInstalled) {
     # Enable global confirmation for Chocolatey
     & C:\ProgramData\chocolatey\choco.exe feature enable -n allowGlobalConfirmation
 }
+
+# Path to Chocolatey executable
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
 
 # Install Boxstarter using Chocolatey
 & C:\ProgramData\chocolatey\choco.exe install boxstarter --force
