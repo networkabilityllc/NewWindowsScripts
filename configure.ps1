@@ -1,3 +1,21 @@
+# Path to git.exe
+$gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
+
+# Check if the repository has been cloned
+$repoPath = "c:\prep\NewWindowsScripts"
+if (-not (Test-Path -Path $repoPath)) {
+    # Clone the GitHub repository
+    $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
+    Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
+} else {
+    # Update the repository
+    Set-Location -Path $repoPath
+    & $gitPath pull
+}
+
+# Load the PresentationFramework assembly
+Add-Type -AssemblyName PresentationFramework
+
 # Run Boxstarter shell and enter interactive commands
 & 'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'
 
@@ -7,13 +25,21 @@ Disable-BingSearch
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions
 Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
-REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
+# Restore the classic right-click context menu
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+# Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
+# Set the registry value to show hidden files and folders for the current user
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
+
+# Set the registry value to show hidden files and folders for all users
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
 
 
 # Set the paths

@@ -36,17 +36,6 @@ $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Install Boxstarter using Chocolatey
 & $chocoPath install boxstarter --force
 
-# Execute run-choco.bat
-# Start-Process -Wait -FilePath "run-choco.bat"
-
-
-
-# Install Python using Chocolatey
-#& $chocoPath install python310 --force
-
-# Install Git using Chocolatey
-#& $chocoPath install git --force
-
 # Check if Python is already installed
 $pythonInstalled = (Get-Command python -ErrorAction SilentlyContinue) -ne $null
 
