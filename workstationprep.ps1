@@ -8,8 +8,12 @@ Set-Location -Path $prepDir
 Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 
 # Download necessary files
-Invoke-WebRequest -Uri "https://pastebin.com/raw/rnRbp37h" -OutFile "run-choco.bat"
-Invoke-WebRequest -Uri "https://pastebin.com/raw/tH3ynJJg" -OutFile "get-choco.ps1"
+REM Invoke-WebRequest -Uri "https://pastebin.com/raw/rnRbp37h" -OutFile "run-choco.bat"
+REM Invoke-WebRequest -Uri "https://pastebin.com/raw/tH3ynJJg" -OutFile "get-choco.ps1"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/run-choco.bat" -OutFile "run-choco.bat"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
+
+
 
 # Execute run-choco.bat
 Start-Process -Wait -FilePath "run-choco.bat"
