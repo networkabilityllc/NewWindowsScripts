@@ -87,7 +87,6 @@ $Shortcut.Description = "Shortcut to Post-User-Install Script"
 # Save the shortcut
 $Shortcut.Save()
 
-# Show a dialog box with the status of changes
 $statusMessage = @"
 Changes Applied:
 
@@ -98,12 +97,8 @@ Changes Applied:
 5 - Registry Tweaks have been applied
 6 - Shortcuts for New User Installs have been added
 
-Click OK to close this dialog.
+Press Enter to acknowledge.
 "@
 
-[System.Windows.MessageBox]::Show(
-    $statusMessage,
-    "Changes Applied",
-    [System.Windows.MessageBoxButton]::OK,
-    [System.Windows.MessageBoxImage]::Information
-)
+Write-Host $statusMessage
+Read-Host
