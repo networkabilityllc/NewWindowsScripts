@@ -16,7 +16,8 @@ Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -Ou
 Write-Host "Splashtop SOS installed for All New Users"
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
-
+# Path to Chocolatey executable
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
 # Install Chocolatey if not already installed
 $chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
 
@@ -31,9 +32,9 @@ if (-not $chocoInstalled) {
 
 # Path to Chocolatey executable
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
-
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Install Boxstarter using Chocolatey
-& C:\ProgramData\chocolatey\choco.exe install boxstarter --force
+& $chocoPath install boxstarter --force
 
 # Execute run-choco.bat
 # Start-Process -Wait -FilePath "run-choco.bat"
