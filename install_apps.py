@@ -1,5 +1,7 @@
 import tkinter as tk
 import subprocess
+import os  # Import the os module
+
 
 # List of software items and their installation parameters
 software_items = [
