@@ -28,24 +28,7 @@ if (-not $pythonInstalled) {
 if (-not $gitInstalled) {
     & C:\ProgramData\chocolatey\choco install git --force
 
-    # Define the list of registry paths to remove Git context menu entries
-    $registryPathsToRemove = @(
-        "HKCU:\Software\Classes\Directory\shell\git_gui",
-        "HKCU:\Software\Classes\Directory\shell\git_shell",
-        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_gui",
-        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_shell",
-        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui",
-        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell"
-    )
-
-    # Loop through the list of registry paths and remove them
-    foreach ($path in $registryPathsToRemove) {
-        # Remove the registry key and its children
-        Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
-
-    Write-Host "Git context menu entries removed from the registry."
-}
 
 
 
@@ -103,6 +86,24 @@ $Shortcut.Description = "Shortcut to Post-User-Install Script"
 # Save the shortcut
 $Shortcut.Save()
 #Requires -RunAsAdministrator
+
+# Define the list of registry paths to remove Git context menu entries
+    $registryPathsToRemove = @(
+        "HKCU:\Software\Classes\Directory\shell\git_gui",
+        "HKCU:\Software\Classes\Directory\shell\git_shell",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_gui",
+        "HKCU:\Software\Classes\LibraryFolder\background\shell\git_shell",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui",
+        "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell"
+    )
+
+    # Loop through the list of registry paths and remove them
+    foreach ($path in $registryPathsToRemove) {
+        # Remove the registry key and its children
+        Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
+    }
+
+    Write-Host "Git context menu entries removed from the registry."
 
 $START_MENU_LAYOUT = @"
 <LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
