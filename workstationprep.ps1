@@ -42,9 +42,17 @@ if ($vmwareVm) {
 # Path to git.exe
 $gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
 
-# Clone the GitHub repository
-$gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
-Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl
+# Check if the repository has been cloned
+$repoPath = "c:\prep\NewWindowsScripts"
+if (-not (Test-Path -Path $repoPath)) {
+    # Clone the GitHub repository
+    $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
+    Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
+} else {
+    # Update the repository
+    Set-Location -Path $repoPath
+    & $gitPath pull
+}
 
 # Load the PresentationFramework assembly
 Add-Type -AssemblyName PresentationFramework
