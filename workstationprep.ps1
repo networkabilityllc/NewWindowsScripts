@@ -12,8 +12,8 @@ Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 # Invoke-WebRequest -Uri "https://pastebin.com/raw/tH3ynJJg" -OutFile "get-choco.ps1"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/run-choco.bat" -OutFile "run-choco.bat"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/get-choco.ps1" -OutFile "get-choco.ps1"
-
-
+Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'
+Write-Host "Splashtop SOS installed for All New Users"
 
 # Execute run-choco.bat
 Start-Process -Wait -FilePath "run-choco.bat"
@@ -66,7 +66,7 @@ Disable-BingSearch
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions
 Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
-REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
