@@ -10,6 +10,7 @@ software_items = [
     ("ccleaner", "--force"),
     ("choco-upgrade-all-at", "--force"),
     ("cpu-z", "--force"),
+    ("ditto", "--force"),
     ("dotnet", "--force"),
     ("dotnetfx", "--force"),
     ("everything", "--force"),
@@ -28,6 +29,7 @@ software_items = [
     ("openjdk", "--force"),
     ("powershell", "--force"),
     ("sysinternals", "-y"),
+    ("translucenttb", "--force"),
     ("vcredist-all", "--force"),
     ("vlc", "--force")
 ]
