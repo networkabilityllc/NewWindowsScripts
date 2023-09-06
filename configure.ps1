@@ -33,7 +33,7 @@ if (-not $gitInstalled) {
 
 
 # Load the PresentationFramework assembly
-Add-Type -AssemblyName PresentationFramework
+# Add-Type -AssemblyName PresentationFramework
 
 # Run Boxstarter shell and enter interactive commands
 & 'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'
