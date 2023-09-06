@@ -77,7 +77,7 @@ def install_selected():
 
 # Create the main window
 root = tk.Tk()
-root.title("Chocolatey Installer")
+root.title("NetworkAbility Software Installer")
 
 # Create a frame for the checkboxes
 checkbox_frame = tk.Frame(root)
