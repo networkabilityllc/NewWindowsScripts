@@ -56,7 +56,8 @@ $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 & $chocoPath install boxstarter --force
 
 # ------------------------------------------------------------
-# Version 0.9 of this script uses Python 3.10.6 to present a checkbox screen for installing apps from chocolatey
+# Version 0.9 of this script uses Python 3.10.6 to present a 
+# checkbox screen for installing apps from chocolatey
 # This will probably be changed to pure Powershell later
 # Check if Python is already installed
 # ------------------------------------------------------------
@@ -64,7 +65,8 @@ $pythonInstalled = Test-Path "C:\python310\python.exe"
 
 # ------------------------------------------------------------
 # This version of the script clones the repository using git
-# We may remove git later or figure out a way to not have it add itself to the context menu 
+# We may remove git later or figure out a way to not have it 
+# add itself to the context menu 
 # ------------------------------------------------------------
 # Check if Git is already installed
 $gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
@@ -77,7 +79,11 @@ if (-not $pythonInstalled) {
 # Install Git using Chocolatey if not already installed
 if (-not $gitInstalled) {
     & C:\ProgramData\chocolatey\choco install git --force
-
+# ------------------------------------------------------------
+# The default installation of git installs context menu entries
+# We need to remove these because most users will not have a need 
+# for them
+# ------------------------------------------------------------
     # Define the list of registry paths to remove Git context menu entries
     $registryPathsToRemove = @(
         "HKCU:\Software\Classes\Directory\shell\git_gui",
@@ -125,23 +131,31 @@ if (-not (Test-Path -Path $repoPath)) {
     Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
 } else {
 	# ------------------------------------------------------------
-	# If already cloned, do a git pull to refresh it in case we changed something
+	# If already cloned, do a git pull to refresh it in case we 
+    # changed something
+    # ------------------------------------------------------------
     # Update the repository
-	# ------------------------------------------------------------
+	
     Set-Location -Path $repoPath
     & $gitPath pull
 }
 
 # Load the PresentationFramework assembly
 # ------------------------------------------------------------
-# This was being used for a graphical Powershell window using WPF. It is currently unused, 
+# This was being used for a graphical Powershell window using WPF. 
+# It is currently unused, 
 # but may be used in lieu of python in the future
 # ------------------------------------------------------------
-Add-Type -AssemblyName PresentationFramework
+# Add-Type -AssemblyName PresentationFramework
 
 # Run Boxstarter shell and enter interactive commands
 & 'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'
-
+# ------------------------------------------------------------
+# This section is for the Boxstarter commands that will be run
+# to configure our default settings and environment
+# It modifies the registry and sets the taskbar options
+# and removes some Windows 10/11 annoyances
+# ------------------------------------------------------------
 # Run the commands interactively
 Disable-UAC -Confirm:$false
 Disable-BingSearch
@@ -153,18 +167,41 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindow
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
+# ------------------------------------------------------------
+# This section restores the default context menu for Windows 11
+# ------------------------------------------------------------
 # Restore the classic right-click context menu
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+# ------------------------------------------------------------
+# This section sets the mouse hover time to a very long time
+# It effectively disables the hover text on the taskbar and 
+# prevents the thumbnails from popping up
+# ------------------------------------------------------------
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
+# ------------------------------------------------------------
+# In some instances, the registry settings above do not take
+# So we set them again here
+# ------------------------------------------------------------
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
-
+# ------------------------------------------------------------
+# Not sure if this works. May remove it later
+# ------------------------------------------------------------
 # Set the registry value to show hidden files and folders for all users
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
 
-
+# ------------------------------------------------------------
+# This section creates a shortcut on the desktop for the
+# Post User Install script. This script will be run by the
+# domain admin after the user logs in for the first time.
+# It repeats some of the settings above, because many of
+# the above settings are not global and only apply to the
+# user that is logged in when they are applied.
+# We will probably be adding some code that creates the
+# post-user install shortcut to the current user's desktop
+# ------------------------------------------------------------
 # Set the paths
 $shortcutPath = "C:\Users\Default\Desktop\Post User Install.lnk"
 $targetPath = "C:\prep\NewWindowsScripts\post-user-install.bat"
