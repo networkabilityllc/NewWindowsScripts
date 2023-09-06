@@ -2,6 +2,38 @@ import tkinter as tk
 import subprocess
 import os  # Import the os module
 
+# Dictionary mapping official names to package names
+software_mapping = {
+    "7zip": "7-Zip",
+    "adobereader": "Adobe Reader",
+    "ccleaner": "CCleaner",
+    "choco-upgrade-all-at": "Chocolatey Nightly Upgrade",
+    "cpu-z": "CPU-Z",
+    "ditto": "Ditto Clipboard Manager",
+    "dotnet": ".NET Framework",
+    "dotnet3.5": ".NET Framework 3.5",
+    "dotnetfx": ".NET Framework 4.8",
+    "everything": "Everything File Search",
+    "firefox": "Firefox",
+    "googlechrome": "Google Chrome",
+    "hwinfo": "HWiNFO",
+    "javaruntime": "Java Runtime",
+    "libreoffice-fresh": "LibreOffice Fresh",
+    "lightshot": "Lightshot Screen Capture",
+    "microsoft-edge": "Microsoft Edge",
+    "mobaxterm": "MobaXterm",
+    "mremoteng": "mRemoteNG",
+    "naps2": "NAPS2",
+    "notepadplusplus": "Notepad++",
+    "open-shell": "Open-Shell",
+    "openjdk": "OpenJDK",
+    "powershell": "PowerShell",
+    "powershell-core": "PowerShell 7.x",
+    "sysinternals": "Sysinternals Suite",
+    "translucenttb": "TranslucentTB",
+    "vcredist-all": "Visual C++ Redistributable",
+    "vlc": "VLC Media Player"
+    }
 
 # List of software items and their installation parameters
 software_items = [
@@ -76,7 +108,5 @@ def exit_app():
 exit_button = tk.Button(root, text="Exit", command=exit_app)
 exit_button.pack(pady=10)
 
-# Start the main event loop
-root.mainloop()
 # Start the main event loop
 root.mainloop()
