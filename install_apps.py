@@ -12,6 +12,7 @@ software_items = [
     ("cpu-z", "--force"),
     ("ditto", "--force"),
     ("dotnet", "--force"),
+    ("dotnet3.5", "--force"),
     ("dotnetfx", "--force"),
     ("everything", "--force"),
     ("firefox", "--force"),
