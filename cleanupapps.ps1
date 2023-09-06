@@ -1,11 +1,23 @@
+# ------------------------------------------------------------
+# Set the apps to be excluded from the removal script
+# ------------------------------------------------------------
 $excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller.*|.*store.*|.*notepad.*|.*terminal.*|.*translucent*'
-
+# ------------------------------------------------------------
+# In some cases, the app removval function below does not 
+# remove Spotify, Teams or Movies & TV. Add them to the list
+# Also, sometimes Windows just ignores the removal request 
+# ¯\_(ツ)_/¯  - we will look into this later
+# ------------------------------------------------------------
 $additionalApps = @(
     '*spotify*',
     '*teams*',
     '*moviesandtv*'
 )
-
+# ------------------------------------------------------------
+# This section creates a list of apps to be removed by 
+# enumerating all apps and then removing the ones that are
+# not in the $excludedApps list
+# ------------------------------------------------------------
 $unwantedApps = Get-AppxPackage -PackageTypeFilter Bundle | Where-Object { $_.Name -notmatch $excludedApps }
 
 # Add the additional apps to the list of unwanted apps
@@ -21,7 +33,12 @@ if ($unwantedApps) {
     $unwantedApps | Remove-AppxPackage
 }
 
-#Requires -RunAsAdministrator
+# Requires -RunAsAdministrator
+# ------------------------------------------------------------
+# This section removes the apps from the start menu. Sort of.
+# We need to attribute this to the original author, but we
+# have to research who that is.
+# ------------------------------------------------------------
 
 $START_MENU_LAYOUT = @"
 <LayoutModificationTemplate xmlns:defaultlayout="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" xmlns:start="http://schemas.microsoft.com/Start/2014/StartLayout" Version="1" xmlns:taskbar="http://schemas.microsoft.com/Start/2014/TaskbarLayout" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
