@@ -29,6 +29,7 @@ software_items = [
     ("open-shell", "--params=\"/StartMenu\""),
     ("openjdk", "--force"),
     ("powershell", "--force"),
+    ("powershell-core", "--force"),
     ("sysinternals", "-y"),
     ("translucenttb", "--force"),
     ("vcredist-all", "--force"),
