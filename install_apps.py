@@ -1,6 +1,6 @@
 import tkinter as tk
 import subprocess
-import os  # Import the os module
+import os
 
 # Dictionary mapping official names to package names
 software_mapping = {
@@ -33,7 +33,7 @@ software_mapping = {
     "translucenttb": "TranslucentTB",
     "vcredist-all": "Visual C++ Redistributable",
     "vlc": "VLC Media Player"
-    }
+}
 
 # List of software items and their installation parameters
 software_items = [
@@ -71,9 +71,9 @@ choco_path = r'c:\ProgramData\chocolatey\choco.exe'  # Chocolatey path
 
 # Function to install selected software
 def install_selected():
-    for item, params, var in checkboxes:
+    for package_name, params, var in checkboxes:
         if var.get():
-            subprocess.run([choco_path, "install", item, params])
+            subprocess.run([choco_path, "install", package_name, params])
 
 # Create the main window
 root = tk.Tk()
@@ -87,13 +87,14 @@ checkbox_frame.pack(padx=10, pady=10)
 num_columns = 3
 checkboxes = []
 
-for i, (item, params) in enumerate(software_items):
+for i, (package_name, params) in enumerate(software_items):
     var = tk.IntVar()
-    checkbox = tk.Checkbutton(checkbox_frame, text=item, variable=var)
+    official_name = software_mapping.get(package_name, package_name)  # Get the official name or use the package name
+    checkbox = tk.Checkbutton(checkbox_frame, text=official_name, variable=var)
     row = i // num_columns
     column = i % num_columns
     checkbox.grid(row=row, column=column, sticky="w", padx=5, pady=5)
-    checkboxes.append((item, params, var))
+    checkboxes.append((package_name, params, var))
 
 # Create install button
 install_button = tk.Button(root, text="Install Selected", command=install_selected)
