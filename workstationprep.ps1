@@ -203,7 +203,7 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCm
 # Create the "command" subkey with the appropriate command
 $commandKeyPath = "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere\command"
 New-Item -Path $commandKeyPath -Force
-Set-ItemProperty -Path $commandKeyPath -Name "(Default)" -Value 'cmd.exe /s /k "pushd \"%V\""'
+Set-ItemProperty -Path $commandKeyPath -Name "(Default)" -Value 'cmd.exe /s /k "cd /d %V"'
 
 
 
