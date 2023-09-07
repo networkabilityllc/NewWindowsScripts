@@ -195,17 +195,10 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 # This sections add the "Open Command Prompt Here" option to
 # the context menu when you right-click 
 # ------------------------------------------------------------
-# Create the "Open Command Prompt Here" option
-New-Item -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Force
-New-ItemProperty -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Name "MUIVerb" -Value "Open Command Prompt Here"
-New-ItemProperty -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Name "Icon" -Value "cmd.exe"
-
-# Create the "command" subkey with the appropriate command
-$commandKeyPath = "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere\command"
-New-Item -Path $commandKeyPath -Force
-Set-ItemProperty -Path $commandKeyPath -Name "(Default)" -Value 'cmd.exe /s /k "cd /d %V"'
-
-
+# ------------------------------------------------------------
+# Add the "Open Command Prompt Here" option to the context menu
+# ------------------------------------------------------------
+regedit.exe /s "C:\prep\NewWindowsScripts\addprompts.reg"
 
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
