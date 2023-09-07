@@ -112,6 +112,32 @@ $popupMessage = "Right click to open Command Prompt added.`r`nShift-Right Click 
 [void][System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 [System.Windows.Forms.MessageBox]::Show($popupMessage, "Notification", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 
+# ------------------------------------------------------------
+# Turn on numlock at startup
+# ------------------------------------------------------------
+Add-Type -TypeDefinition @"
+using System;
+using System.Runtime.InteropServices;
+
+public class NumLockControl {
+    const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
+    const uint KEYEVENTF_KEYUP = 0x0002;
+    const int VK_NUMLOCK = 0x90;
+
+    [DllImport("user32.dll")]
+    private static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+    public static void EnableNumLock() {
+        keybd_event((byte)VK_NUMLOCK, 0x45, KEYEVENTF_EXTENDEDKEY, (UIntPtr)0);
+        keybd_event((byte)VK_NUMLOCK, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, (UIntPtr)0);
+    }
+}
+"@
+
+[NumLockControl]::EnableNumLock()
+
+
+
 # Define the list of registry paths to remove Git context menu entries
     $registryPathsToRemove = @(
         "HKCU:\Software\Classes\Directory\shell\git_gui",
