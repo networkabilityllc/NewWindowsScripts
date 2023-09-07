@@ -206,6 +206,7 @@ New-Item -Path $commandKeyPath -Force
 Set-ItemProperty -Path $commandKeyPath -Name "(Default)" -Value 'cmd.exe /s /k "pushd \"%V\""'
 
 
+
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
 # Post User Install script. This script will be run by the
