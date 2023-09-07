@@ -32,7 +32,8 @@ software_mapping = {
     "sysinternals": "Sysinternals Suite",
     "translucenttb": "TranslucentTB",
     "vcredist-all": "Visual C++ Redistributable",
-    "vlc": "VLC Media Player"
+    "vlc": "VLC Media Player",
+    "zoom": "Zoom
 }
 
 # List of software items and their installation parameters
@@ -65,7 +66,8 @@ software_items = [
     ("sysinternals", "-y"),
     ("translucenttb", "--force"),
     ("vcredist-all", "--force"),
-    ("vlc", "--force")
+    ("vlc", "--force"),
+    ("zoom", "--force")
 ]
 choco_path = r'c:\ProgramData\chocolatey\choco.exe'  # Chocolatey path
 
