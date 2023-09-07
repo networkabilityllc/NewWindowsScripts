@@ -191,6 +191,20 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 # Set the registry value to show hidden files and folders for all users
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
+# ------------------------------------------------------------
+# This sections add the "Open Command Prompt Here" option to
+# the context menu when you right-click 
+# ------------------------------------------------------------
+# Create the "Open Command Prompt Here" option
+New-Item -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Force
+New-ItemProperty -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Name "MUIVerb" -Value "Open Command Prompt Here"
+New-ItemProperty -Path "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere" -Name "Icon" -Value "cmd.exe"
+
+# Create the "command" subkey with the appropriate command
+$commandKeyPath = "HKLM:\SOFTWARE\Classes\Directory\Background\shell\OpenCmdHere\command"
+New-Item -Path $commandKeyPath -Force
+Set-ItemProperty -Path $commandKeyPath -Name "(Default)" -Value 'cmd.exe /s /k "pushd \"%V\""'
+
 
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
