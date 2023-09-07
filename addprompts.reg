@@ -1,0 +1,82 @@
+# Function to check if the script is running as administrator (elevated)
+function Test-IsAdmin {
+    $currentUser = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    $isAdmin = $currentUser.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    return $isAdmin
+}
+
+# Check if the script is running as administrator (elevated)
+if (-Not (Test-IsAdmin)) {
+    # If not elevated, re-run the script with elevated permissions
+    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    exit
+}
+
+# Create the HKCR drive if it doesn't exist
+New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT -ErrorAction SilentlyContinue
+
+# CMD
+# Directory\Background
+New-Item -Path "HKCR:\Directory\Background\shell\q_cmd_usr" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\q_cmd_usr" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Directory\Background\shell\q_cmd_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\q_cmd_usr\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# Directory
+New-Item -Path "HKCR:\Directory\shell\q_cmd_usr" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\q_cmd_usr" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Directory\shell\q_cmd_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\q_cmd_usr\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# Drive
+New-Item -Path "HKCR:\Drive\shell\q_cmd_usr" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\q_cmd_usr" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Drive\shell\q_cmd_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\q_cmd_usr\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# CMD (Elevated)
+# Directory\Background
+New-Item -Path "HKCR:\Directory\Background\shell\runas" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\runas" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Directory\Background\shell\runas\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\runas\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# Directory
+New-Item -Path "HKCR:\Directory\shell\runas" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\runas" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Directory\shell\runas\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\runas\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# Drive
+New-Item -Path "HKCR:\Drive\shell\runas" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\runas" -Name "(default)" -Value "@shell32.dll,-8506"
+
+New-Item -Path "HKCR:\Drive\shell\runas\command" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\runas\command" -Name "(default)" -Value "cmd.exe /s /k pushd \"%V\""
+
+# PS (Elevated)
+# Directory\Background
+New-Item -Path "HKCR:\Directory\Background\shell\ps_uac_usr" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\ps_uac_usr" -Name "(default)" -Value "@shell32.dll,-8508"
+
+New-Item -Path "HKCR:\Directory\Background\shell\ps_uac_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\Background\shell\ps_uac_usr\command" -Name "(default)" -Value "cmd /C powershell \"start powershell -a '-noexit -command Set-Location \""'%V'"\"' -v RunAs\""
+
+# Directory
+New-Item -Path "HKCR:\Directory\shell\ps_uac_usr" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\ps_uac_usr" -Name "(default)" -Value "@shell32.dll,-8508"
+
+New-Item -Path "HKCR:\Directory\shell\ps_uac_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Directory\shell\ps_uac_usr\command" -Name "(default)" -Value "cmd /C powershell \"start powershell -a '-noexit -command Set-Location \""'%V'"\"' -v RunAs\""
+
+# Drive
+New-Item -Path "HKCR:\Drive\shell\ps_uac_usr" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\ps_uac_usr" -Name "(default)" -Value "@shell32.dll,-8508"
+
+New-Item -Path "HKCR:\Drive\shell\ps_uac_usr\command" -Force
+Set-ItemProperty -Path "HKCR:\Drive\shell\ps_uac_usr\command" -Name "(default)" -Value "cmd /C powershell \"start powershell -a '-noexit -command Set-Location \""'%V'"\"' -v RunAs\""
