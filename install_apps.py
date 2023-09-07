@@ -33,7 +33,7 @@ software_mapping = {
     "translucenttb": "TranslucentTB",
     "vcredist-all": "Visual C++ Redistributable",
     "vlc": "VLC Media Player",
-    "zoom": "Zoom
+    "zoom": "Zoom"
 }
 
 # List of software items and their installation parameters
