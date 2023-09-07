@@ -87,6 +87,31 @@ $Shortcut.Description = "Shortcut to Post-User-Install Script"
 $Shortcut.Save()
 #Requires -RunAsAdministrator
 
+# ------------------------------------------------------------
+# This sections add the "Open Command Prompt Here" option to
+# the context menu when you right-click 
+# ------------------------------------------------------------
+#------------------------------------------------------------
+# Because the next section opens a dialog box, which may
+# open behind the current window, we need to display a
+# message to the user to look for it
+#------------------------------------------------------------
+
+# Display a screen prompt to the user
+Write-Host "Please look behind this console window for any open dialog boxes or user prompts.`nClose them before continuing."
+
+# ------------------------------------------------------------
+# Add the "Open Command Prompt Here" option to the context menu
+# ------------------------------------------------------------
+
+# Import registry settings
+regedit.exe /s "C:\prep\NewWindowsScripts\addprompts.reg"
+
+# Display a message to the user
+$popupMessage = "Right click to open Command Prompt added.`r`nShift-Right Click to open PowerShell and Elevated Command Prompt added.`r`nClick OK to continue."
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+[System.Windows.Forms.MessageBox]::Show($popupMessage, "Notification", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+
 # Define the list of registry paths to remove Git context menu entries
     $registryPathsToRemove = @(
         "HKCU:\Software\Classes\Directory\shell\git_gui",
