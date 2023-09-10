@@ -1,4 +1,3 @@
-```markdown
 # Workstation Preparation Script (workstationprep.ps1)
 
 This PowerShell script, `workstationprep.ps1`, automates the process of preparing a Windows workstation for a new user. It performs various tasks to set up the workstation environment efficiently.
