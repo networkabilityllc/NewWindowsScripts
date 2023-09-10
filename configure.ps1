@@ -88,7 +88,7 @@ $Shortcut.Save()
 #Requires -RunAsAdministrator
 
 # ------------------------------------------------------------
-# This sections add the "Open Command Prompt Here" option to
+# This section adds the "Open Command Prompt Here" option to
 # the context menu when you right-click 
 # ------------------------------------------------------------
 #------------------------------------------------------------
