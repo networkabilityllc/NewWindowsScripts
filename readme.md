@@ -16,7 +16,7 @@ iwr -useb https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/
 
 Alternatively, you can clone the repository and run the script manually. Here are the steps:
 
-1. Clone the repository to your local machine. These scripts expect to be run from C:\Prep, so first create that folder, then change to it and run:
+1. Clone the repository to your local machine. These scripts expect to be run from `C:\Prep`, so first create that folder, then change to it and run:
 
    ```bash
    git clone https://github.com/networkabilityllc/NewWindowsScripts.git
@@ -28,11 +28,26 @@ Alternatively, you can clone the repository and run the script manually. Here ar
    cd NewWindowsScripts
    ```
 
-3. Run the script.
+3. Before running the script, set the execution policy to Bypass for LocalMachine. This is required to ensure the script can run without restrictions. Run the following command:
+
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+   ```
+
+4. Run the script.
 
    ```powershell
    .\workstationprep.ps1
    ```
+
+5. After the script has completed its tasks, you can reset the execution policy to its default value for security reasons. Run the following command:
+
+   ```powershell
+   Set-ExecutionPolicy Default
+   ```
+
+This sequence of steps ensures that you temporarily set the execution policy to Bypass for LocalMachine before running the script and then reset it to Default afterward for security purposes.
+
 
 ## Script Overview
 
