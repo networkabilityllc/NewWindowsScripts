@@ -16,7 +16,7 @@ iwr -useb https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/
 
 Alternatively, you can clone the repository and run the script manually. Here are the steps:
 
-1. Clone the repository to your local machine.
+1. Clone the repository to your local machine. These scripts expect to be run from C:\Prep, so first create that folder, then change to it and run:
 
    ```bash
    git clone https://github.com/networkabilityllc/NewWindowsScripts.git
