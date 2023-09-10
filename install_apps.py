@@ -77,13 +77,42 @@ choco_path = r'c:\ProgramData\chocolatey\choco.exe'  # Chocolatey path
 
 # Function to install selected software
 def install_selected():
-    for package_name, params, var in checkboxes:
+    for package_name, params, var, checkbox in checkboxes:
         if var.get():
             subprocess.run([choco_path, "install", package_name, params])
+            # After installation, change the text color to green
+            checkbox.configure(fg="green")
+
+# Function to check and update the text color based on installation status
+def check_and_update_text_color():
+    installed_packages = get_installed_packages()
+    for package_name, _, _, checkbox in checkboxes:
+        # Check for partial and case-insensitive matches
+        if any(package_name.lower() in installed.lower() for installed in installed_packages):
+            # Package is installed, set text color to green
+            checkbox.configure(fg="green")
+
+# Function to get a list of installed packages using 'choco list'
+def get_installed_packages():
+    result = subprocess.run([choco_path, "list"], stdout=subprocess.PIPE, text=True)
+    if result.returncode == 0:
+        installed_packages = []
+        lines = result.stdout.split("\n")
+        for line in lines:
+            parts = line.strip().split(" ")
+            if len(parts) > 1:
+                installed_packages.append(parts[0])
+        return installed_packages
+    else:
+        return []
 
 # Create the main window
 root = tk.Tk()
 root.title("NetworkAbility Software Installer")
+
+# Create a label for the message
+message_label = tk.Label(root, text="Applications in Green have Already been Installed by Chocolatey")
+message_label.pack(padx=10, pady=10)
 
 # Create a frame for the checkboxes
 checkbox_frame = tk.Frame(root)
@@ -100,7 +129,10 @@ for i, (package_name, params) in enumerate(software_items):
     row = i // num_columns
     column = i % num_columns
     checkbox.grid(row=row, column=column, sticky="w", padx=5, pady=5)
-    checkboxes.append((package_name, params, var))
+    checkboxes.append((package_name, params, var, checkbox))  # Include the checkbox in the tuple
+
+# Check and update text color based on installation status
+check_and_update_text_color()
 
 # Create install button
 install_button = tk.Button(root, text="Install Selected", command=install_selected)
