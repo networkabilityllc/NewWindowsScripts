@@ -45,7 +45,11 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 # Only disable UAC if it's not already disabled
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
+    Write-Host "UAC has been disabled."
+} else {
+    Write-Host "UAC is already disabled."
 }
+
 # Check if Bing Search is already disabled
 $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search").BingSearchEnabled -eq 0
 
