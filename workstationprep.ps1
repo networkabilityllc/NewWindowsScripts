@@ -12,7 +12,10 @@ Set-Location -Path $prepDir
 # This prevents us from having to send the set execution bypass command every time we run a script
 # ------------------------------------------------------------
 Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
-Add-Type -AssemblyName System.Windows.Forms
+#-------------------------------------------------------------
+# Add-Type -AssemblyName System.Windows.Forms
+# Not used yet, but may be used in the future
+# ------------------------------------------------------------
 # Function to Prompt User with Two-Button Choice Dialog plus Help Button
 function Get-Choice {
     param (
