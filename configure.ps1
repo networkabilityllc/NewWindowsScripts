@@ -192,7 +192,7 @@ foreach ($regAlias in $regAliases){
 }
 
 #Restart Explorer, open the start menu (necessary to load the new layout), and give it a few seconds to process
-Stop-Process -name explorer --force
+Stop-Process -name explorer -force
 Start-Sleep -Seconds 5
 $wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESCAPE}')
 Start-Sleep -s 5
@@ -205,7 +205,7 @@ foreach ($regAlias in $regAliases){
 }
 
 #Restart Explorer and delete the layout file
-Stop-Process -name explorer --force
+Stop-Process -name explorer -force
 
 # Uncomment the next line to make clean start menu default for all new users
 Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
