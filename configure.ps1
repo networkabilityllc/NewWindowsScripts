@@ -47,12 +47,17 @@ if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
 }
 # Check if Bing Search is already disabled
-$bingSearchDisabled = Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search\BingSearchEnabled"
+$bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search").BingSearchEnabled -eq 0
 
-# Only disable Bing Search if it's not already disabled
-if (-not $bingSearchDisabled) {
-    Disable-BingSearch
+# Output "Disabled" if already disabled, or run the command to disable it
+if ($bingSearchDisabled) {
+    "Bing Search is Already Disabled"
+} else {
+    # Run the command to disable Bing Search
+    Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
+    "Bing Search is Now Disabled"
 }
+
 
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
