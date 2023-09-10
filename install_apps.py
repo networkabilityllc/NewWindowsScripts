@@ -111,7 +111,7 @@ root = tk.Tk()
 root.title("NetworkAbility Software Installer")
 
 # Create a label for the message
-message_label = tk.Label(root, text="Applications in Green have Already been Installed by Chocolatey")
+message_label = tk.Label(root, text="Applications in Green have already been installed by Chocolatey")
 message_label.pack(padx=10, pady=10)
 
 # Create a frame for the checkboxes
