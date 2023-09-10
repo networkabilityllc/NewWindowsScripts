@@ -46,7 +46,14 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
 }
-Disable-BingSearch
+# Check if Bing Search is already disabled
+$bingSearchDisabled = Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search\BingSearchEnabled"
+
+# Only disable Bing Search if it's not already disabled
+if (-not $bingSearchDisabled) {
+    Disable-BingSearch
+}
+
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
 Set-BoxstarterTaskbarOptions -Size Large 
