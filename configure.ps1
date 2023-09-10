@@ -59,7 +59,7 @@ if ($bingSearchDisabled) {
 }
 
 
-# Disable-GameBarTips
+Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
 Set-BoxstarterTaskbarOptions -Size Large 
 Set-BoxstarterTaskbarOptions -Dock Bottom 
