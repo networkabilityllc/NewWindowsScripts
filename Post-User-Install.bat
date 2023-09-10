@@ -9,6 +9,8 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 REM Call the cleanupapps.ps1 PowerShell script
 echo Cleaning up Apps
+echo This windows will now close. The next prompt after this window closes will be the UAC toggle.
+pause
 powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
 
 REM Call the Toggle UAC PowerShell script
