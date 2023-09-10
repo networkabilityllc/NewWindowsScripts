@@ -15,7 +15,7 @@ set vbscriptFile=%temp%\popup.vbs
 
 :: Create the VBScript content in the temporary file
 (
-   echo MsgBox "This window will close, and the screen will flash for a bit. Click OK to continue, and the next prompt after this window closes will be the UAC toggle."
+   echo MsgBox "This window will close, and the screen will flash and the Start Menu will open and close. This is expected behavior. Click OK to continue, and the next prompt after this window closes will be the UAC toggle."
 ) > "%vbscriptFile%"
 
 :: Run the VBScript to show the pop-up message
