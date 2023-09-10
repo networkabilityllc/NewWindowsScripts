@@ -277,7 +277,7 @@ $gitPath = "C:\Program Files\Git\bin\git.exe"
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
     # Clone the GitHub repository
-    $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
+    $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts/Development"
     Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
 } else {
 	# ------------------------------------------------------------
