@@ -9,7 +9,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 REM Call the cleanupapps.ps1 PowerShell script
 echo Cleaning up Apps
-powershell.exe -ExecutionPolicy Bypass -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
+powershell.exe -ExecutionPolicy Bypass -NoNewWindow -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
 
 REM Call the Toggle UAC PowerShell script
 echo Toggling UAC
