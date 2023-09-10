@@ -12,13 +12,163 @@ Set-Location -Path $prepDir
 # This prevents us from having to send the set execution bypass command every time we run a script
 # ------------------------------------------------------------
 Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
-# ------------------------------------------------------------
-# Download Splashtop SOS to c:\users\default\Desktop so that new users will have it available
-# ------------------------------------------------------------
-Invoke-WebRequest -Uri 'https://download.splashtop.com/sos/SplashtopSOS.exe' -OutFile 'C:\Users\Default\Desktop\SplashtopSOS.exe'
-Write-Host "------------------------------------------"
-Write-Host "Splashtop SOS installed for All New Users"
-Write-Host "------------------------------------------"
+Add-Type -AssemblyName System.Windows.Forms
+# Function to Prompt User with Two-Button Choice Dialog plus Help Button
+function Get-Choice {
+    param (
+        [string]$Prompt,
+        [string]$DialogTitle,
+        [string]$HelpText
+    )
+    $form = New-Object Windows.Forms.Form
+    $form.Text = $DialogTitle
+    $form.Size = New-Object Drawing.Size(400, 200) # Increased the height of the form
+
+    $label = New-Object Windows.Forms.Label
+    $label.Text = $Prompt
+    $label.Size = New-Object Drawing.Size(350, 60) # Increased the height of the label
+    $label.Location = New-Object Drawing.Point(25, 20)
+    $form.Controls.Add($label)
+
+    $buttonYes = New-Object Windows.Forms.Button
+    $buttonYes.Text = "Yes"
+    $buttonYes.DialogResult = [Windows.Forms.DialogResult]::Yes
+    $buttonYes.Location = New-Object Drawing.Point(50, 120) # Adjusted button position
+    $form.Controls.Add($buttonYes)
+
+    $buttonNo = New-Object Windows.Forms.Button
+    $buttonNo.Text = "No"
+    $buttonNo.DialogResult = [Windows.Forms.DialogResult]::No
+    $buttonNo.Location = New-Object Drawing.Point(150, 120) # Adjusted button position
+    $form.Controls.Add($buttonNo)
+
+    $helpButton = New-Object Windows.Forms.Button
+    $helpButton.Text = "Help"
+    $helpButton.Location = New-Object Drawing.Point(250, 120) # Adjusted button position
+    $form.Controls.Add($helpButton)
+
+    $form.ControlBox = $false
+    $form.TopMost = $true
+    $form.Add_Shown({$form.Activate()})
+
+    $helpForm = $null
+
+    $helpButton.Add_Click({
+        $helpForm = New-Object Windows.Forms.Form
+        $helpForm.Text = "Help"
+        $helpForm.Size = New-Object Drawing.Size(400, 275) # Increased the height of the form
+        $helpForm.TopMost = $true
+
+        $helpLabel = New-Object Windows.Forms.Label
+        $helpLabel.Text = $HelpText
+        $helpLabel.Size = New-Object Drawing.Size(350, 160) # Increased the height of the label
+        $helpLabel.Location = New-Object Drawing.Point(25, 20)
+        $helpLabel.AutoSize = $false # Allow text to wrap
+        $helpLabel.TextAlign = [System.Drawing.ContentAlignment]::TopLeft # Align text to the top-left
+        $helpForm.Controls.Add($helpLabel)
+
+        $helpCloseButton = New-Object Windows.Forms.Button
+        $helpCloseButton.Text = "Close"
+        $helpCloseButton.Location = New-Object Drawing.Point(150, 200) # Adjusted button position
+        $helpForm.Controls.Add($helpCloseButton)
+
+        $helpCloseButton.Add_Click({
+            $helpForm.Close()
+        })
+
+        $helpForm.ShowDialog()
+    })
+
+    $result = $form.ShowDialog()
+
+    if ($result -eq [Windows.Forms.DialogResult]::Yes) {
+        return "Yes"
+    } else {
+        return "No"
+    }
+}
+
+# Function to Prompt User for SplashtopSOS Download
+function Prompt-DownloadSplashtopSOS {
+    $helpText = @"
+    Clicking Yes will download the latest 
+    version of SplashtopSOS to the Default Desktop 
+    for new users.
+
+    Note: This will only download the installer
+    for new users. It will not install SplashtopSOS
+    for the current user.
+"@
+
+    $choice = $null
+    $choice = Get-Choice -Prompt "Do you want to download Splashtop SOS for all users?" -DialogTitle "Install SplashtopSOS" -HelpText $helpText
+    if ($choice -eq "Yes") {
+        Download-SplashtopSOS
+    } else {
+        Write-Host "Skipping Splashtop SOS download for all users."
+    }
+}
+
+# Function to Download Splashtop SOS for All Users
+function Download-SplashtopSOS {
+    $sosUri = 'https://download.splashtop.com/sos/SplashtopSOS.exe'
+    $sosPath = 'C:\Users\Default\Desktop\SplashtopSOS.exe'
+    Invoke-WebRequest -Uri $sosUri -OutFile $sosPath
+    Write-Host "------------------------------------------"
+    Write-Host "Splashtop SOS installed for All New Users"
+    Write-Host "------------------------------------------"
+}
+
+# Function to Prompt User for Taskbar Tweaks
+function Prompt-TaskbarTweaks {
+    $helpText = @"
+    Clicking Yes will apply the following tweaks to the
+    Registry of New Users:
+    
+1) Removes Widgets from the Taskbar
+2) Removes Chat from the Taskbar
+3) Default Start Menu alignment Left
+4) Removes search from the Taskbar
+
+Note: this will only apply the tweaks to new users
+not the current user.
+"@
+
+    $choice = $null
+    $choice = Get-Choice -Prompt "Do you want to apply taskbar tweaks to new users?" -DialogTitle "Taskbar Tweaks" -HelpText $helpText
+    if ($choice -eq "Yes") {
+        Apply-TaskbarTweaks
+    } else {
+        Write-Host "Skipping taskbar tweaks for new users."
+    }
+}
+
+# Function to Apply Taskbar Tweaks to Default User
+function Apply-TaskbarTweaks {
+    # Load the Default User Registry hive
+    REG LOAD HKLM\Default C:\Users\Default\NTUSER.DAT
+
+    # Removes Widgets from the Taskbar
+    New-itemproperty "HKLM:\Default\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarDa" -Value "0" -PropertyType Dword
+
+    # Removes Chat from the Taskbar
+    New-itemproperty "HKLM:\Default\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarMn" -Value "0" -PropertyType Dword
+
+    # Default StartMenu alignment 0=Left
+    New-itemproperty "HKLM:\Default\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarAl" -Value "0" -PropertyType Dword
+
+    # Removes search from the Taskbar
+    reg.exe add "HKLM\Default\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v SearchboxTaskbarMode /t REG_DWORD /d 0 /f
+
+    # Unload the Default User Registry hive
+    REG UNLOAD HKLM\Default
+
+    Write-Host "Taskbar tweaks applied to the Default User."
+}
+
+# Call the prompt functions
+Prompt-DownloadSplashtopSOS
+Prompt-TaskbarTweaks
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
 Write-Host "------------------------------------------"
