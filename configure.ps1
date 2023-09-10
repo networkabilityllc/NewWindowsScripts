@@ -39,7 +39,13 @@ if (-not $gitInstalled) {
 & 'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'
 
 # Run the commands interactively
-Disable-UAC -Confirm:$false
+# Check if UAC is already disabled
+$uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -ErrorAction SilentlyContinue
+
+# Only disable UAC if it's not already disabled
+if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
+    Disable-UAC -Confirm:$false
+}
 Disable-BingSearch
 Disable-GameBarTips
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
