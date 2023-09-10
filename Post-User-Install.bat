@@ -1,7 +1,7 @@
 @echo off
 
 REM Invoke PowerShell to run the script from the provided URL
-powershell.exe -ExecutionPolicy Bypass -Command "iwr -useb https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/configure.ps1 | iex"
+powershell.exe -ExecutionPolicy Bypass -Command "iwr -useb https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/Development/configure.ps1 | iex"
 
 REM Run the Choco Installer using Python
 echo Starting Chocolatey App Installer
