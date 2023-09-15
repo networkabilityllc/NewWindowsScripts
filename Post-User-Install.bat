@@ -3,14 +3,5 @@
 REM Invoke PowerShell to run the script from the provided URL in a separate window
 start powershell.exe -ExecutionPolicy Bypass -Command "iwr -useb https://raw.githubusercontent.com/networkabilityllc/NewWindowsScripts/main/configure.ps1 | iex"
 
-REM Run the Choco Installer using Python in a separate window
-start "" C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
-
-:: Run the cleanupapps.ps1 PowerShell script with Normal WindowStyle in a separate window
-start "" powershell.exe -ExecutionPolicy Bypass -WindowStyle Normal -File "c:\prep\NewWindowsScripts\cleanupapps.ps1"
-
 REM Call the Toggle UAC PowerShell script in a separate window
 start "" powershell.exe -ExecutionPolicy Bypass -File "c:\prep\NewWindowsScripts\toggle-uac.ps1"
-
-REM Pause to keep the command prompt window open
-pause
