@@ -344,7 +344,6 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 # Set the registry value to show hidden files and folders for all users
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
-
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
 # Post User Install script. This script will be run by the
@@ -356,28 +355,49 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 # to the current user's desktop
 # ------------------------------------------------------------
 # Set the paths
-$targetPath = "C:\prep\NewWindowsScripts\post-user-install.bat"
-$iconPath = "C:\prep\NewWindowsScripts\installme.ico"
+$targetPathPostUserInstall = "C:\prep\NewWindowsScripts\post-user-install.bat"
+$iconPathPostUserInstall = "C:\prep\NewWindowsScripts\installme.ico"
+
+$targetPathChocoApps = "C:\prep\NewWindowsScripts\chocoapps.bat"
+$iconPathChocoApps = "C:\prep\NewWindowsScripts\installer.ico"
 
 # Create the WScript Shell Object
 $WshShell = New-Object -comObject WScript.Shell
 
-# Create the shortcut for the Default user
-$shortcutPathDefault = "C:\Users\Default\Desktop\Post User Install.lnk"
-$ShortcutDefault = $WshShell.CreateShortcut($shortcutPathDefault)
-$ShortcutDefault.TargetPath = $targetPath
-$ShortcutDefault.IconLocation = $iconPath
-$ShortcutDefault.Description = "Shortcut to Post-User-Install Script"
-$ShortcutDefault.Save()
+# Create the shortcut for the Default user - Post User Install
+$shortcutPathDefaultPostUserInstall = "C:\Users\Default\Desktop\Post User Install.lnk"
+$ShortcutDefaultPostUserInstall = $WshShell.CreateShortcut($shortcutPathDefaultPostUserInstall)
+$ShortcutDefaultPostUserInstall.TargetPath = $targetPathPostUserInstall
+$ShortcutDefaultPostUserInstall.IconLocation = $iconPathPostUserInstall
+$ShortcutDefaultPostUserInstall.Description = "Shortcut to Post-User-Install Script"
+$ShortcutDefaultPostUserInstall.Save()
 
-# Create the shortcut for the current user
+# Create the shortcut for the current user - Post User Install
 $currentUserName = $env:USERNAME
-$shortcutPathCurrentUser = "C:\Users\$currentUserName\Desktop\Post User Install.lnk"
-$ShortcutCurrentUser = $WshShell.CreateShortcut($shortcutPathCurrentUser)
-$ShortcutCurrentUser.TargetPath = $targetPath
-$ShortcutCurrentUser.IconLocation = $iconPath
-$ShortcutCurrentUser.Description = "Shortcut to Post-User-Install Script"
-$ShortcutCurrentUser.Save()
+$shortcutPathCurrentUserPostUserInstall = "C:\Users\$currentUserName\Desktop\Post User Install.lnk"
+$ShortcutCurrentUserPostUserInstall = $WshShell.CreateShortcut($shortcutPathCurrentUserPostUserInstall)
+$ShortcutCurrentUserPostUserInstall.TargetPath = $targetPathPostUserInstall
+$ShortcutCurrentUserPostUserInstall.IconLocation = $iconPathPostUserInstall
+$ShortcutCurrentUserPostUserInstall.Description = "Shortcut to Post-User-Install Script"
+$ShortcutCurrentUserPostUserInstall.Save()
+
+# Create the shortcut for the Default user - Choco Apps
+$shortcutPathDefaultChocoApps = "C:\Users\Default\Desktop\Choco Apps.lnk"
+$ShortcutDefaultChocoApps = $WshShell.CreateShortcut($shortcutPathDefaultChocoApps)
+$ShortcutDefaultChocoApps.TargetPath = $targetPathChocoApps
+$ShortcutDefaultChocoApps.IconLocation = $iconPathChocoApps
+$ShortcutDefaultChocoApps.Description = "Shortcut to Choco Apps Script"
+$ShortcutDefaultChocoApps.Save()
+
+# Create the shortcut for the current user - Choco Apps
+$currentUserName = $env:USERNAME
+$shortcutPathCurrentUserChocoApps = "C:\Users\$currentUserName\Desktop\Choco Apps.lnk"
+$ShortcutCurrentUserChocoApps = $WshShell.CreateShortcut($shortcutPathCurrentUserChocoApps)
+$ShortcutCurrentUserChocoApps.TargetPath = $targetPathChocoApps
+$ShortcutCurrentUserChocoApps.IconLocation = $iconPathChocoApps
+$ShortcutCurrentUserChocoApps.Description = "Shortcut to Choco Apps Script"
+$ShortcutCurrentUserChocoApps.Save()
+
 
 
 $statusMessage = @"
