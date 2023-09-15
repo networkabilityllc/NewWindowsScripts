@@ -234,3 +234,4 @@ Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 
 Remove-Item $layoutFile
 
+C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
