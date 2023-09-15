@@ -235,3 +235,6 @@ Import-StartLayout -LayoutPath $layoutFile -MountPath $env:SystemDrive\
 Remove-Item $layoutFile
 
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
+
+$scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
+Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
