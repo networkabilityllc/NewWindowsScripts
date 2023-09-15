@@ -345,7 +345,6 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
 
-
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
 # Post User Install script. This script will be run by the
@@ -353,29 +352,33 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer
 # It repeats some of the settings above, because many of
 # the above settings are not global and only apply to the
 # user that is logged in when they are applied.
-# We will probably be adding some code that creates the
-# post-user install shortcut to the current user's desktop
+# This will also install the post-user install shortcut
+# to the current user's desktop
 # ------------------------------------------------------------
 # Set the paths
-$shortcutPath = "C:\Users\Default\Desktop\Post User Install.lnk"
 $targetPath = "C:\prep\NewWindowsScripts\post-user-install.bat"
 $iconPath = "C:\prep\NewWindowsScripts\installme.ico"
 
 # Create the WScript Shell Object
 $WshShell = New-Object -comObject WScript.Shell
 
-# Create the shortcut
-$Shortcut = $WshShell.CreateShortcut($shortcutPath)
-$Shortcut.TargetPath = $targetPath
+# Create the shortcut for the Default user
+$shortcutPathDefault = "C:\Users\Default\Desktop\Post User Install.lnk"
+$ShortcutDefault = $WshShell.CreateShortcut($shortcutPathDefault)
+$ShortcutDefault.TargetPath = $targetPath
+$ShortcutDefault.IconLocation = $iconPath
+$ShortcutDefault.Description = "Shortcut to Post-User-Install Script"
+$ShortcutDefault.Save()
 
-# Set the shortcut's icon to the provided .ico file
-$Shortcut.IconLocation = $iconPath
+# Create the shortcut for the current user
+$currentUserName = $env:USERNAME
+$shortcutPathCurrentUser = "C:\Users\$currentUserName\Desktop\Post User Install.lnk"
+$ShortcutCurrentUser = $WshShell.CreateShortcut($shortcutPathCurrentUser)
+$ShortcutCurrentUser.TargetPath = $targetPath
+$ShortcutCurrentUser.IconLocation = $iconPath
+$ShortcutCurrentUser.Description = "Shortcut to Post-User-Install Script"
+$ShortcutCurrentUser.Save()
 
-# Additional optional setting
-$Shortcut.Description = "Shortcut to Post-User-Install Script"
-
-# Save the shortcut
-$Shortcut.Save()
 
 $statusMessage = @"
 Changes Applied:
