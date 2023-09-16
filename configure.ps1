@@ -206,6 +206,23 @@ if ($package -eq $null) {
     # Package is already installed
     Write-Host "Package '$packageName' is already installed."
 }
+#-------------------------------------------------------------
+# Install the latest version of WinGet from GitHub
+#-------------------------------------------------------------
+# Define the URL and destination path
+$url = "https://github.com/microsoft/winget-cli/releases/download/v1.3.1741/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+
+# Create the destination directory if it doesn't exist
+if (-Not (Test-Path "C:\Temp")) {
+    New-Item -Path "C:\Temp" -ItemType Directory
+}
+
+# Download the file
+Invoke-WebRequest -Uri $url -OutFile $destPath
+
+# Install the application silently
+Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Check for the presence of .net 3.5 and install it if needed
