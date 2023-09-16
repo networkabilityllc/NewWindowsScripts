@@ -225,6 +225,22 @@ Invoke-WebRequest -Uri $url -OutFile $destPath
 Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
+# Install TranslucentTB using WinGet from the MS Store
+# Execute winget search for TranslucentTB and capture output
+$output = winget search TranslucentTB | Out-String
+
+# Extract the ID field using regex
+if ($output -match 'TranslucentTB\s+(\S+)\s+') {
+    $appID = $matches[1]
+
+    # Construct and execute the winget install command
+    $installCommand = "winget install --id=""$appID"" --accept-source-agreements --accept-package-agreements"
+    Invoke-Expression $installCommand
+} else {
+    Write-Host "Failed to find TranslucentTB ID."
+}
+
+#-------------------------------------------------------------
 # Check for the presence of .net 3.5 and install it if needed
 #-------------------------------------------------------------
 $featureName = "NetFx3"
