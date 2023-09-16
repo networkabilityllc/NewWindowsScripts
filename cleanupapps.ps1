@@ -1,7 +1,7 @@
 # ------------------------------------------------------------
 # Set the apps to be excluded from the removal script
 # ------------------------------------------------------------
-$excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller.*|.*store.*|.*notepad.*|.*terminal.*|.*translucent*'
+$excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller*|.*store.*|.*notepad.*|.*terminal.*|.*translucent*'
 # ------------------------------------------------------------
 # In some cases, the app removval function below does not 
 # remove Spotify, Teams or Movies & TV. Add them to the list

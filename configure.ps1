@@ -70,8 +70,15 @@ Set-BoxstarterTaskbarOptions -Dock Bottom
 Set-BoxstarterTaskbarOptions -DisableSearchBox 
 Set-BoxstarterTaskbarOptions -AlwaysShowIconsOn 
 Set-BoxstarterTaskbarOptions -Combine Always
+#-------------------------------------------------------------
+# Remove Taskbar Chat Icon
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
+#-------------------------------------------------------------
+
+#-------------------------------------------------------------
+# Disable Windows Consumer Experience Features
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
+#-------------------------------------------------------------
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
@@ -182,6 +189,23 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 $scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
 Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
+
+#-------------------------------------------------------------
+# Make sure that WinGet is installed and if not, install it
+#-------------------------------------------------------------
+$packageName = "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe"
+
+# Check if the package is installed
+$package = Get-AppxPackage -Name $packageName -AllUsers
+
+if ($package -eq $null) {
+    # Package not found, install it
+    Add-AppxPackage -RegisterByFamilyName -MainPackage $packageName
+    Write-Host "Package '$packageName' installed."
+} else {
+    # Package is already installed
+    Write-Host "Package '$packageName' is already installed."
+}
 
 
 #-------------------------------------------------------------
