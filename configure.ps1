@@ -227,7 +227,7 @@ Add-AppxPackage -Path $destPath
 #-------------------------------------------------------------
 # Install TranslucentTB using WinGet from the MS Store
 # Execute winget search for TranslucentTB and capture output
-$output = winget search TranslucentTB | Out-String
+$output = winget search TranslucentTB --accept-source-agreements | Out-String
 
 # Extract the ID field using regex
 if ($output -match 'TranslucentTB\s+(\S+)\s+') {
@@ -239,6 +239,8 @@ if ($output -match 'TranslucentTB\s+(\S+)\s+') {
 } else {
     Write-Host "Failed to find TranslucentTB ID."
 }
+
+#-------------------------------------------------------------
 
 #-------------------------------------------------------------
 # Check for the presence of .net 3.5 and install it if needed
