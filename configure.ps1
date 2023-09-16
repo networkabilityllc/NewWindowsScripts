@@ -64,7 +64,9 @@ if ($bingSearchDisabled) {
 
 
 Disable-GameBarTips
+Write-Host "Setting Enable Show Hiiden Files and Folders. Enabling Show File Extensions. Disabling Open File Explorer to Quick Access. Disabling Show Recent Files in Quick Access. Disabling Show Frequent Folders in Quick Access. Disabling Expand to Open Folder."
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
+Write-Host "Setting Taskbar size Large."
 Set-BoxstarterTaskbarOptions -Size Large 
 Set-BoxstarterTaskbarOptions -Dock Bottom 
 Set-BoxstarterTaskbarOptions -DisableSearchBox 
@@ -259,6 +261,44 @@ if ($featureEnabled -eq $null) {
     # Feature is already enabled
     Write-Host "Feature '$featureName' is already enabled."
 }
+
+#-------------------------------------------------------------
+# Add Boxstart Icon to the Default and the current User's Desktops
+#-------------------------------------------------------------
+# Define the location for the shortcut for the Default User
+$defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
+
+# Define the location for the shortcut for the current user
+$currentuserShortcutPath = "$($env:USERPROFILE)\Desktop\Box Starter.lnk"
+
+# Define the target PowerShell command
+$command = 'C:\ProgramData\Boxstarter\BoxstarterShell.ps1'
+
+# Define the icon location
+$iconLocation = "C:\ProgramData\Boxstarter\boxlogo.ico"
+
+# Define the "Start In" (working directory) path
+$startInPath = 'C:\ProgramData\Boxstarter\'
+
+# Create the WScript Shell Object
+$WshShell = New-Object -comObject WScript.Shell
+
+# Create the shortcut for the Default User
+$ShortcutDefaultUser = $WshShell.CreateShortcut($defaultUserShortcutPath)
+$ShortcutDefaultUser.TargetPath = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+$ShortcutDefaultUser.Arguments = "-ExecutionPolicy bypass -NoExit -File `"$command`""
+$ShortcutDefaultUser.IconLocation = $iconLocation
+$ShortcutDefaultUser.WorkingDirectory = $startInPath
+$ShortcutDefaultUser.Save()
+
+# Create the shortcut for the current user
+$ShortcutCurrentUser = $WshShell.CreateShortcut($currentuserShortcutPath)
+$ShortcutCurrentUser.TargetPath = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+$ShortcutCurrentUser.Arguments = "-ExecutionPolicy bypass -NoExit -File `"$command`""
+$ShortcutCurrentUser.IconLocation = $iconLocation
+$ShortcutCurrentUser.WorkingDirectory = $startInPath
+$ShortcutCurrentUser.Save()
+
 
 #-------------------------------------------------------------
 # Toggle UAC Section
