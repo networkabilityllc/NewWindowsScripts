@@ -207,6 +207,23 @@ if ($package -eq $null) {
     Write-Host "Package '$packageName' is already installed."
 }
 
+#-------------------------------------------------------------
+# Check for the presence of .net 3.5 and install it if needed
+#-------------------------------------------------------------
+$featureName = "NetFx3"
+$sourcePath = "d:\sources\sxs"
+
+# Check if the feature is enabled
+$featureEnabled = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
+
+if ($featureEnabled -eq $null) {
+    # Feature not found, enable it
+    Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess
+    Write-Host "Feature '$featureName' enabled."
+} else {
+    # Feature is already enabled
+    Write-Host "Feature '$featureName' is already enabled."
+}
 
 #-------------------------------------------------------------
 # Toggle UAC Section
