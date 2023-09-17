@@ -9,6 +9,18 @@ This PowerShell script, `workstationprep.ps1`, automates the process of preparin
 
 ### Method 1: Run Directly from GitHub
 
+On new installs, I execute the Workstation Prep Script from Audit Mode.
+At first boot, when presented with the Language selection, press SHFT-CTRL-F3 and 
+windows will reboot to Audit Mode.
+I suggest you run both the workstation script and the post-user install script while in Audit Mode
+
+I also generally reboot into OOBE, and then press SHFT-F10 and in the command prompt window type in 
+```cmd
+oobe\bypassnro
+```
+
+This will reboot into OOBE without the requirement for setting up an online account
+
 If you're comfortable running the script directly from GitHub, you can use the following command to execute it:
 
 ```powershell
