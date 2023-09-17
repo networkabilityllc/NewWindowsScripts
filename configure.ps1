@@ -240,36 +240,6 @@ winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 #-------------------------------------------------------------
-# Install TranslucentTB using WinGet from the MS Store
-# This seems to be necessary for new users to be able to use 
-# the chocolatey installer for TranslucentTB. Not sure why
-# need to investigate further. But doing this makes
-# it work for everyone.
-#-------------------------------------------------------------
-
-#-------------------------------------------------------------
-# Execute winget search for TranslucentTB and capture output
-# Note: the --accept-source-agreements parameter is required
-# in both places, otherwise the command will hang waiting for 
-# user input
-#-------------------------------------------------------------
-
-$output = winget search TranslucentTB --accept-source-agreements | Out-String
-
-# Extract the ID field using regex
-if ($output -match 'TranslucentTB\s+(\S+)\s+') {
-    $appID = $matches[1]
-
-    # Construct and execute the winget install command
-    $installCommand = "winget install --id=""$appID"" --accept-source-agreements --accept-package-agreements"
-    Invoke-Expression $installCommand
-} else {
-    Write-Host "Failed to find TranslucentTB ID."
-}
-
-#-------------------------------------------------------------
-
-#-------------------------------------------------------------
 # Install .Net 3.5 (Netfx3) using PowerShell
 #-------------------------------------------------------------
 #-------------------------------------------------------------
