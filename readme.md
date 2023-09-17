@@ -105,8 +105,3 @@ Feel free to customize and use this script according to your workstation prepara
 This script is provided under the [MIT License](LICENSE). See the [LICENSE](LICENSE) file for details.
 
 ---
-
-**Note:** This README serves as a brief overview of the script's functionality and usage. For more detailed information and explanations of individual tasks within the script, refer to the script comments and documentation.
-
-
-You can replace `[License Name]` in the template with the specific license name or terms you want to apply to your script, and don't forget to include the actual license file (`LICENSE`) in your repository if applicable.
