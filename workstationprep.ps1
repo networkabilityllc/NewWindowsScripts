@@ -402,7 +402,7 @@ $ShortcutCurrentUserChocoApps.Save()
 # Copy a pristine start.bin to the default user profile
 #-------------------------------------------------------------
 # Define source and destination paths
-$sourceFile = "C:\prep\NewWindowsScripts\start.bin"
+$sourceFile = "C:\prep\NewWindowsScripts\start2.bin"
 $destinationDir = "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
 
 # Check if the source file exists
