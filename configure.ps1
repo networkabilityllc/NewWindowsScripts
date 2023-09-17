@@ -187,7 +187,9 @@ public class NumLockControl {
 
     Write-Host "Git context menu entries removed from the registry."
 
-C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
+#-------------------------------------------------------------
+# Start App Cleanup Script
+#-------------------------------------------------------------
 
 $scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
 Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
@@ -225,6 +227,17 @@ Invoke-WebRequest -Uri $url -OutFile $destPath
 
 # Install the application silently
 Add-AppxPackage -Path $destPath
+
+#-------------------------------------------------------------
+# Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
+winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
+
+
+#-------------------------------------------------------------
+# Start Chocolatey App Installer
+#-------------------------------------------------------------
+
+C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 #-------------------------------------------------------------
 # Install TranslucentTB using WinGet from the MS Store
@@ -286,6 +299,7 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
     # Feature is already enabled
     Write-Host "Feature '$featureName' is already enabled."
 }
+
 
 #-------------------------------------------------------------
 # Add Boxstart Icon to the Default and the current User's Desktops
