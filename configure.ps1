@@ -299,7 +299,11 @@ $ShortcutCurrentUser.IconLocation = $iconLocation
 $ShortcutCurrentUser.WorkingDirectory = $startInPath
 $ShortcutCurrentUser.Save()
 
-
+#-------------------------------------------------------------
+# Remove the Boxstarter shortcut from the Public Folder
+# that was created during the Boxstarter installation
+if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
+write-host "Boxstarter Shell shortcut removed from Public Desktop."
 #-------------------------------------------------------------
 # Toggle UAC Section
 # ------------------------------------------------------------ 
