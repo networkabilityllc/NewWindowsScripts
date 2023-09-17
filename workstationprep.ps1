@@ -398,6 +398,26 @@ $ShortcutCurrentUserChocoApps.IconLocation = $iconPathChocoApps
 $ShortcutCurrentUserChocoApps.Description = "Shortcut to Choco Apps Script"
 $ShortcutCurrentUserChocoApps.Save()
 
+#-------------------------------------------------------------
+# Copy a pristine start.bin to the default user profile
+#-------------------------------------------------------------
+# Define source and destination paths
+$sourceFile = "C:\prep\NewWindowsScripts\start.bin"
+$destinationDir = "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
+
+# Check if the source file exists
+if (Test-Path $sourceFile) {
+    # Check if the destination directory exists, if not create it
+    if (-Not (Test-Path $destinationDir)) {
+        New-Item -Path $destinationDir -ItemType Directory
+    }
+
+    # Copy the file
+    Copy-Item -Path $sourceFile -Destination $destinationDir -Force
+} else {
+    Write-Host "Source file does not exist."
+}
+
 
 
 $statusMessage = @"
