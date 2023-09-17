@@ -228,7 +228,19 @@ Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Install TranslucentTB using WinGet from the MS Store
+# This seems to be necessary for new users to be able to use 
+# the chocolatey installer for TranslucentTB. Not sure why
+# need to investigate further. But doing this makes
+# it work for everyone.
+#-------------------------------------------------------------
+
+#-------------------------------------------------------------
 # Execute winget search for TranslucentTB and capture output
+# Note: the --accept-source-agreements parameter is required
+# in both places, otherwise the command will hang waiting for 
+# user input
+#-------------------------------------------------------------
+
 $output = winget search TranslucentTB --accept-source-agreements | Out-String
 
 # Extract the ID field using regex
@@ -245,18 +257,31 @@ if ($output -match 'TranslucentTB\s+(\S+)\s+') {
 #-------------------------------------------------------------
 
 #-------------------------------------------------------------
-# Check for the presence of .net 3.5 and install it if needed
+# Install .Net 3.5 (Netfx3) using PowerShell
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+# Check for the presence of .NET 3.5 and install it if 
+# it's not already installed. Suppress Local Media Missing
+# error message.
 #-------------------------------------------------------------
 $featureName = "NetFx3"
 $sourcePath = "d:\sources\sxs"
 
 # Check if the feature is enabled
-$featureEnabled = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
+$feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
 
-if ($featureEnabled -eq $null) {
-    # Feature not found, enable it
-    Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess
-    Write-Host "Feature '$featureName' enabled."
+if ($feature -eq $null -or $feature.State -ne "Enabled") {
+    try {
+        # Try enabling the feature from local source
+        $enableFeature = Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess -ErrorAction Stop
+        Write-Host "Feature '$featureName' enabled."
+    }
+    catch {
+        # Handle the error when local media is not found
+        Write-Host "Local Media not available: Checking for Online Source."
+        # Try enabling the feature from online source
+        Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All
+    }
 } else {
     # Feature is already enabled
     Write-Host "Feature '$featureName' is already enabled."
@@ -265,6 +290,7 @@ if ($featureEnabled -eq $null) {
 #-------------------------------------------------------------
 # Add Boxstart Icon to the Default and the current User's Desktops
 #-------------------------------------------------------------
+
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
 
@@ -302,8 +328,10 @@ $ShortcutCurrentUser.Save()
 #-------------------------------------------------------------
 # Remove the Boxstarter shortcut from the Public Folder
 # that was created during the Boxstarter installation
+#-------------------------------------------------------------
 if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
 write-host "Boxstarter Shell shortcut removed from Public Desktop."
+
 #-------------------------------------------------------------
 # Toggle UAC Section
 # ------------------------------------------------------------ 

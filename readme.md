@@ -1,5 +1,8 @@
-# Workstation Preparation Script (workstationprep.ps1)
+## Disclaimer
 
+This is a highly opinionated installation script that does exactly what I want for new workstation installs. Some features may not be desirable to you, however everything is done by batch file, PowerShell script, and Python, and all of the code is commented and should be easily modifiable.
+
+# Workstation Preparation Script (workstationprep.ps1)
 This PowerShell script, `workstationprep.ps1`, automates the process of preparing a Windows workstation for a new user. It performs various tasks to set up the workstation environment efficiently.
 
 ## How to Use
