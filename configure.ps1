@@ -1,7 +1,10 @@
 # Path to git.exe
 $gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
 
+Write-Host "Checking for Git installation." -ForegroundColor Black -BackgroundColor White
+
 # Check if the repository has been cloned
+Write-Host "Checking if the repository has been cloned." -ForegroundColor Black -BackgroundColor White
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
     # Clone the GitHub repository
@@ -74,19 +77,29 @@ Set-BoxstarterTaskbarOptions -AlwaysShowIconsOn
 Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
+Write-Host "Removing Taskbar Chat Icon." -ForegroundColor Black -BackgroundColor White
+
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
 #-------------------------------------------------------------
 
 #-------------------------------------------------------------
 # Disable Windows Consumer Experience Features
+
+Write-Host "Disabling Windows Consumer Experience Features." -ForegroundColor Black -BackgroundColor White
+
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 #-------------------------------------------------------------
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
 # Restore the classic right-click context menu
+
+Write-Host "Restoring the classic right-click context menu." -ForegroundColor Black -BackgroundColor White
+
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
+Write-Host "Setting Mouse Hover Time for Taskbar to a very long time to prevent hover text." -ForegroundColor Black -BackgroundColor White
+
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
@@ -213,7 +226,8 @@ if ($package -eq $null) {
 #-------------------------------------------------------------
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
-Write-Host "Installing the latest version of WinGet from GitHub."
+Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor Black -BackgroundColor White
+
 # Define the URL and destination path
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.3.1741/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -231,19 +245,19 @@ Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
-Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet."
+Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor Black -BackgroundColor White
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
 #-------------------------------------------------------------
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
-Write-Host "Uninstalling Windows 11 Personal Teams."
+Write-Host "Uninstalling Windows 11 Personal Teams." -ForegroundColor Black -BackgroundColor White
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
-
+Write-Host "Starting Chocolatey App Installer." -ForegroundColor Black -BackgroundColor White
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 #-------------------------------------------------------------
@@ -254,6 +268,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # it's not already installed. Suppress Local Media Missing
 # error message.
 #-------------------------------------------------------------
+Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell." -ForegroundColor Black -BackgroundColor White
 $featureName = "NetFx3"
 $sourcePath = "d:\sources\sxs"
 
@@ -281,7 +296,7 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
 #-------------------------------------------------------------
 # Add Boxstart Icon to the Default and the current User's Desktops
 #-------------------------------------------------------------
-
+Write-Host "Adding Boxstarter Shell shortcut to the Default and current user's Desktops." -ForegroundColor Black -BackgroundColor White
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
 
@@ -320,12 +335,15 @@ $ShortcutCurrentUser.Save()
 # Remove the Boxstarter shortcut from the Public Folder
 # that was created during the Boxstarter installation
 #-------------------------------------------------------------
+Write-Host "Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor Black -BackgroundColor White
+
 if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
 write-host "Boxstarter Shell shortcut removed from Public Desktop."
 
 #-------------------------------------------------------------
 # Toggle UAC Section
 # ------------------------------------------------------------ 
+Write-Host "Toggling UAC." -ForegroundColor Black -BackgroundColor White
 # Load the System.Windows.Forms assembly
 Add-Type -AssemblyName System.Windows.Forms
 
