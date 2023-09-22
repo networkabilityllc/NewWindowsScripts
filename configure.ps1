@@ -50,9 +50,9 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 # Only disable UAC if it's not already disabled
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
-    Write-Host "UAC has been disabled."
+    Write-Host "UAC has been disabled." -ForegroundColor Black -BackgroundColor White
 } else {
-    Write-Host "UAC is already disabled."
+    Write-Host "UAC is already disabled." -ForegroundColor Black -BackgroundColor White
 }
 
 # Check if Bing Search is already disabled
@@ -60,11 +60,11 @@ $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\
 
 # Output "Disabled" if already disabled, or run the command to disable it
 if ($bingSearchDisabled) {
-    "Bing Search is Already Disabled"
+    "Bing Search is Already Disabled" -ForegroundColor Black -BackgroundColor White
 } else {
     # Run the command to disable Bing Search
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
-    "Bing Search is Now Disabled"
+    "Bing Search is Now Disabled" -ForegroundColor Black -BackgroundColor White
 }
 
 
@@ -250,6 +250,7 @@ Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
+Write-Host "The latest version of TranslucentTB will not install without this package." -ForegroundColor Black -BackgroundColor White
 Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor Black -BackgroundColor White
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
@@ -257,12 +258,14 @@ winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
 Write-Host "Uninstalling Windows 11 Personal Teams." -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
 Write-Host "Starting Chocolatey App Installer." -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 #-------------------------------------------------------------
@@ -274,6 +277,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # error message.
 #-------------------------------------------------------------
 Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell." -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
 $featureName = "NetFx3"
 $sourcePath = "d:\sources\sxs"
 
