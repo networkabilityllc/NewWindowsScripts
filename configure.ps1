@@ -60,12 +60,13 @@ $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\
 
 # Output "Disabled" if already disabled, or run the command to disable it
 if ($bingSearchDisabled) {
-    "Bing Search is Already Disabled" -ForegroundColor Black -BackgroundColor White
+    Write-Host "Bing Search is Already Disabled" -ForegroundColor Black -BackgroundColor White
 } else {
     # Run the command to disable Bing Search
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
-    "Bing Search is Now Disabled" -ForegroundColor Black -BackgroundColor White
+    Write-Host "Bing Search is Now Disabled" -ForegroundColor Black -BackgroundColor White
 }
+
 
 
 Disable-GameBarTips
