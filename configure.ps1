@@ -213,6 +213,7 @@ if ($package -eq $null) {
 #-------------------------------------------------------------
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
+Write-Host "Installing the latest version of WinGet from GitHub."
 # Define the URL and destination path
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.3.1741/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -230,11 +231,13 @@ Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
+Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet."
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
 #-------------------------------------------------------------
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
+Write-Host "Uninstalling Windows 11 Personal Teams."
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
