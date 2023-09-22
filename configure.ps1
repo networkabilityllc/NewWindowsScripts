@@ -231,7 +231,10 @@ if ($package -eq $null) {
 Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor Black -BackgroundColor White
 Write-Host "`n"
 # Define the URL and destination path
-$url = "https://github.com/microsoft/winget-cli/releases/tag/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+Write-host "This URL may change in the future - always check the latest release from https://github.com/microsoft/winget-cli/releases" -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
+
+$url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
 # Create the destination directory if it doesn't exist
