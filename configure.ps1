@@ -2,9 +2,11 @@
 $gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
 
 Write-Host "Checking for Git installation." -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
 
 # Check if the repository has been cloned
 Write-Host "Checking if the repository has been cloned." -ForegroundColor Black -BackgroundColor White
+Write-Host "`n"
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
     # Clone the GitHub repository
@@ -78,7 +80,7 @@ Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
 Write-Host "Removing Taskbar Chat Icon." -ForegroundColor Black -BackgroundColor White
-
+Write-Host "`n"
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
 #-------------------------------------------------------------
 
@@ -86,7 +88,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v
 # Disable Windows Consumer Experience Features
 
 Write-Host "Disabling Windows Consumer Experience Features." -ForegroundColor Black -BackgroundColor White
-
+Write-Host "`n"
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 #-------------------------------------------------------------
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
@@ -95,11 +97,11 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\"
 # Restore the classic right-click context menu
 
 Write-Host "Restoring the classic right-click context menu." -ForegroundColor Black -BackgroundColor White
-
+Write-Host "`n"
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 Write-Host "Setting Mouse Hover Time for Taskbar to a very long time to prevent hover text." -ForegroundColor Black -BackgroundColor White
-
+Write-Host "`n"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
@@ -142,8 +144,8 @@ $Shortcut.Save()
 #------------------------------------------------------------
 
 # Display a screen prompt to the user
-Write-Host "Please look behind this console window for any open dialog boxes or user prompts.`nClose them before continuing."
-
+Write-Host "Please look behind this console window for any open dialog boxes or user prompts.`nClose them before continuing." -ForegroundColor Black -BackgroundColor Blue
+Write-Host "`n"
 # ------------------------------------------------------------
 # Add the "Open Command Prompt Here" option to the context menu
 # ------------------------------------------------------------
@@ -227,9 +229,9 @@ if ($package -eq $null) {
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
 Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor Black -BackgroundColor White
-
+Write-Host "`n"
 # Define the URL and destination path
-$url = "https://github.com/microsoft/winget-cli/releases/download/v1.3.1741/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$url = "https://github.com/microsoft/winget-cli/releases/tag/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
 # Create the destination directory if it doesn't exist
