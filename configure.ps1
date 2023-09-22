@@ -232,6 +232,10 @@ Add-AppxPackage -Path $destPath
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
+#-------------------------------------------------------------
+# Uninstall Windows 11 Personal Teams
+#-------------------------------------------------------------
+Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
 # Start Chocolatey App Installer
