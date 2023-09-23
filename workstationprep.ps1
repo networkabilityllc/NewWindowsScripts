@@ -111,9 +111,9 @@ function Prompt-DownloadSplashtopSOS {
     if ($choice -eq "Yes") {
         Download-SplashtopSOS
     } else {
-        Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+        Write-Host "----------------------------------------------------"   -ForegroundColor White -BackgroundColor Green
         Write-Host "       Skipping SOS Shortcut Install                "   -ForegroundColor White -BackgroundColor Green
-        Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+        Write-Host "----------------------------------------------------"   -ForegroundColor White -BackgroundColor Green
     }
 }
 
@@ -122,9 +122,9 @@ function Download-SplashtopSOS {
     $sosUri = 'https://download.splashtop.com/sos/SplashtopSOS.exe'
     $sosPath = 'C:\Users\Default\Desktop\SplashtopSOS.exe'
     Invoke-WebRequest -Uri $sosUri -OutFile $sosPath
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------"   -ForegroundColor White -BackgroundColor Green
     Write-Host "Splashtop SOS installed for All New Users           "   -ForegroundColor White -BackgroundColor Green
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------"   -ForegroundColor White -BackgroundColor Green
 }
 # Function to Prompt User for Taskbar Tweaks
 function Prompt-TaskbarTweaks {
@@ -169,18 +169,18 @@ function Apply-TaskbarTweaks {
     # Unload the Default User Registry hive
     REG UNLOAD HKLM\Default
 
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
     Write-Host "      Taskbar Tweaks Applied for All New Users      " -ForegroundColor White -BackgroundColor Green
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
 # Call the prompt functions
 Prompt-DownloadSplashtopSOS
 Prompt-TaskbarTweaks
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
-Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor Black -BackgroundColor White
+Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
 Write-Host "    Checking for Choco and BoxStarter     " -ForegroundColor Black -BackgroundColor White
-Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor Black -BackgroundColor White
+Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
 
 # ------------------------------------------------------------
 # Set the path to the chocolatey executable as an environment variable
@@ -265,9 +265,9 @@ if (-not $gitInstalled) {
         Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
 
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
     Write-Host "Git context menu entries removed from the registry  " -ForegroundColor White -BackgroundColor Green
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
 # ------------------------------------------------------------
 # Check if the machine is running as a VMware virtual machine
@@ -275,14 +275,14 @@ if (-not $gitInstalled) {
 $vmwareVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object { $_.Manufacturer -eq "VMware, Inc." }
 
 if ($vmwareVm) {
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"  -ForegroundColor White -BackgroundColor Green
+    Write-Host "-------------------------------------------------------------"  -ForegroundColor White -BackgroundColor Green
     Write-Host "Detected VMware virtual machine. Installing VMware Tools..."    -ForegroundColor White -BackgroundColor Green
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"  -ForegroundColor White -BackgroundColor Green
+    Write-Host "-------------------------------------------------------------"  -ForegroundColor White -BackgroundColor Green
     & $chocoPath install vmware-tools --force
 } else {
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "-----------------------------------------------------------------------------" -ForegroundColor White -BackgroundColor Green
     Write-Host "Not running as a VMware virtual machine. Skipping VMware Tools installation. " -ForegroundColor White -BackgroundColor Green
-    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "-----------------------------------------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
 
 
