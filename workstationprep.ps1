@@ -316,8 +316,8 @@ if (-not (Test-Path -Path $repoPath)) {
 # Disable error messages for this specific operation
 $ErrorActionPreference = 'SilentlyContinue'
 Disable-UAC -Confirm:$false
-Disable-BingSearch
-Disable-GameBarTips
+Disable-BingSearch -ErrorAction SilentlyContinue
+Disable-GameBarTips -ErrorAction SilentlyContinue
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions
 Set-BoxstarterTaskbarOptions -Size Large -Dock Bottom -Combine Always -AlwaysShowIconsOn
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
