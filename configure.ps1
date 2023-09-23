@@ -273,14 +273,14 @@ if ($package -eq $null) {
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor Black -BackgroundColor White
+Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 # Define the URL and destination path
 Write-GreenWhiteSeparator
 Write-host "This URL may change in the future                     "      -ForegroundColor Black -BackgroundColor Blue
-Write-Host "always check the latest release from                  "   -ForegroundColor Black -BackgroundColor Blue
-Write-Host "https://github.com/microsoft/winget-cli/releases      " -ForegroundColor Black -BackgroundColor White
+Write-Host "always check the latest release from                  "      -ForegroundColor Black -BackgroundColor Blue
+Write-Host "https://github.com/microsoft/winget-cli/releases      "      -ForegroundColor Black -BackgroundColor Bluen
 Write-GreenWhiteSeparator
 Write-Host "`n"
 
@@ -301,9 +301,9 @@ Add-AppxPackage -Path $destPath
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
 Write-GreenWhiteSeparator
-Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor Black -BackgroundColor White
-Write-Host "The latest version of TranslucentTB" -ForegroundColor Black -BackgroundColor White 
-Write-Host "will not install without this package." -ForegroundColor Black -BackgroundColor White
+Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor White -BackgroundColor Green
+Write-Host "The latest version of TranslucentTB" -ForegroundColor White -BackgroundColor Green 
+Write-Host "will not install without this package." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
@@ -312,7 +312,7 @@ winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Uninstalling Windows 11 Personal Teams." -ForegroundColor Black -BackgroundColor White
+Write-Host "Uninstalling Windows 11 Personal Teams." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
@@ -321,7 +321,7 @@ Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -E
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Starting Chocolatey App Installer." -ForegroundColor Black -BackgroundColor White
+Write-Host "Starting Chocolatey App Installer." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
@@ -335,7 +335,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # error message.
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell.     " -ForegroundColor Black -BackgroundColor White
+Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell.     " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 $featureName = "NetFx3"
@@ -371,7 +371,7 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
 Write-Host "Adding Boxstarter Shell shortcut to the     "
-Write-Host "Default and current user's Desktops.        " -ForegroundColor Black -BackgroundColor White
+Write-Host "Default and current user's Desktops.        " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
@@ -412,7 +412,7 @@ $ShortcutCurrentUser.Save()
 # that was created during the Boxstarter installation
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor Black -BackgroundColor White
+Write-Host "Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 
 if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
@@ -422,7 +422,7 @@ write-host "Boxstarter Shell shortcut removed from Public Desktop."
 # Toggle UAC Section
 # ------------------------------------------------------------ 
 Write-GreenWhiteSeparator
-Write-Host "Toggling UAC.                           " -ForegroundColor Black -BackgroundColor White
+Write-Host "Toggling UAC.                           " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 # Load the System.Windows.Forms assembly
 Add-Type -AssemblyName System.Windows.Forms
