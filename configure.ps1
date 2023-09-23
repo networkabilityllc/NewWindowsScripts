@@ -280,7 +280,7 @@ Write-Host "`n"
 Write-GreenWhiteSeparator
 Write-host "This URL may change in the future                     "      -ForegroundColor Black -BackgroundColor Blue
 Write-Host "always check the latest release from                  "      -ForegroundColor Black -BackgroundColor Blue
-Write-Host "https://github.com/microsoft/winget-cli/releases      "      -ForegroundColor Black -BackgroundColor Bluen
+Write-Host "https://github.com/microsoft/winget-cli/releases      "      -ForegroundColor Black -BackgroundColor Blue
 Write-GreenWhiteSeparator
 Write-Host "`n"
 
