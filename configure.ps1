@@ -271,7 +271,7 @@ if ($package -eq $null) {
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Installing the latest version of WinGet from GitHub." -ForegroundColor White -BackgroundColor Green
+Write-Host "   Installing the latest version of WinGet from GitHub.  " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 # Define the URL and destination path
