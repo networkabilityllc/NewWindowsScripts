@@ -87,10 +87,10 @@ if ($bingSearchDisabled) {
 
 Disable-GameBarTips
 Write-GreenWhiteSeparator
-Write-Host "Setting Enable Show Hiiden Files and Folders. "   -ForegroundColor White -BackgroundColor Green
-Write-Host "Enabling Show File Extensions. "                  -ForegroundColor White -BackgroundColor Green
-Write-Host "Disabling Open File Explorer to Quick Access."    -ForegroundColor White -BackgroundColor Green
-Write-Host "Disabling Show Recent Files in Quick Access. "    -ForegroundColor White -BackgroundColor Green
+Write-Host "Setting Enable Show Hiiden Files and Folders.   "   -ForegroundColor White -BackgroundColor Green
+Write-Host "Enabling Show File Extensions.                  "                  -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Open File Explorer to Quick Access.   "    -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Show Recent Files in Quick Access.    "    -ForegroundColor White -BackgroundColor Green
 Write-Host "Disabling Show Frequent Folders in Quick Access." -ForegroundColor White -BackgroundColor Green 
 Write-Host "Disabling Expand to Open Folder."                 -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
@@ -106,7 +106,7 @@ Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
 Write-GreenWhiteSeparator
-Write-Host "Removing Taskbar Chat Icon." -ForegroundColor White -BackgroundColor Green
+Write-Host "Removing Taskbar Chat Icon.              " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
@@ -115,8 +115,8 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v
 #-------------------------------------------------------------
 # Disable Windows Consumer Experience Features
 Write-GreenWhiteSeparator
-Write-Host "Disabling Windows" -ForegroundColor White -BackgroundColor Green 
-Write-Host "Consumer Experience Features." -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Windows                            " -ForegroundColor White -BackgroundColor Green 
+Write-Host "Consumer Experience Features.                " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
@@ -126,8 +126,8 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
 # Restore the classic right-click context menu
 Write-GreenWhiteSeparator
-Write-Host "Restoring the classic" -ForegroundColor White -BackgroundColor Green 
-Write-Host "right-click context menu." -ForegroundColor White -BackgroundColor Green
+Write-Host "Restoring the classic                              " -ForegroundColor White -BackgroundColor Green 
+Write-Host "right-click context menu.                          " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
@@ -180,9 +180,9 @@ $Shortcut.Save()
 
 # Display a screen prompt to the user
 Write-GreenWhiteSeparator
-Write-Host "Please look behind this console window " -ForegroundColor Black -BackgroundColor Blue
-Write-Host "for any open dialog boxes or user prompts." -ForegroundColor Black -BackgroundColor Blue
-Write-Host "Close them before continuing." -ForegroundColor Black -BackgroundColor Blue
+Write-Host "Please look behind this console window           " -ForegroundColor Black -BackgroundColor Blue
+Write-Host "for any open dialog boxes or user prompts.       " -ForegroundColor Black -BackgroundColor Blue
+Write-Host "Close them before continuing.                    " -ForegroundColor Black -BackgroundColor Blue
 Write-GreenWhiteSeparator
 Write-Host "`n"
 # ------------------------------------------------------------
@@ -278,9 +278,9 @@ Write-GreenWhiteSeparator
 Write-Host "`n"
 # Define the URL and destination path
 Write-GreenWhiteSeparator
-Write-host "This URL may change in the future"      -ForegroundColor Black -BackgroundColor Blue
-Write-Host "always check the latest release from"   -ForegroundColor Black -BackgroundColor Blue
-Write-Host" https://github.com/microsoft/winget-cli/releases" -ForegroundColor Black -BackgroundColor White
+Write-host "This URL may change in the future                     "      -ForegroundColor Black -BackgroundColor Blue
+Write-Host "always check the latest release from                  "   -ForegroundColor Black -BackgroundColor Blue
+Write-Host "https://github.com/microsoft/winget-cli/releases      " -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 Write-Host "`n"
 
@@ -302,7 +302,8 @@ Add-AppxPackage -Path $destPath
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
 Write-GreenWhiteSeparator
 Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor Black -BackgroundColor White
-Write-Host "The latest version of TranslucentTB will not install without this package." -ForegroundColor Black -BackgroundColor White
+Write-Host "The latest version of TranslucentTB" -ForegroundColor Black -BackgroundColor White 
+Write-Host "will not install without this package." -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
@@ -334,7 +335,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # error message.
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell." -ForegroundColor Black -BackgroundColor White
+Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell.     " -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 Write-Host "`n"
 $featureName = "NetFx3"
@@ -369,7 +370,8 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
 # Add Boxstart Icon to the Default and the current User's Desktops
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Adding Boxstarter Shell shortcut to the Default and current user's Desktops." -ForegroundColor Black -BackgroundColor White
+Write-Host "Adding Boxstarter Shell shortcut to the     "
+Write-Host "Default and current user's Desktops.        " -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
@@ -420,7 +422,7 @@ write-host "Boxstarter Shell shortcut removed from Public Desktop."
 # Toggle UAC Section
 # ------------------------------------------------------------ 
 Write-GreenWhiteSeparator
-Write-Host "Toggling UAC." -ForegroundColor Black -BackgroundColor White
+Write-Host "Toggling UAC.                           " -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 # Load the System.Windows.Forms assembly
 Add-Type -AssemblyName System.Windows.Forms
@@ -432,10 +434,10 @@ $dialogResult = [System.Windows.Forms.MessageBox]::Show("Do you want to re-enabl
 if ($dialogResult -eq [System.Windows.Forms.DialogResult]::Yes) {
     Enable-UAC
     Write-GreenWhiteSeparator
-    Write-Host "UAC has been re-enabled."
+    Write-Host "UAC has been re-enabled.        "
     Write-GreenWhiteSeparator
 } else {
     Write-GreenWhiteSeparator
-    Write-Host "UAC remains disabled."
+    Write-Host "UAC remains disabled.           "
     Write-GreenWhiteSeparator
 }
