@@ -22,14 +22,22 @@ function Write-BoxedText {
     # Create the top border
     $border = $BorderString * $totalLength
     
+    # Create breaks above and below the boxed text
+    Write-Host "`n"
+    
     # Create the boxed text with padding and center the text
-    $boxedText = $BorderString * $padding + $Text + $BorderString * ($totalLength - $padding - $Text.Length)
+    $boxedText = (' ' * $padding) + $Text + (' ' * ($totalLength - $padding - $Text.Length))
     
     # Output the top border, boxed text, and bottom border
     Write-Host $border -ForegroundColor White -BackgroundColor Green
     Write-Host $boxedText -ForegroundColor White -BackgroundColor Green
     Write-Host $border -ForegroundColor White -BackgroundColor Green
+    
+    # Create a break below the boxed text
+    Write-Host "`n"
 }
+
+
 
 function Check-GitInstallation {
     # Path to git.exe
