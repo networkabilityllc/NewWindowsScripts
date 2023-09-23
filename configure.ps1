@@ -2,7 +2,7 @@ function Write-BoxedText {
     param (
         [string]$Text,
         [char]$BorderChar = '-',
-        [int]$PaddingSize = 20
+        [int]$PaddingSize = 10
     )
     
     # Convert the BorderChar to a string
