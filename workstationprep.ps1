@@ -169,7 +169,7 @@ function Apply-TaskbarTweaks {
     Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
     Write-Host "Taskbar Tweaks Applied for All New Users  " -ForegroundColor White -BackgroundColor Green
     Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
-
+}
 # Call the prompt functions
 Prompt-DownloadSplashtopSOS
 Prompt-TaskbarTweaks
