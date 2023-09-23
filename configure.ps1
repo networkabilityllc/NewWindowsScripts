@@ -1,5 +1,5 @@
 # Path to git.exe
-$gitPath = "C:\Program Files\Git\bin\git.exe"  # Change this path to the actual location of git.exe
+$gitPath = "C:\Program Files\Git\bin\git.exe" 
 
 Write-Host "Checking for Git installation." -ForegroundColor Black -BackgroundColor White
 Write-Host "`n"
