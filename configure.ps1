@@ -59,11 +59,11 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
     Write-GreenWhiteSeparator
-    Write-Host "UAC has been disabled.            "  -ForegroundColor White -BackgroundColor Green
+    Write-Host "                UAC has been disabled.            "  -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 } else {
     Write-GreenWhiteSeparator
-    Write-Host "UAC is already disabled.          "  -ForegroundColor White -BackgroundColor Green
+    Write-Host "                UAC is already disabled.          "  -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 }
 
@@ -73,13 +73,13 @@ $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\
 # Output "Disabled" if already disabled, or run the command to disable it
 if ($bingSearchDisabled) {
     Write-GreenWhiteSeparator
-    Write-Host "Bing Search is Already Disabled" -ForegroundColor White -BackgroundColor Green
+    Write-Host "              Bing Search is Already Disabled     " -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 } else {
     # Run the command to disable Bing Search
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
     Write-GreenWhiteSeparator
-    Write-Host "Bing Search is Now Disabled" -ForegroundColor White -BackgroundColor Green
+    Write-Host "              Bing Search is Now Disabled          " -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 }
 
@@ -87,16 +87,16 @@ if ($bingSearchDisabled) {
 
 Disable-GameBarTips
 Write-GreenWhiteSeparator
-Write-Host "Setting Enable Show Hiiden Files and Folders.   "   -ForegroundColor White -BackgroundColor Green
-Write-Host "Enabling Show File Extensions.                  "                  -ForegroundColor White -BackgroundColor Green
-Write-Host "Disabling Open File Explorer to Quick Access.   "    -ForegroundColor White -BackgroundColor Green
-Write-Host "Disabling Show Recent Files in Quick Access.    "    -ForegroundColor White -BackgroundColor Green
-Write-Host "Disabling Show Frequent Folders in Quick Access." -ForegroundColor White -BackgroundColor Green 
-Write-Host "Disabling Expand to Open Folder."                 -ForegroundColor White -BackgroundColor Green
+Write-Host "       Setting Enable Show Hiiden Files and Folders.   "   -ForegroundColor White -BackgroundColor Green
+Write-Host "       Enabling Show File Extensions.                  "                  -ForegroundColor White -BackgroundColor Green
+Write-Host "       Disabling Open File Explorer to Quick Access.   "    -ForegroundColor White -BackgroundColor Green
+Write-Host "       Disabling Show Recent Files in Quick Access.    "    -ForegroundColor White -BackgroundColor Green
+Write-Host "       Disabling Show Frequent Folders in Quick Access." -ForegroundColor White -BackgroundColor Green 
+Write-Host "       Disabling Expand to Open Folder.                "                 -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
 Write-GreenWhiteSeparator
-Write-Host "Setting Taskbar size Large."
+Write-Host "       Setting Taskbar size Large.                     "
 Write-GreenWhiteSeparator
 Set-BoxstarterTaskbarOptions -Size Large 
 Set-BoxstarterTaskbarOptions -Dock Bottom 
@@ -106,7 +106,7 @@ Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
 Write-GreenWhiteSeparator
-Write-Host "Removing Taskbar Chat Icon.              " -ForegroundColor White -BackgroundColor Green
+Write-Host "       Removing Taskbar Chat Icon.                      " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
@@ -115,8 +115,8 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v
 #-------------------------------------------------------------
 # Disable Windows Consumer Experience Features
 Write-GreenWhiteSeparator
-Write-Host "Disabling Windows                            " -ForegroundColor White -BackgroundColor Green 
-Write-Host "Consumer Experience Features.                " -ForegroundColor White -BackgroundColor Green
+Write-Host "       Disabling Windows                            " -ForegroundColor White -BackgroundColor Green 
+Write-Host "       Consumer Experience Features.                " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
@@ -126,15 +126,15 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
 # Restore the classic right-click context menu
 Write-GreenWhiteSeparator
-Write-Host "Restoring the classic                              " -ForegroundColor White -BackgroundColor Green 
-Write-Host "right-click context menu.                          " -ForegroundColor White -BackgroundColor Green
+Write-Host "       Restoring the classic                         " -ForegroundColor White -BackgroundColor Green 
+Write-Host "       right-click context menu.                     " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 Write-GreenWhiteSeparator
-Write-Host "Setting Mouse Hover Time for Taskbar"
-Write-host "to a very long time to prevent hover text." -ForegroundColor White -BackgroundColor Green
+Write-Host "       Setting Mouse Hover Time for Taskbar          "
+Write-host "       to a very long time to prevent hover text.    " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
@@ -179,11 +179,9 @@ $Shortcut.Save()
 #------------------------------------------------------------
 
 # Display a screen prompt to the user
-Write-GreenWhiteSeparator
 Write-Host "Please look behind this console window           " -ForegroundColor Black -BackgroundColor Blue
 Write-Host "for any open dialog boxes or user prompts.       " -ForegroundColor Black -BackgroundColor Blue
 Write-Host "Close them before continuing.                    " -ForegroundColor Black -BackgroundColor Blue
-Write-GreenWhiteSeparator
 Write-Host "`n"
 # ------------------------------------------------------------
 # Add the "Open Command Prompt Here" option to the context menu
@@ -239,7 +237,7 @@ public class NumLockControl {
         Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
     Write-GreenWhiteSeparator
-    Write-Host "Git context menu entries removed from the registry."
+    Write-Host "   Git context menu entries removed from the registry.   " -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 
 #-------------------------------------------------------------
@@ -261,12 +259,12 @@ if ($package -eq $null) {
     # Package not found, install it
     Add-AppxPackage -RegisterByFamilyName -MainPackage $packageName
     Write-GreenWhiteSeparator
-    Write-Host "Package '$packageName' installed."
+    Write-Host "       Package '$packageName' installed."
     Write-GreenWhiteSeparator
 } else {
     # Package is already installed
     Write-GreenWhiteSeparator
-    Write-Host "Package '$packageName' is already installed."
+    Write-Host "       Package '$packageName' is already installed."
     Write-GreenWhiteSeparator
 }
 #-------------------------------------------------------------
@@ -278,9 +276,9 @@ Write-GreenWhiteSeparator
 Write-Host "`n"
 # Define the URL and destination path
 Write-GreenWhiteSeparator
-Write-host "This URL may change in the future                     "      -ForegroundColor Black -BackgroundColor Blue
-Write-Host "always check the latest release from                  "      -ForegroundColor Black -BackgroundColor Blue
-Write-Host "https://github.com/microsoft/winget-cli/releases      "      -ForegroundColor Black -BackgroundColor Blue
+Write-host "       This URL may change in the future               "      -ForegroundColor Black -BackgroundColor Blue
+Write-Host "       always check the latest release from            "      -ForegroundColor Black -BackgroundColor Blue
+Write-Host "       https://github.com/microsoft/winget-cli/releases"      -ForegroundColor Black -BackgroundColor Blue
 Write-GreenWhiteSeparator
 Write-Host "`n"
 
@@ -301,9 +299,9 @@ Add-AppxPackage -Path $destPath
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
 Write-GreenWhiteSeparator
-Write-Host "Installing Microsoft.UI.Xaml.2.8 using WinGet." -ForegroundColor White -BackgroundColor Green
-Write-Host "The latest version of TranslucentTB" -ForegroundColor White -BackgroundColor Green 
-Write-Host "will not install without this package." -ForegroundColor White -BackgroundColor Green
+Write-Host "    Installing Microsoft.UI.Xaml.2.8 using WinGet.  " -ForegroundColor White -BackgroundColor Green
+Write-Host "        The latest version of TranslucentTB         " -ForegroundColor White -BackgroundColor Green 
+Write-Host "       will not install without this package.       " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
@@ -312,7 +310,7 @@ winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Uninstalling Windows 11 Personal Teams." -ForegroundColor White -BackgroundColor Green
+Write-Host "       Uninstalling Windows 11 Personal Teams.     " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
@@ -321,7 +319,7 @@ Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -E
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Starting Chocolatey App Installer." -ForegroundColor White -BackgroundColor Green
+Write-Host "       Starting Chocolatey App Installer.       " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
@@ -335,7 +333,7 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # error message.
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Installing .NET 3.5 (Netfx3) using PowerShell.     " -ForegroundColor White -BackgroundColor Green
+Write-Host "  Installing .NET 3.5 (Netfx3) using PowerShell.  " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 $featureName = "NetFx3"
@@ -370,8 +368,8 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
 # Add Boxstart Icon to the Default and the current User's Desktops
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Adding Boxstarter Shell shortcut to the     "
-Write-Host "Default and current user's Desktops.        " -ForegroundColor White -BackgroundColor Green
+Write-Host "       Adding Boxstarter Shell shortcut to the     "
+Write-Host "       Default and current user's Desktops.        " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
@@ -412,17 +410,19 @@ $ShortcutCurrentUser.Save()
 # that was created during the Boxstarter installation
 #-------------------------------------------------------------
 Write-GreenWhiteSeparator
-Write-Host "Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor White -BackgroundColor Green
+Write-Host "       Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 
 if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
-write-host "Boxstarter Shell shortcut removed from Public Desktop."
+Write-GreenWhiteSeparator
+write-host "       Boxstarter Shell shortcut removed from Public Desktop."
+Write-GreenWhiteSeparator
 
 #-------------------------------------------------------------
 # Toggle UAC Section
 # ------------------------------------------------------------ 
 Write-GreenWhiteSeparator
-Write-Host "Toggling UAC.                           " -ForegroundColor White -BackgroundColor Green
+Write-Host "                     Toggling UAC.                            " -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 # Load the System.Windows.Forms assembly
 Add-Type -AssemblyName System.Windows.Forms
@@ -434,10 +434,10 @@ $dialogResult = [System.Windows.Forms.MessageBox]::Show("Do you want to re-enabl
 if ($dialogResult -eq [System.Windows.Forms.DialogResult]::Yes) {
     Enable-UAC
     Write-GreenWhiteSeparator
-    Write-Host "UAC has been re-enabled.        "
+    Write-Host "       UAC has been re-enabled.        "
     Write-GreenWhiteSeparator
 } else {
     Write-GreenWhiteSeparator
-    Write-Host "UAC remains disabled.           "
+    Write-Host "       UAC remains disabled.           "
     Write-GreenWhiteSeparator
 }
