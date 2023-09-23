@@ -313,6 +313,8 @@ if (-not (Test-Path -Path $repoPath)) {
 # and removes some Windows 10/11 annoyances
 # ------------------------------------------------------------
 # Run the commands interactively
+# Disable error messages for this specific operation
+$ErrorActionPreference = 'SilentlyContinue'
 Disable-UAC -Confirm:$false
 Disable-BingSearch
 Disable-GameBarTips
@@ -347,6 +349,9 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 # Set the registry value to show hidden files and folders for all users
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "CheckedValue" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Folder\Hidden\SHOWALL" -Name "DefaultValue" -Value 1
+
+# Reset the error action preference to its previous value
+$ErrorActionPreference = 'Continue'
 # ------------------------------------------------------------
 # This section creates a shortcut on the desktop for the
 # Post User Install script. This script will be run by the
