@@ -1,32 +1,61 @@
-#--------------------------------------------------
-# Create Seperator Fucntion
-#--------------------------------------------------
-function Write-GreenWhiteSeparator {
-    Write-Host "---------------------------------------------------------" -ForegroundColor White -BackgroundColor Green
+function Write-BoxedText {
+    param (
+        [string]$Text,
+        [char]$BorderChar = '-',
+        [int]$PaddingSize = 20
+    )
+    
+    # Convert the BorderChar to a string
+    $BorderString = $BorderChar.ToString()
+    
+    # Calculate the total length of the boxed text
+    $totalLength = $Text.Length + ($PaddingSize * 2)
+    
+    # Ensure the total length is at least as long as the text
+    if ($totalLength -lt $Text.Length) {
+        $totalLength = $Text.Length
+    }
+    
+    # Calculate the padding on both sides to center the text
+    $padding = ($totalLength - $Text.Length) / 2
+    
+    # Create the top border
+    $border = $BorderString * $totalLength
+    
+    # Create the boxed text with padding and center the text
+    $boxedText = $BorderString * $padding + $Text + $BorderString * ($totalLength - $padding - $Text.Length)
+    
+    # Output the top border, boxed text, and bottom border
+    Write-Host $border -ForegroundColor White -BackgroundColor Green
+    Write-Host $boxedText -ForegroundColor White -BackgroundColor Green
+    Write-Host $border -ForegroundColor White -BackgroundColor Green
 }
 
-# Path to git.exe
-$gitPath = "C:\Program Files\Git\bin\git.exe" 
-Write-GreenWhiteSeparator
-Write-Host "                Checking for Git installation.           "  -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
-
-# Check if the repository has been cloned
-Write-GreenWhiteSeparator  
-Write-Host "       Checking if the repository has been cloned.       " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
-$repoPath = "c:\prep\NewWindowsScripts"
-if (-not (Test-Path -Path $repoPath)) {
-    # Clone the GitHub repository
-    $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
-    Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
-} else {
-    # Update the repository
-    Set-Location -Path $repoPath
-    & $gitPath pull
+function Check-GitInstallation {
+    # Path to git.exe
+    $gitPath = "C:\Program Files\Git\bin\git.exe"
+    
+    # Display a boxed message
+    Write-BoxedText "Checking for Git installation"
+    
+    # Check if the repository has been cloned
+    Write-BoxedText "Checking if the repository has been cloned"
+    
+    $repoPath = "c:\prep\NewWindowsScripts"
+    if (-not (Test-Path -Path $repoPath)) {
+        # Clone the GitHub repository
+        $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
+        Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
+    } else {
+        # Update the repository
+        Set-Location -Path $repoPath
+        & $gitPath pull
+    }
 }
+
+# Call the function to check Git installation
+Check-GitInstallation
+
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Check if Python is already installed
 $pythonInstalled = Test-Path "C:\python310\python.exe"
@@ -60,13 +89,11 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 # Only disable UAC if it's not already disabled
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
-    Write-GreenWhiteSeparator
-    Write-Host "                    UAC has been disabled.               "  -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    Write-BoxedText "UAC has been disabled."
+    
 } else {
-    Write-GreenWhiteSeparator
-    Write-Host "                    UAC is already disabled.             "  -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+       Write-BoxedText "UAC is already disabled."
+    
 }
 
 # Check if Bing Search is already disabled
@@ -74,32 +101,29 @@ $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\
 
 # Output "Disabled" if already disabled, or run the command to disable it
 if ($bingSearchDisabled) {
-    Write-GreenWhiteSeparator 
-    Write-Host "               Bing Search is Already Disabled           " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
-} else {
+   Write-BoxedText "Bing Search is already disabled."
+    } else {
     # Run the command to disable Bing Search
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
-    Write-GreenWhiteSeparator
-    Write-Host "              Bing Search is Now Disabled                " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    Write-BoxedText "Bing Search has been disabled."
+    
 }
 
 
 
 Disable-GameBarTips
-Write-GreenWhiteSeparator
-Write-Host "       Setting Enable Show Hidden Files and Folders.     "   -ForegroundColor White -BackgroundColor Green
-Write-Host "       Enabling Show File Extensions.                    "   -ForegroundColor White -BackgroundColor Green
-Write-Host "       Disabling Open File Explorer to Quick Access.     "   -ForegroundColor White -BackgroundColor Green
-Write-Host "       Disabling Show Recent Files in Quick Access.      "   -ForegroundColor White -BackgroundColor Green
-Write-Host "       Disabling Show Frequent Folders in Quick Access.  "   -ForegroundColor White -BackgroundColor Green 
-Write-Host "       Disabling Expand to Open Folder.                  "   -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
+Write-BoxedText "Game Bar Tips have been disabled."
+Write-BoxedText "Disabling Windows Consumer Experience Features."
+Write-BoxedText "Disabling Open File Explorer to Quick Access."
+Write-BoxedText "Disabling Show Recent Files in Quick Access."
+Write-BoxedText "Disabling Show Frequent Folders in Quick Access." 
+Write-BoxedText "Disabling Expand to Open Folder."
+
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
-Write-GreenWhiteSeparator
+
 Write-Host "       Setting Taskbar size Large.                       "     -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
 Set-BoxstarterTaskbarOptions -Size Large 
 Set-BoxstarterTaskbarOptions -Dock Bottom 
 Set-BoxstarterTaskbarOptions -DisableSearchBox 
@@ -107,36 +131,27 @@ Set-BoxstarterTaskbarOptions -AlwaysShowIconsOn
 Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
-Write-GreenWhiteSeparator
-Write-Host "         Removing Taskbar Chat Icon.                     " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
-#-------------------------------------------------------------
 
-#-------------------------------------------------------------
+Write-BoxedText "Removing Taskbar Chat Icon."
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
+
 # Disable Windows Consumer Experience Features
-Write-GreenWhiteSeparator
-Write-Host "  Disabling Windows Consumer Experience Features.        " -ForegroundColor White -BackgroundColor Green 
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Disabling Windows Consumer Experience Features."
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
 #-------------------------------------------------------------
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v ContentDeliveryAllowed /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v SilentInstalledAppsEnabled /d 0 /t REG_DWORD /f
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
 # Restore the classic right-click context menu
-Write-GreenWhiteSeparator
-Write-Host "       Restoring the classic right-click context menu.   " -ForegroundColor White -BackgroundColor Green 
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Restoring the classic right-click context menu."
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
-Write-GreenWhiteSeparator
-Write-Host "         Setting Mouse Hover Time for Taskbar            " -ForegroundColor White -BackgroundColor Green
-Write-host "       to a very long time to prevent hover text.        " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Setting Mouse Hover Time for Taskbar" 
+Write-BoxedText "to a very long time to prevent hover text." 
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
@@ -178,11 +193,10 @@ $Shortcut.Save()
 # message to the user to look for it
 #------------------------------------------------------------
 
-# Display a screen prompt to the user
-Write-Host "        Please look behind this console window           " -ForegroundColor White -BackgroundColor Blue
-Write-Host "        for any open dialog boxes or user prompts.       " -ForegroundColor White -BackgroundColor Blue
-Write-Host "        Close them before continuing.                    " -ForegroundColor White -BackgroundColor Blue
-Write-Host "`n"
+# Display a screen prompt to the user 
+Write-Host "Please look behind this console window     " -ForegroundColor White -BackgroundColor Blue
+Write-Host "for any open dialog boxes or user prompts. " -ForegroundColor White -BackgroundColor Blue
+Write-Host "Close them before continuing.              " -ForegroundColor White -BackgroundColor Blue
 # ------------------------------------------------------------
 # Add the "Open Command Prompt Here" option to the context menu
 # ------------------------------------------------------------
@@ -236,9 +250,8 @@ public class NumLockControl {
         # Remove the registry key and its children
         Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
-    Write-GreenWhiteSeparator
-    Write-Host "   Git context menu entries removed from the registry.   " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "Git context menu entries removed from the registry."
 
 #-------------------------------------------------------------
 # Start App Cleanup Script
@@ -258,28 +271,25 @@ $package = Get-AppxPackage -Name $packageName -AllUsers
 if ($package -eq $null) {
     # Package not found, install it
     Add-AppxPackage -RegisterByFamilyName -MainPackage $packageName
-    Write-GreenWhiteSeparator
-    Write-Host "             Installing Winget Store Version.            " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "Installing Winget Store Version."
+    
 } else {
     # Package is already installed
-    Write-GreenWhiteSeparator
-    Write-Host "         Winget Store Version is already installed.      " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "Winget Store Version is already installed."
+    
 }
 #-------------------------------------------------------------
 # Install the latest version of WinGet from GitHub
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
-Write-Host "   Installing the latest version of WinGet from GitHub.  " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Installing the latest version of WinGet from GitHub."
 # Define the URL and destination path
-Write-GreenWhiteSeparator
 Write-host "       This URL may change in the future                 "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       always check the latest release from              "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       https://github.com/microsoft/winget-cli/releases  "      -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
 Write-Host "`n"
 
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
@@ -298,30 +308,29 @@ Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
-Write-GreenWhiteSeparator
+
 Write-Host "     Installing Microsoft.UI.Xaml.2.8 using WinGet.      " -ForegroundColor White -BackgroundColor Green
 Write-Host "         The latest version of TranslucentTB             " -ForegroundColor White -BackgroundColor Green 
 Write-Host "        will not install without this package.           " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
 
 winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
 #-------------------------------------------------------------
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
+
 Write-Host "          Uninstalling Windows 11 Personal Teams.        " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
 Write-Host "`n"
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
-Write-Host "           Starting Chocolatey App Installer.            " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Starting Chocolatey App Installer."
+
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
 #-------------------------------------------------------------
@@ -332,10 +341,8 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # it's not already installed. Suppress Local Media Missing
 # error message.
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
-Write-Host "      Installing .NET 3.5 (Netfx3) using PowerShell.     " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
-Write-Host "`n"
+
+Write-BoxedText "Installing .NET 3.5 (Netfx3) using PowerShell."
 $featureName = "NetFx3"
 $sourcePath = "d:\sources\sxs"
 
@@ -346,31 +353,30 @@ if ($feature -eq $null -or $feature.State -ne "Enabled") {
     try {
         # Try enabling the feature from local source
         $enableFeature = Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess -ErrorAction Stop
-        Write-Host "Feature '$featureName' enabled."
+        Write-BoxedText "Feature '$featureName' enabled."
     }
     catch {
         # Handle the error when local media is not found
-        Write-GreenWhiteSeparator
-        Write-Host "  Local Media not available: Checking for Online Source. "   -ForegroundColor White -BackgroundColor Green
-        Write-GreenWhiteSeparator
+        
+        Write-BoxedText "Local Media not available: Checking for Online Source."
+        
         # Try enabling the feature from online source
         Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All
     }
 } else {
     # Feature is already enabled
-    Write-GreenWhiteSeparator
-    Write-Host "Feature '$featureName' is already enabled."
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "Feature '$featureName' is already enabled."
+    
 }
 
 
 #-------------------------------------------------------------
 # Add Boxstart Icon to the Default and the current User's Desktops
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
-Write-Host "          Adding Boxstarter Shell shortcut to the        " -ForegroundColor White -BackgroundColor Green
-Write-Host "          Default and current user's Desktops.           " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
+Write-BoxedText "Adding Boxstarter Shell shortcut to the Default and current user's Desktops."
+
 # Define the location for the shortcut for the Default User
 $defaultUserShortcutPath = "C:\Users\Default\Desktop\Box Starter.lnk"
 
@@ -409,21 +415,21 @@ $ShortcutCurrentUser.Save()
 # Remove the Boxstarter shortcut from the Public Folder
 # that was created during the Boxstarter installation
 #-------------------------------------------------------------
-Write-GreenWhiteSeparator
-Write-Host "  Removing Boxstarter Shell shortcut from Public Desktop." -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
+Write-BoxedText "Removing Boxstarter Shell shortcut from Public Desktop."
+
 
 if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
-Write-GreenWhiteSeparator
-write-host "  Boxstarter Shell shortcut removed from Public Desktop. " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
+Write-BoxedText "Boxstarter Shell shortcut removed from Public Desktop."
+
 
 #-------------------------------------------------------------
 # Toggle UAC Section
 # ------------------------------------------------------------ 
-Write-GreenWhiteSeparator
-Write-Host "                     Toggling UAC.                            " -ForegroundColor White -BackgroundColor Green
-Write-GreenWhiteSeparator
+
+Write-BoxedText "Toggling UAC."
+
 # Load the System.Windows.Forms assembly
 Add-Type -AssemblyName System.Windows.Forms
 
@@ -433,11 +439,11 @@ $dialogResult = [System.Windows.Forms.MessageBox]::Show("Do you want to re-enabl
 
 if ($dialogResult -eq [System.Windows.Forms.DialogResult]::Yes) {
     Enable-UAC
-    Write-GreenWhiteSeparator
-    Write-Host "                UAC has been re-enabled.                 " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "UAC has been re-enabled."
+    
 } else {
-    Write-GreenWhiteSeparator
-    Write-Host "                UAC remains disabled.                    " -ForegroundColor White -BackgroundColor Green
-    Write-GreenWhiteSeparator
+    
+    Write-BoxedText "UAC remains disabled."
+    
 }
