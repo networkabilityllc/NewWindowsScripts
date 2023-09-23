@@ -2,7 +2,7 @@
 # Create Seperator Fucntion
 #--------------------------------------------------
 function Write-GreenWhiteSeparator {
-    Write-Host "--------------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "------------------------------ ---------------------------" -ForegroundColor White -BackgroundColor Green
 }
 
 # Path to git.exe
