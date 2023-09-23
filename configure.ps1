@@ -158,8 +158,7 @@ Write-BoxedText "Restoring the classic right-click context menu."
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 
-Write-BoxedText "Setting Mouse Hover Time for Taskbar" 
-Write-BoxedText "to a very long time to prevent hover text." 
+Write-BoxedText "Setting Mouse Hover Time for Taskbar to a very long time to prevent hover text" 
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
@@ -298,8 +297,6 @@ Write-host "       This URL may change in the future                 "      -For
 Write-Host "       always check the latest release from              "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       https://github.com/microsoft/winget-cli/releases  "      -ForegroundColor White -BackgroundColor Green
 
-Write-Host "`n"
-
 $url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
@@ -328,9 +325,8 @@ winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package
 # Uninstall Windows 11 Personal Teams
 #-------------------------------------------------------------
 
-Write-Host "          Uninstalling Windows 11 Personal Teams.        " -ForegroundColor White -BackgroundColor Green
+Write-BoxedText "Uninstalling Windows 11 Personal Teams."
 
-Write-Host "`n"
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
