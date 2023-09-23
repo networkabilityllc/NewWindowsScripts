@@ -121,7 +121,7 @@ function Download-SplashtopSOS {
     Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
     Write-Host "Splashtop SOS installed for All New Users " -ForegroundColor White -BackgroundColor Green
     Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
-
+}
 # Function to Prompt User for Taskbar Tweaks
 function Prompt-TaskbarTweaks {
     $helpText = @"
