@@ -100,7 +100,8 @@ function Prompt-DownloadSplashtopSOS {
 
     Note: This will only download the installer
     for new users. It will not install SplashtopSOS
-    for the current user.
+    for the current user. There is another function later
+    on that will install SplashtopSOS for the current user.
 "@
 
     $choice = $null
@@ -117,10 +118,9 @@ function Download-SplashtopSOS {
     $sosUri = 'https://download.splashtop.com/sos/SplashtopSOS.exe'
     $sosPath = 'C:\Users\Default\Desktop\SplashtopSOS.exe'
     Invoke-WebRequest -Uri $sosUri -OutFile $sosPath
-    Write-Host "------------------------------------------"
-    Write-Host "Splashtop SOS installed for All New Users"
-    Write-Host "------------------------------------------"
-}
+    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "Splashtop SOS installed for All New Users " -ForegroundColor White -BackgroundColor Green
+    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
 
 # Function to Prompt User for Taskbar Tweaks
 function Prompt-TaskbarTweaks {
@@ -166,17 +166,18 @@ function Apply-TaskbarTweaks {
     # Unload the Default User Registry hive
     REG UNLOAD HKLM\Default
 
-    Write-Host "Taskbar tweaks applied to the Default User."
-}
+    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "Taskbar Tweaks Applied for All New Users  " -ForegroundColor White -BackgroundColor Green
+    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
 
 # Call the prompt functions
 Prompt-DownloadSplashtopSOS
 Prompt-TaskbarTweaks
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
-Write-Host "------------------------------------------"
-Write-Host "Checking for Choco and BoxStarter"
-Write-Host "------------------------------------------"
+Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
+Write-Host "Checking for Choco and BoxStarter         " -ForegroundColor Black -BackgroundColor White
+Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
 
 # ------------------------------------------------------------
 # Set the path to the chocolatey executable as an environment variable
@@ -209,17 +210,19 @@ $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 & $chocoPath install boxstarter --force
 
 # ------------------------------------------------------------
-# Version 0.9 of this script uses Python 3.10.6 to present a 
+# Current version of this script uses Python 3.10.6 to present a 
 # checkbox screen for installing apps from chocolatey
 # This will probably be changed to pure Powershell later
+# ------------------------------------------------------------
 # Check if Python is already installed
 # ------------------------------------------------------------
 $pythonInstalled = Test-Path "C:\python310\python.exe"
 
 # ------------------------------------------------------------
 # This version of the script clones the repository using git
-# We may remove git later or figure out a way to not have it 
-# add itself to the context menu 
+# You may uninstall git later using the uninstall function of 
+# the python installer app. Note: if you run this script again
+# git will be reinstalled
 # ------------------------------------------------------------
 # Check if Git is already installed
 $gitInstalled = (Get-Command git -ErrorAction SilentlyContinue) -ne $null
@@ -253,9 +256,10 @@ if (-not $gitInstalled) {
         Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
 
-    Write-Host "Git context menu entries removed from the registry."
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "Git context menu entries removed from the registry. " -ForegroundColor White -BackgroundColor Green
+    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
-
 # ------------------------------------------------------------
 # Check if the machine is running as a VMware virtual machine
 # ------------------------------------------------------------
