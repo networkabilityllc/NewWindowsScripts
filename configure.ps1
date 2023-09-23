@@ -259,12 +259,12 @@ if ($package -eq $null) {
     # Package not found, install it
     Add-AppxPackage -RegisterByFamilyName -MainPackage $packageName
     Write-GreenWhiteSeparator
-    Write-Host "       Package '$packageName' installed."
+    Write-Host "             Installing Winget Store Version.            " -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 } else {
     # Package is already installed
     Write-GreenWhiteSeparator
-    Write-Host "       Package '$packageName' is already installed."
+    Write-Host "         Winget Store Version is already installed.      " -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 }
 #-------------------------------------------------------------
