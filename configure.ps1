@@ -2,7 +2,7 @@
 # Create Seperator Fucntion
 #--------------------------------------------------
 function Write-GreenWhiteSeparator {
-    Write-Host "----------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "---------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
 
 # Path to git.exe
@@ -13,7 +13,7 @@ Write-GreenWhiteSeparator
 Write-Host "`n"
 
 # Check if the repository has been cloned
-Write-Host "Checking if the repository has been cloned." -ForegroundColor Black -BackgroundColor White
+Write-Host "Checking if the repository has been cloned." -ForegroundColor White -BackgroundColor Green
 Write-Host "`n"
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
@@ -59,7 +59,7 @@ $uacStatus = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVer
 if ($uacStatus -eq $null -or $uacStatus.EnableLUA -ne 0) {
     Disable-UAC -Confirm:$false
     Write-GreenWhiteSeparator
-    Write-Host "UAC has been disabled.            "  -ForegroundColor White -BackgroundColor Gree
+    Write-Host "UAC has been disabled.            "  -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 } else {
     Write-GreenWhiteSeparator
@@ -73,13 +73,13 @@ $bingSearchDisabled = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\
 # Output "Disabled" if already disabled, or run the command to disable it
 if ($bingSearchDisabled) {
     Write-GreenWhiteSeparator
-    Write-Host "Bing Search is Already Disabled" -ForegroundColor Black -BackgroundColor White
+    Write-Host "Bing Search is Already Disabled" -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 } else {
     # Run the command to disable Bing Search
     Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" -Name BingSearchEnabled -Value 0 -Force
     Write-GreenWhiteSeparator
-    Write-Host "Bing Search is Now Disabled" -ForegroundColor Black -BackgroundColor White
+    Write-Host "Bing Search is Now Disabled" -ForegroundColor White -BackgroundColor Green
     Write-GreenWhiteSeparator
 }
 
@@ -87,7 +87,12 @@ if ($bingSearchDisabled) {
 
 Disable-GameBarTips
 Write-GreenWhiteSeparator
-Write-Host "Setting Enable Show Hiiden Files and Folders. Enabling Show File Extensions. Disabling Open File Explorer to Quick Access. Disabling Show Recent Files in Quick Access. Disabling Show Frequent Folders in Quick Access. Disabling Expand to Open Folder."
+Write-Host "Setting Enable Show Hiiden Files and Folders. "   -ForegroundColor White -BackgroundColor Green
+Write-Host "Enabling Show File Extensions. "                  -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Open File Explorer to Quick Access."    -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Show Recent Files in Quick Access. "    -ForegroundColor White -BackgroundColor Green
+Write-Host "Disabling Show Frequent Folders in Quick Access." -ForegroundColor White -BackgroundColor Green 
+Write-Host "Disabling Expand to Open Folder."                 -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
 Write-GreenWhiteSeparator
@@ -101,7 +106,7 @@ Set-BoxstarterTaskbarOptions -Combine Always
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
 Write-GreenWhiteSeparator
-Write-Host "Removing Taskbar Chat Icon." -ForegroundColor Black -BackgroundColor White
+Write-Host "Removing Taskbar Chat Icon." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v TaskbarMn /t REG_DWORD /d 0
@@ -110,7 +115,8 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /f /v
 #-------------------------------------------------------------
 # Disable Windows Consumer Experience Features
 Write-GreenWhiteSeparator
-Write-Host "Disabling Windows Consumer Experience Features." -ForegroundColor Black -BackgroundColor White
+Write-Host "Disabling Windows" -ForegroundColor White -BackgroundColor Green 
+Write-Host "Consumer Experience Features." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /d 1 /t REG_DWORD /f
@@ -120,13 +126,15 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /d 0 /t REG_DWORD /f
 # Restore the classic right-click context menu
 Write-GreenWhiteSeparator
-Write-Host "Restoring the classic right-click context menu." -ForegroundColor Black -BackgroundColor White
+Write-Host "Restoring the classic" -ForegroundColor White -BackgroundColor Green 
+Write-Host "right-click context menu." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
 # Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 Write-GreenWhiteSeparator
-Write-Host "Setting Mouse Hover Time for Taskbar to a very long time to prevent hover text." -ForegroundColor Black -BackgroundColor White
+Write-Host "Setting Mouse Hover Time for Taskbar"
+Write-host "to a very long time to prevent hover text." -ForegroundColor White -BackgroundColor Green
 Write-GreenWhiteSeparator
 Write-Host "`n"
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
@@ -172,7 +180,9 @@ $Shortcut.Save()
 
 # Display a screen prompt to the user
 Write-GreenWhiteSeparator
-Write-Host "Please look behind this console window for any open dialog boxes or user prompts.`nClose them before continuing." -ForegroundColor Black -BackgroundColor Blue
+Write-Host "Please look behind this console window " -ForegroundColor Black -BackgroundColor Blue
+Write-Host "for any open dialog boxes or user prompts." -ForegroundColor Black -BackgroundColor Blue
+Write-Host "Close them before continuing." -ForegroundColor Black -BackgroundColor Blue
 Write-GreenWhiteSeparator
 Write-Host "`n"
 # ------------------------------------------------------------
@@ -268,7 +278,9 @@ Write-GreenWhiteSeparator
 Write-Host "`n"
 # Define the URL and destination path
 Write-GreenWhiteSeparator
-Write-host "This URL may change in the future - always check the latest release from https://github.com/microsoft/winget-cli/releases" -ForegroundColor Black -BackgroundColor White
+Write-host "This URL may change in the future"      -ForegroundColor Black -BackgroundColor Blue
+Write-Host "always check the latest release from"   -ForegroundColor Black -BackgroundColor Blue
+Write-Host" https://github.com/microsoft/winget-cli/releases" -ForegroundColor Black -BackgroundColor White
 Write-GreenWhiteSeparator
 Write-Host "`n"
 
