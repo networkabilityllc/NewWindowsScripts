@@ -92,7 +92,9 @@ function Get-Choice {
 }
 
 # Function to Prompt User for SplashtopSOS Download
+
 function Prompt-DownloadSplashtopSOS {
+# This section creates the Help dialogue text box
     $helpText = @"
     Clicking Yes will download the latest 
     version of SplashtopSOS to the Default Desktop 
@@ -109,7 +111,9 @@ function Prompt-DownloadSplashtopSOS {
     if ($choice -eq "Yes") {
         Download-SplashtopSOS
     } else {
-        Write-Host "Skipping Splashtop SOS download for all users."
+        Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+        Write-Host "       Skipping SOS Shortcut Install                "   -ForegroundColor White -BackgroundColor Green
+        Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
     }
 }
 
@@ -118,9 +122,9 @@ function Download-SplashtopSOS {
     $sosUri = 'https://download.splashtop.com/sos/SplashtopSOS.exe'
     $sosPath = 'C:\Users\Default\Desktop\SplashtopSOS.exe'
     Invoke-WebRequest -Uri $sosUri -OutFile $sosPath
-    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
-    Write-Host "Splashtop SOS installed for All New Users " -ForegroundColor White -BackgroundColor Green
-    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
+    Write-Host "Splashtop SOS installed for All New Users           "   -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"   -ForegroundColor White -BackgroundColor Green
 }
 # Function to Prompt User for Taskbar Tweaks
 function Prompt-TaskbarTweaks {
@@ -165,24 +169,24 @@ function Apply-TaskbarTweaks {
     # Unload the Default User Registry hive
     REG UNLOAD HKLM\Default
 
-    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
-    Write-Host "Taskbar Tweaks Applied for All New Users  " -ForegroundColor White -BackgroundColor Green
-    Write-Host "------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "      Taskbar Tweaks Applied for All New Users      " -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
 }
 # Call the prompt functions
 Prompt-DownloadSplashtopSOS
 Prompt-TaskbarTweaks
 
 # ----------------------------- Test for Choco and BoxStarter -------------------
-Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
-Write-Host "Checking for Choco and BoxStarter         " -ForegroundColor Black -BackgroundColor White
-Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
+Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor Black -BackgroundColor White
+Write-Host "    Checking for Choco and BoxStarter     " -ForegroundColor Black -BackgroundColor White
+Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor Black -BackgroundColor White
 
 # ------------------------------------------------------------
 # Set the path to the chocolatey executable as an environment variable
 # ------------------------------------------------------------
-# Path to Chocolatey executable
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  # Change this path to the actual location of choco.exe
+# Path to default install of Chocolatey executable
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  
 # ------------------------------------------------------------
 # Install Chocolatey if not already installed
 # ------------------------------------------------------------
@@ -202,7 +206,8 @@ if (-not $chocoInstalled) {
 }
 
 # ------------------------------------------------------------
-# Path to Chocolatey executable declared again because the previous iex flushed the declaration sometimes
+# Path to Chocolatey executable declared again because the 
+# previous iex sometimes flushes the declaration
 # ------------------------------------------------------------
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # Install Boxstarter using Chocolatey
@@ -214,6 +219,11 @@ $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
 # This will probably be changed to pure Powershell later
 # ------------------------------------------------------------
 # Check if Python is already installed
+# We use the chocolatey default install of Python 3.10.6
+# Because not all installations of Windows 11 will have Python
+# pre-installed
+# This is the default path that Chocolatey installs Python to
+# If you changed it, you will need to change it here as well
 # ------------------------------------------------------------
 $pythonInstalled = Test-Path "C:\python310\python.exe"
 
@@ -255,9 +265,9 @@ if (-not $gitInstalled) {
         Remove-Item -Path $path -Force -Recurse -ErrorAction SilentlyContinue
     }
 
-    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
-    Write-Host "Git context menu entries removed from the registry. " -ForegroundColor White -BackgroundColor Green
-    Write-Host "----------------------------------------------------" -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "Git context menu entries removed from the registry  " -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
 }
 # ------------------------------------------------------------
 # Check if the machine is running as a VMware virtual machine
@@ -265,10 +275,14 @@ if (-not $gitInstalled) {
 $vmwareVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object { $_.Manufacturer -eq "VMware, Inc." }
 
 if ($vmwareVm) {
-    Write-Host "Detected VMware virtual machine. Installing VMware Tools..."
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"  -ForegroundColor White -BackgroundColor Green
+    Write-Host "Detected VMware virtual machine. Installing VMware Tools..."    -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■"  -ForegroundColor White -BackgroundColor Green
     & $chocoPath install vmware-tools --force
 } else {
-    Write-Host "Not running as a VMware virtual machine. Skipping VMware Tools installation."
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
+    Write-Host "Not running as a VMware virtual machine. Skipping VMware Tools installation. " -ForegroundColor White -BackgroundColor Green
+    Write-Host "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" -ForegroundColor White -BackgroundColor Green
 }
 
 
