@@ -260,8 +260,9 @@ public class NumLockControl {
 #-------------------------------------------------------------
 # Install XAML 2.7 in case Windows 10/100 is pre-22H2
 #-------------------------------------------------------------
-Write-BoxedText "Installing XAML 2.7"    
+Write-BoxedText "Installing XAML 2.7 and VCLIBS 14"    
 choco install microsoft-ui-xaml -y --force
+choco install microsoft-vclibs-140-00 -y --force
 #-------------------------------------------------------------
 # Start App Cleanup Script
 #-------------------------------------------------------------
