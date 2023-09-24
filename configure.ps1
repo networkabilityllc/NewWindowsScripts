@@ -333,6 +333,33 @@ Write-BoxedText "Uninstalling Windows 11 Personal Teams."
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
 
 #-------------------------------------------------------------
+# Check for and Disable Hibernation
+#-------------------------------------------------------------
+
+$result = Invoke-Expression -Command "powercfg.exe /hibernate off"
+if ($result -eq 0) {
+    Write-BoxedText "Hibernation has been disabled successfully."
+} else {
+    Write-BoxedText "Hibernation already disabled."
+}
+
+#-------------------------------------------------------------
+# Check for and disable Sleep Menu Item from Shutdown Button
+#-------------------------------------------------------------
+# Define the Registry path for the Start Menu customization
+$registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+
+# Set the "ShowSleepOption" value to 0 to remove the Sleep option
+Set-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0
+
+# Force a refresh of the taskbar and Start menu
+Stop-Process -Name explorer -Force
+Start-Process explorer
+
+Write-BoxedText "The Sleep option has been removed from the Start menu."
+
+
+#-------------------------------------------------------------
 # Start Chocolatey App Installer
 #-------------------------------------------------------------
 
