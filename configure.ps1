@@ -258,6 +258,11 @@ public class NumLockControl {
     Write-BoxedText "Git context menu entries removed from the registry."
 
 #-------------------------------------------------------------
+# Install XAML 2.7 in case Windows 10/100 is pre-22H2
+#-------------------------------------------------------------
+Write-BoxedText "Installing XAML 2.7"    
+choco install microsoft-ui-xaml -y --force
+#-------------------------------------------------------------
 # Start App Cleanup Script
 #-------------------------------------------------------------
 
