@@ -344,15 +344,30 @@ if ($result -eq 0) {
 }
 
 # Check for and disable Sleep Menu Item from Shutdown Button
+
 # Define the Registry path for the Start Menu customization
 $registryPath = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
 
+# Check if the registry path exists, and create it if it doesn't
+if (-Not (Test-Path $registryPath)) {
+    New-Item -Path $registryPath -Force
+}
+
 # Set the "ShowSleepOption" value to 0 to remove the Sleep option
-Set-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0
+$showSleepOptionValue = Get-ItemProperty -Path $registryPath -Name "ShowSleepOption" -ErrorAction SilentlyContinue
+
+# Check if the "ShowSleepOption" value exists, and create it if it doesn't
+if ($showSleepOptionValue -eq $null) {
+    New-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0 -PropertyType DWORD
+} else {
+    # If the value exists, set it to 0
+    Set-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0
+}
 
 # Force a refresh of the taskbar and Start menu
 Stop-Process -Name explorer -Force
 Start-Process explorer
+
 
 
 Write-BoxedText "The Sleep option has been removed from the Start menu."
