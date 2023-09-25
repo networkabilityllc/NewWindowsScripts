@@ -264,9 +264,9 @@ Write-BoxedText "Installing XAML 2.7 and VCLIBS 14"
 choco install microsoft-ui-xaml -y --force
 choco install microsoft-vclibs-140-00 -y --force
 #-------------------------------------------------------------
-# Start App Cleanup Script
+# Start App Cleanup Script to remove Junk Windows Apps
 #-------------------------------------------------------------
-
+Write-BoxedText "Starting App Cleanup Script and removing Junk Windows Apps"
 $scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
 Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
 
