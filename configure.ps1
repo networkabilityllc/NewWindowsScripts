@@ -81,7 +81,7 @@ if (-not $gitInstalled) {
     & C:\ProgramData\chocolatey\choco install git --force
 
     }
-
+Write-BoxedText "Git and Python installed."
 
 
 # Load the PresentationFramework assembly
@@ -130,10 +130,14 @@ Write-BoxedText "Disabling Expand to Open Folder."
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
 Write-BoxedText "Setting Taskbar size Large."
 Set-BoxstarterTaskbarOptions -Size Large 
+Write-BoxedText "Setting Taskbar Dock Bottom."
 Set-BoxstarterTaskbarOptions -Dock Bottom 
+Write-BoxedText "Search Box Disabled."
 Set-BoxstarterTaskbarOptions -DisableSearchBox 
 Set-BoxstarterTaskbarOptions -AlwaysShowIconsOn 
+Write-BoxedText "Show Taskbar Icons set to Always. May not work in latest version of Windows 11"
 Set-BoxstarterTaskbarOptions -Combine Always
+Write-BoxedText "Setting Taskbar to Combine Always for Running Apps."
 #-------------------------------------------------------------
 # Remove Taskbar Chat Icon
 
