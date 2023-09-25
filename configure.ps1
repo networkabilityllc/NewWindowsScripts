@@ -343,11 +343,9 @@ if ($result -eq 0) {
     Write-BoxedText "Hibernation already disabled."
 }
 
-#-------------------------------------------------------------
 # Check for and disable Sleep Menu Item from Shutdown Button
-#-------------------------------------------------------------
 # Define the Registry path for the Start Menu customization
-$registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
+$registryPath = "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer"
 
 # Set the "ShowSleepOption" value to 0 to remove the Sleep option
 Set-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0
@@ -355,6 +353,7 @@ Set-ItemProperty -Path $registryPath -Name "ShowSleepOption" -Value 0
 # Force a refresh of the taskbar and Start menu
 Stop-Process -Name explorer -Force
 Start-Process explorer
+
 
 Write-BoxedText "The Sleep option has been removed from the Start menu."
 
