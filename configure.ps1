@@ -326,7 +326,7 @@ Write-Host "         The latest version of TranslucentTB             " -Foregrou
 Write-Host "        will not install without this package.           " -ForegroundColor White -BackgroundColor Green
 
 
-winget install Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
+winget install --id Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
 #-------------------------------------------------------------
 # Uninstall Windows 11 Personal Teams
