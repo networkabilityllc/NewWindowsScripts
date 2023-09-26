@@ -219,7 +219,13 @@ $popupMessage = "Right click to open Command Prompt added.`r`nShift-Right Click 
 
 # ------------------------------------------------------------
 # Turn on numlock at startup
+# This uses C# code to send a keypress to turn on numlock
+# It's more reliable to do this in C# than in PowerShell
+# This may not work on non-US keyboards
+# Many thanks to the helpful tutorials at https://www.byteinthesky.com/powershell/
 # ------------------------------------------------------------
+Write-BoxedText "Turning on Numlock at Startup. See comments in script for details."
+# Adding a custom C# class definition by using Add-Type
 Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
