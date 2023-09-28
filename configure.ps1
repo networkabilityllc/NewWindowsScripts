@@ -300,17 +300,24 @@ if ($package -eq $null) {
     Write-BoxedText "Winget Store Version is already installed."
     
 }
+
 #-------------------------------------------------------------
 # Install the latest version of WinGet from GitHub
+# TranclucentTB requires Xaml 2.8 which is not available in the 
+# store version of WinGet. The github version of WinGet includes 
+# Xaml 2.8, so we need to download and install the latest WinGet
+# This may change with future releases of the Store, so this 
+# section may end up being eliminated. 
 #-------------------------------------------------------------
 
 Write-BoxedText "Installing the latest version of WinGet from GitHub."
+
 # Define the URL and destination path
 Write-host "       This URL may change in the future                 "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       always check the latest release from              "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       https://github.com/microsoft/winget-cli/releases  "      -ForegroundColor White -BackgroundColor Green
 
-$url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2631/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2701/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
 # Create the destination directory if it doesn't exist
@@ -318,14 +325,22 @@ if (-Not (Test-Path "C:\Temp")) {
     New-Item -Path "C:\Temp" -ItemType Directory
 }
 
-# Download the file
-Invoke-WebRequest -Uri $url -OutFile $destPath
+# Check if the file already exists
+if (-Not (Test-Path $destPath)) {
+    # Download the file only if it doesn't exist
+    Invoke-WebRequest -Uri $url -OutFile $destPath
+} else {
+    Write-Host "File already exists, skipping download."
+}
 
 # Install the application silently
 Add-AppxPackage -Path $destPath
 
 #-------------------------------------------------------------
-# Install Microsoft.UI.Xaml.2.8 using WinGet from the MS Store
+# Install Microsoft.UI.Xaml.2.8 using WinGet from the latest repository
+# The primary reason for this is that the default store version only has
+# Xaml 2.7 and the latest version of TranslucentTB requires 2.8
+#-------------------------------------------------------------
 
 Write-Host "     Installing Microsoft.UI.Xaml.2.8 using WinGet.      " -ForegroundColor White -BackgroundColor Green
 Write-Host "         The latest version of TranslucentTB             " -ForegroundColor White -BackgroundColor Green 
@@ -341,6 +356,29 @@ winget install --id Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-pa
 Write-BoxedText "Uninstalling Windows 11 Personal Teams."
 
 Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
+
+Write-BoxedText "Uninstalling Teams machine-wide installer."
+
+#-------------------------------------------------------------
+# Credit for code snippet to r/powershell on Reddit
+# https://www.reddit.com/r/PowerShell/comments/yqt1o0/making_a_script_to_uninstall_teams_for_all_users/
+#-------------------------------------------------------------
+
+$AppName = "Teams Machine-Wide Installer"
+$Process = "Teams*"
+ForEach ( $Architecture in "SOFTWARE", "SOFTWARE\Wow6432Node" ) { $UninstallKeys = "HKLM:$Architecture\Microsoft\Windows\CurrentVersion\Uninstall" 
+if (Test-path $UninstallKeys) { Write-Output "Checking for $AppName installation in $UninstallKeys" $GUID = Get-ItemProperty -Path "$UninstallKeys*" | Where-Object -FilterScript { $_.DisplayName -like $AppName } | Select-Object PSChildName -ExpandProperty PSChildName
+    If ( $GUID ) {
+        Write-Output "Stopping $AppName Processes"
+        Get-Process $Process | Stop-Process -Force
+        $GUID | ForEach-Object {
+            Write-Output "Uninstalling: $(( Get-ItemProperty "$UninstallKeys\$_" ).DisplayName) " 
+            Start-Process -Wait -FilePath "MsiExec.exe" -ArgumentList "/X$_ /qn /norestart"
+        }
+    }
+}
+}
+
 
 #-------------------------------------------------------------
 # Check for and Disable Hibernation
