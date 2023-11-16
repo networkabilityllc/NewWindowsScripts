@@ -52,7 +52,7 @@ software_items = [
     ("firefox", ["--force"]),
     ("googlechrome", ["--force"]),
     ("hwinfo", ["--force"]),
-    ("intel-dsa", ["--force"]),
+    ("intel-dsa", ["--force", "--ignore-checksums"]),
     ("javaruntime", ["--force"]),
     ("libreoffice-fresh", ["--force"]),
     ("lightshot", ["--force"]),
