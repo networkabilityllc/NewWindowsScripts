@@ -29,8 +29,6 @@ software_mapping = {
     "notepadplusplus": "Notepad++",
     "open-shell": "Open-Shell",
     "openjdk": "OpenJDK",
-    "pdfcreator": "PDFCreator",
-    "powershell": "PowerShell",
     "powershell-core": "PowerShell 7.x",
     "sysinternals": "Sysinternals Suite",
     "translucenttb": "TranslucentTB",
@@ -42,7 +40,7 @@ software_mapping = {
 # List of software items and their installation parameters
 software_items = [
     ("7zip", ["--force"]),
-    ("adobereader", ["--force", "--params", "/DesktopIcon", "/UpdateMode:4"]),
+    ("adobereader", ["--force", "--params", "/DesktopIcon"]),
     ("ccleaner", ["--force"]),
     ("choco-upgrade-all-at", ["--force"]),
     ("chocolateygui", ["--force"]),
@@ -65,8 +63,6 @@ software_items = [
     ("notepadplusplus", ["--force"]),
     ("open-shell", ["--params=\"/StartMenu\""]),
     ("openjdk", ["--force"]),
-    ("pdfcreator", ["--force"]),
-    ("powershell", ["--force"]),
     ("powershell-core", ["--force"]),
     ("sysinternals", ["-y"]),
     ("translucenttb", ["--force"]),
