@@ -13,8 +13,8 @@ Set-Location -Path $prepDir
 # ------------------------------------------------------------
 Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
 #-------------------------------------------------------------
-# Add-Type -AssemblyName System.Windows.Forms
-# Not used yet, but may be used in the future
+Add-Type -AssemblyName System.Windows.Forms
+# Required for later versions of Windows 11, as it does not load automatically and causes errors
 # ------------------------------------------------------------
 # Function to Prompt User with Two-Button Choice Dialog plus Help Button
 function Get-Choice {
