@@ -289,7 +289,7 @@ if ($vmwareVm) {
 # Check if the machine is running as a QEMU virtual machine
 # ------------------------------------------------------------
 $qemuVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object {
-    $_.Manufacturer -match "QEMU" -or $_.Model -match "Standard PC (i440FX + PIIX, 1996)"
+    $_.Manufacturer -match "QEMU" -or $_.Model -match "Standard PC (i440FX + PIIX, 1996)" -or $_.Model -match "Q35"
 }
 if ($qemuVm) {
     Write-Host "-------------------------------------------------------------"  -ForegroundColor White -BackgroundColor Blue
