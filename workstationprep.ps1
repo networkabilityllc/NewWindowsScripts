@@ -285,6 +285,26 @@ if ($vmwareVm) {
     Write-Host "-----------------------------------------------------------------------------" -ForegroundColor White -BackgroundColor Green
 }
 
+# ------------------------------------------------------------
+# Check if the machine is running as a QEMU virtual machine
+# ------------------------------------------------------------
+$qemuVm = Get-WmiObject -Namespace "root\cimv2" -Class Win32_ComputerSystem | Where-Object {
+    $_.Manufacturer -match "QEMU" -or $_.Model -match "Standard PC (i440FX + PIIX, 1996)"
+}
+if ($qemuVm) {
+    Write-Host "-------------------------------------------------------------"  -ForegroundColor White -BackgroundColor Blue
+    Write-Host "Detected QEMU virtual machine. Installing QEMU Guest Agent..." -ForegroundColor White -BackgroundColor Blue
+    Write-Host "-------------------------------------------------------------"  -ForegroundColor White -BackgroundColor Blue
+    & $chocoPath install qemu-guest-agent -y --force --ignore-package-exit-codes
+    Write-Host "-------------------------------------------------------------------"  -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host "Reminder: A system reboot is required to complete the installation." -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host "Please plan to reboot your system after the script completes.      " -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host "-------------------------------------------------------------------"  -ForegroundColor Black -BackgroundColor Yellow
+} else {
+    Write-Host "------------------------------------------------------------------------------" -ForegroundColor White -BackgroundColor Blue
+    Write-Host "Not running as a QEMU virtual machine. Skipping QEMU Guest Agent installation." -ForegroundColor White -BackgroundColor Blue
+    Write-Host "------------------------------------------------------------------------------" -ForegroundColor White -BackgroundColor Blue
+}
 
 # ------------------------------------------------------------
 # Set Path to git.exe
