@@ -7,6 +7,7 @@ import os
 software_mapping = {
     "7zip": "7-Zip",
     "adobereader": "Adobe Reader",
+    "amd-ryzen-chipset": "AMD Ryzen Chipset Drivers",
     "ccleaner": "CCleaner",
     "chocolateygui": "Chocolatey GUI",
     "choco-upgrade-all-at": "Chocolatey Nightly Upgrade",
@@ -49,6 +50,7 @@ software_mapping = {
 software_items = [
     ("7zip", ["--force"]),
     ("adobereader", ["--force", "--params", "/DesktopIcon"]),
+    ("amd-ryzen-chipset", ["--force"]),
     ("ccleaner", ["--force"]),
     ("choco-upgrade-all-at", ["--force"]),
     ("chocolateygui", ["--force"]),
