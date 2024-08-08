@@ -7,8 +7,16 @@ if %errorLevel% neq 0 (
     powershell -command Start-Process "%0" -Verb RunAs
     exit /b
 )
+
+:: Change directory to c:\prep\NewWindowsScripts
 cd /d "C:\prep\NewWindowsScripts"
+
+:: Execute git pull
+git pull
+
+:: Run install_apps.py
 start c:\python310\python.exe install_apps.py
+
 
 
 
