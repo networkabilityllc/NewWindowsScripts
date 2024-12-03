@@ -46,7 +46,7 @@ software_mapping = {
     "translucenttb": "TranslucentTB",
     "vcredist-all": "Visual C++ Redistributable",
     "vlc": "VLC Media Player",
-    "Windows Terminal": "Windows Terminal",
+    "microsoft-windows-terminal": "Windows Terminal",
     "zoom": "Zoom"
 }
 
