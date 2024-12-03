@@ -93,7 +93,7 @@ software_items = [
     ("translucenttb", ["--force"]),
     ("vcredist-all", ["--force"]),
     ("vlc", ["--force"]),
-    ("Windows Terminal", ["--force"]),
+    ("microsoft-windows-terminal", ["--force"]),
     ("zoom", ["--force"])
 ]
 
