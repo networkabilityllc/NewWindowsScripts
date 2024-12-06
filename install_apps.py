@@ -92,7 +92,7 @@ software_items = [
     ("speccy", ["--force"]),
     ("sysinternals", ["-y"]),
     ("tightvnc", ["-y", "--installArguments", "\"SET_RUNCONTROLINTERFACE=1 VALUE_OF_RUNCONTROLINTERFACE=0 SET_DISCONNECTACTION=1 VALUE_OF_DISCONNECTACTION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=0 SET_ALLOWLOOPBACK=1 VALUE_OF_ALLOWLOOPBACK=1 SET_REMOVEWALLPAPER=1 VALUE_OF_REMOVEWALLPAPER=0 SET_LOCKDESKTOP=1\""]),
-    ("translucenttb", ["--force"]),
+    ("translucenttb", ["--force", "--ignore-checksums"]),
     ("vcredist-all", ["--force"]),
     ("vlc", ["--force"]),
     ("microsoft-windows-terminal", ["--force"]),
