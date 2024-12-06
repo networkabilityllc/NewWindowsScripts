@@ -89,7 +89,7 @@ software_items = [
     ("powershell-core", ["--force"]),
     ("powertoys", ["--force"]),
     ("qemu-guest-agent", ["--force"]),
-    ("speccy", ["--force"]),
+    ("speccy", ["--force", "--ignore-checksums"]),
     ("sysinternals", ["-y"]),
     ("tightvnc", ["-y", "--installArguments", "\"SET_RUNCONTROLINTERFACE=1 VALUE_OF_RUNCONTROLINTERFACE=0 SET_DISCONNECTACTION=1 VALUE_OF_DISCONNECTACTION=1 SET_USEVNCAUTHENTICATION=1 VALUE_OF_USEVNCAUTHENTICATION=0 SET_ALLOWLOOPBACK=1 VALUE_OF_ALLOWLOOPBACK=1 SET_REMOVEWALLPAPER=1 VALUE_OF_REMOVEWALLPAPER=0 SET_LOCKDESKTOP=1\""]),
     ("translucenttb", ["--force", "--ignore-checksums"]),
