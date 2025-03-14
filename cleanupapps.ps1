@@ -46,3 +46,4 @@ if ($unwantedApps) {
 } else {
     Write-Output "No unwanted apps found. No removals needed."
 }
+# End of script
