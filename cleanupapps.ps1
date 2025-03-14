@@ -1,14 +1,48 @@
-# Set the apps to be excluded from the removal script
-# This is kind-of a whitelist. These are apps that should not be removed
-# because doing so causes problems with Windows
-$excludedApps = '.*photos.*|.*calculator.*|.*alarms.*|.*sticky.*|.*soundrecorder.*|.*zunevideo.*|.*microsoft.desktopappinstaller*|.*store.*|.*notepad.*|.*terminal.*|.*translucent*'
+# Check for administrative privileges
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Host "You need to run this script as an Administrator."
+    exit 1
+}
 
-# This section creates a list of apps to be removed by 
-# enumerating all apps and then removing the ones that are
-# not in the $excludedApps list
+# Set the apps to be excluded from the removal script.
+# This acts as a whitelist to prevent removing essential apps.
+$excludedApps = @(
+    '.*photos.*',
+    '.*calculator.*',
+    '.*alarms.*',
+    '.*sticky.*',
+    '.*soundrecorder.*',
+    '.*zunevideo.*',
+    '.*microsoft.desktopappinstaller*',
+    '.*store.*',
+    '.*notepad.*',
+    '.*terminal.*',
+    '.*translucent*',
+    '.*Microsoft.VCLibs.*',
+    '.*Microsoft.NET.Native.Framework.*',
+    '.*Microsoft.UI.Xaml.*',
+    '.*Microsoft.WindowsCalculator.*',
+    '.*Microsoft.WindowsStore.*',
+    '.*Microsoft.HEIFImageExtension.*',
+    '.*Microsoft.AV1VideoExtension.*',
+    '.*Microsoft.Print3D.*',
+    '.*Microsoft.ScreenSketch.*'
+) -join '|' # Join the array elements with '|' to create a regex pattern for matching excluded apps
+
+# Get only removable Appx bundles and filter them
 $unwantedApps = Get-AppxPackage -PackageTypeFilter Bundle | Where-Object { $_.Name -notmatch $excludedApps }
 
-# Remove the unwanted apps
+# Remove unwanted apps or notify if none found
 if ($unwantedApps) {
-    $unwantedApps | Remove-AppxPackage
+    $totalApps = $unwantedApps.Count
+    Write-Output "Removing $totalApps unwanted apps..."
+    
+    $unwantedApps | ForEach-Object {
+        Write-Output "Removing: $($_.Name)"
+        $_ | Remove-AppxPackage
+    }
+    
+    Write-Output "App removal process completed."
+} else {
+    Write-Output "No unwanted apps found. No removals needed."
 }
