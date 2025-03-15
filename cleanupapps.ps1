@@ -13,7 +13,7 @@ $excludedApps = @(
     '.*sticky.*',
     '.*soundrecorder.*',
     '.*zunevideo.*',
-    '.*microsoft.desktopappinstaller*',
+    '.*microsoft.desktopappinstaller.*',
     '.*store.*',
     '.*notepad.*',
     '.*terminal.*',
@@ -26,7 +26,21 @@ $excludedApps = @(
     '.*Microsoft.HEIFImageExtension.*',
     '.*Microsoft.AV1VideoExtension.*',
     '.*Microsoft.Print3D.*',
-    '.*Microsoft.ScreenSketch.*'
+    '.*Microsoft.ScreenSketch.*',
+    '.*Microsoft.WindowsFeedbackHub.*',
+    '.*Microsoft.XboxGameOverlay.*',
+    '.*Microsoft.XboxGamingOverlay.*',
+    '.*Microsoft.XboxIdentityProvider.*',
+    '.*Microsoft.XboxSpeechToTextOverlay.*',
+    '.*Microsoft.YourPhone.*',
+    '.*Microsoft.Windows.Photos.*',
+    '.*Microsoft.HEVCVideoExtension.*',
+    '.*Microsoft.Paint.*',
+    '.*Microsoft.VP9VideoExtensions.*',
+    '.*Microsoft.WindowsSoundRecorder.*',
+    '.*Microsoft.RawImageExtension.*',
+    '.*Microsoft.WebpImageExtension.*',
+    '.*Clipchamp.Clipchamp.*'
 ) -join '|' # Join the array elements with '|' to create a regex pattern for matching excluded apps
 
 # Get only removable Appx bundles and filter them
