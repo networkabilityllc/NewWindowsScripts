@@ -48,6 +48,7 @@ software_mapping = {
     "vcredist-all": "Visual C++ Redistributable",
     "vlc": "VLC Media Player",
     "microsoft-windows-terminal": "Windows Terminal",
+    "WireGuard": "WireGuard",
     "zoom": "Zoom"
 }
 
@@ -96,6 +97,7 @@ software_items = [
     ("vcredist-all", ["--force"]),
     ("vlc", ["--force"]),
     ("microsoft-windows-terminal", ["--force"]),
+    ("WireGuard", ["--force"]),
     ("zoom", ["--force"])
 ]
 
