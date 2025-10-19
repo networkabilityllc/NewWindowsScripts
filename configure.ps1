@@ -317,7 +317,7 @@ Write-host "       This URL may change in the future                 "      -For
 Write-Host "       always check the latest release from              "      -ForegroundColor White -BackgroundColor Green
 Write-Host "       https://github.com/microsoft/winget-cli/releases  "      -ForegroundColor White -BackgroundColor Green
 
-$url = "https://github.com/microsoft/winget-cli/releases/download/v1.6.2701/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+$url = "https://github.com/microsoft/winget-cli/releases/download/v1.12.340/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 $destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
 # Create the destination directory if it doesn't exist
