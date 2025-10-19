@@ -268,7 +268,7 @@ public class NumLockControl {
     Write-BoxedText "Git context menu entries removed from the registry."
 
 #-------------------------------------------------------------
-# Install XAML 2.7 in case Windows 10/100 is pre-22H2
+# Install XAML 2.7 in case Windows 10 is pre-22H2
 #-------------------------------------------------------------
 Write-BoxedText "Installing XAML 2.7 and VCLIBS 14"    
 choco install microsoft-ui-xaml -y --force
@@ -281,73 +281,30 @@ $scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
 Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
 
 #-------------------------------------------------------------
-# Make sure that WinGet is installed and if not, install it
+# Install VCLibs and XAML frameworks required by modern MSIX apps
+# TranslucentTB, Terminal, and other packages depend on these.
 #-------------------------------------------------------------
-$packageName = "Microsoft.DesktopAppInstaller_8wekyb3d8bbwe"
+Write-BoxedText "Installing Microsoft Visual C++ Runtime and XAML Frameworks"
 
-# Check if the package is installed
-$package = Get-AppxPackage -Name $packageName -AllUsers
-
-if ($package -eq $null) {
-    # Package not found, install it
-    Add-AppxPackage -RegisterByFamilyName -MainPackage $packageName
-    
-    Write-BoxedText "Installing Winget Store Version."
-    
-} else {
-    # Package is already installed
-    
-    Write-BoxedText "Winget Store Version is already installed."
-    
-}
+# Ensure TLS 1.2 is used for all web requests
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 #-------------------------------------------------------------
-# Install the latest version of WinGet from GitHub
-# TranclucentTB requires Xaml 2.8 which is not available in the 
-# store version of WinGet. The github version of WinGet includes 
-# Xaml 2.8, so we need to download and install the latest WinGet
-# This may change with future releases of the Store, so this 
-# section may end up being eliminated. 
+# Install Microsoft.VCLibs.x64.14.00.Desktop
 #-------------------------------------------------------------
-
-Write-BoxedText "Installing the latest version of WinGet from GitHub."
-
-# Define the URL and destination path
-Write-host "       This URL may change in the future                 "      -ForegroundColor White -BackgroundColor Green
-Write-Host "       always check the latest release from              "      -ForegroundColor White -BackgroundColor Green
-Write-Host "       https://github.com/microsoft/winget-cli/releases  "      -ForegroundColor White -BackgroundColor Green
-
-$url = "https://github.com/microsoft/winget-cli/releases/download/v1.12.340/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-$destPath = "C:\Temp\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-
-# Create the destination directory if it doesn't exist
-if (-Not (Test-Path "C:\Temp")) {
-    New-Item -Path "C:\Temp" -ItemType Directory
-}
-
-# Check if the file already exists
-if (-Not (Test-Path $destPath)) {
-    # Download the file only if it doesn't exist
-    Invoke-WebRequest -Uri $url -OutFile $destPath
-} else {
-    Write-Host "File already exists, skipping download."
-}
-
-# Install the application silently
-Add-AppxPackage -Path $destPath
+Write-Host "Downloading and installing Microsoft.VCLibs.x64.14.00.Desktop..." -ForegroundColor Cyan
+Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+Add-AppxPackage "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx"
 
 #-------------------------------------------------------------
-# Install Microsoft.UI.Xaml.2.8 using WinGet from the latest repository
-# The primary reason for this is that the default store version only has
-# Xaml 2.7 and the latest version of TranslucentTB requires 2.8
+# Install Microsoft.UI.Xaml.2.8 (x64)
 #-------------------------------------------------------------
+Write-Host "Downloading and installing Microsoft.UI.Xaml.2.8.x64..." -ForegroundColor Cyan
+Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx" -OutFile "$env:TEMP\Microsoft.UI.Xaml.2.8.x64.appx"
+Add-AppxPackage "$env:TEMP\Microsoft.UI.Xaml.2.8.x64.appx"
 
-Write-Host "     Installing Microsoft.UI.Xaml.2.8 using WinGet.      " -ForegroundColor White -BackgroundColor Green
-Write-Host "         The latest version of TranslucentTB             " -ForegroundColor White -BackgroundColor Green 
-Write-Host "        will not install without this package.           " -ForegroundColor White -BackgroundColor Green
+Write-BoxedText "Framework installation complete."
 
-
-winget install --id Microsoft.UI.Xaml.2.8 --accept-source-agreements --accept-package-agreements
 
 #-------------------------------------------------------------
 # Uninstall Windows 11 Personal Teams
