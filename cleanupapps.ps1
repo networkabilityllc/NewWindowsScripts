@@ -7,41 +7,54 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 # Set the apps to be excluded from the removal script.
 # This acts as a whitelist to prevent removing essential apps.
 $excludedApps = @(
-    '.*photos.*',
-    '.*calculator.*',
-    '.*alarms.*',
-    '.*sticky.*',
-    '.*soundrecorder.*',
-    '.*zunevideo.*',
-    '.*microsoft.desktopappinstaller.*',
-    '.*store.*',
-    '.*notepad.*',
-    '.*terminal.*',
-    '.*translucent*',
+    # Core runtimes and frameworks
     '.*Microsoft.VCLibs.*',
     '.*Microsoft.NET.Native.Framework.*',
+    '.*Microsoft.NET.Native.Runtime.*',
     '.*Microsoft.UI.Xaml.*',
-    '.*Microsoft.WindowsCalculator.*',
+    '.*Microsoft.WindowsAppRuntime.*',
+    '.*Microsoft.WinAppRuntime.*',
+
+    # App installer and store dependencies
+    '.*Microsoft.DesktopAppInstaller.*',
+    '.*Microsoft.StorePurchaseApp.*',
+    '.*Microsoft.Services.Store.Engagement.*',
     '.*Microsoft.WindowsStore.*',
-    '.*Microsoft.HEIFImageExtension.*',
-    '.*Microsoft.AV1VideoExtension.*',
-    '.*Microsoft.Print3D.*',
+
+    # Core user apps
+    '.*Microsoft.WindowsCalculator.*',
+    '.*Microsoft.Windows.Photos.*',
+    '.*Microsoft.WindowsSoundRecorder.*',
+    '.*Microsoft.Paint.*',
+    '.*Microsoft.Notepad.*',
+    '.*Microsoft.WindowsCamera.*',
     '.*Microsoft.ScreenSketch.*',
-    '.*Microsoft.WindowsFeedbackHub.*',
+    '.*Microsoft.FeedbackHub.*',
+    '.*Microsoft.YourPhone.*',
+    '.*Microsoft.OutlookForWindows.*',
+    '.*Microsoft.DevHome.*',
+
+    # Video and image codecs
+    '.*Microsoft.HEIFImageExtension.*',
+    '.*Microsoft.HEVCVideoExtension.*',
+    '.*Microsoft.AV1VideoExtension.*',
+    '.*Microsoft.RawImageExtension.*',
+    '.*Microsoft.WebpImageExtension.*',
+    '.*Microsoft.VP9VideoExtensions.*',
+
+    # Xbox and gaming dependencies (needed by Store)
     '.*Microsoft.XboxGameOverlay.*',
     '.*Microsoft.XboxGamingOverlay.*',
     '.*Microsoft.XboxIdentityProvider.*',
     '.*Microsoft.XboxSpeechToTextOverlay.*',
-    '.*Microsoft.YourPhone.*',
-    '.*Microsoft.Windows.Photos.*',
-    '.*Microsoft.HEVCVideoExtension.*',
-    '.*Microsoft.Paint.*',
-    '.*Microsoft.VP9VideoExtensions.*',
-    '.*Microsoft.WindowsSoundRecorder.*',
-    '.*Microsoft.RawImageExtension.*',
-    '.*Microsoft.WebpImageExtension.*',
-    '.*Clipchamp.Clipchamp.*'
-) -join '|' # Join the array elements with '|' to create a regex pattern for matching excluded apps
+
+    # System utilities
+    '.*Microsoft.WindowsTerminal.*',
+    '.*Microsoft.WindowsFeedbackHub.*',
+    '.*Microsoft.ZuneVideo.*',
+    '.*Clipchamp.Clipchamp.*',
+    '.*Microsoft.Print3D.*'
+) -join '|'
 
 # Get only removable Appx bundles and filter them
 $unwantedApps = Get-AppxPackage -PackageTypeFilter Bundle | Where-Object { $_.Name -notmatch $excludedApps }
