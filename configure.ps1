@@ -1,41 +1,51 @@
 function Write-BoxedText {
     param (
         [string]$Text,
-        [char]$BorderChar = '-',
-        [int]$PaddingSize = 10
+        [int]$PaddingSize = 1,
+        [switch]$LeadingNewline
     )
-    
-    # Convert the BorderChar to a string
-    $BorderString = $BorderChar.ToString()
-    
-    # Calculate the total length of the boxed text
-    $totalLength = $Text.Length + ($PaddingSize * 2)
-    
-    # Ensure the total length is at least as long as the text
-    if ($totalLength -lt $Text.Length) {
-        $totalLength = $Text.Length
+
+    # Box characters
+    $h='─'; $v='│'; $tl='┌'; $tr='┐'; $bl='└'; $br='┘'
+
+    # Get console width safely
+    try { $consoleWidth = $Host.UI.RawUI.WindowSize.Width } catch { $consoleWidth = 80 }
+    $maxInnerWidth = $consoleWidth - 4 - ($PaddingSize * 2)
+    if ($maxInnerWidth -lt 10) { $maxInnerWidth = 10 }
+
+    # Word-aware wrapping
+    $words = $Text -split '\s+'
+    $TextLines = @()
+    $currentLine = ""
+    foreach ($word in $words) {
+        if (($currentLine.Length + $word.Length + 1) -le $maxInnerWidth) {
+            if ($currentLine.Length -eq 0) { $currentLine = $word } else { $currentLine += " $word" }
+        } else {
+            if ($currentLine.Length -gt 0) { $TextLines += $currentLine }
+            $currentLine = $word
+        }
     }
-    
-    # Calculate the padding on both sides to center the text
-    $padding = ($totalLength - $Text.Length) / 2
-    
-    # Create the top border
-    $border = $BorderString * $totalLength
-    
-    # Create breaks above and below the boxed text
-    Write-Host "`n"
-    
-    # Create the boxed text with padding and center the text
-    $boxedText = (' ' * $padding) + $Text + (' ' * ($totalLength - $padding - $Text.Length))
-    
-    # Output the top border, boxed text, and bottom border
-    Write-Host $border -ForegroundColor White -BackgroundColor Green
-    Write-Host $boxedText -ForegroundColor White -BackgroundColor Green
-    Write-Host $border -ForegroundColor White -BackgroundColor Green
-    
-    # Create a break below the boxed text
+    if ($currentLine.Length -gt 0) { $TextLines += $currentLine }
+
+    $maxLineLength = ($TextLines | Measure-Object -Property Length -Maximum).Maximum
+    if ($null -eq $maxLineLength) { $maxLineLength = 0 }
+    $innerWidth = $maxLineLength + ($PaddingSize * 2)
+    $top = $tl + ($h * $innerWidth) + $tr
+    $bottom = $bl + ($h * $innerWidth) + $br
+    # Render
+    if ($LeadingNewline) { Write-Host "`n" }
+    Write-Host $top
+    foreach ($line in $TextLines) {
+        $trimmed = $line.Trim()
+        $leftPad = [math]::Floor(($maxLineLength - $trimmed.Length) / 2)
+        $rightPad = $maxLineLength - $trimmed.Length - $leftPad
+        $padded = (' ' * $PaddingSize) + (' ' * $leftPad) + $trimmed + (' ' * $rightPad) + (' ' * $PaddingSize)
+        Write-Host "$v$padded$v"
+    }
+    Write-Host $bottom
     Write-Host "`n"
 }
+
 
 
 
