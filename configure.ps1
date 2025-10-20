@@ -294,7 +294,19 @@ Write-BoxedText "Installing Microsoft Visual C++ Runtime and XAML Frameworks"
 #-------------------------------------------------------------
 Write-Host "Downloading and installing Microsoft.VCLibs.x64.14.00.Desktop..." -ForegroundColor Cyan
 Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx"
-Add-AppxPackage "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx"
+
+try {
+    Add-AppxPackage "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx" -ErrorAction Stop
+}
+catch {
+    if ($_.Exception.HResult -eq -2147009290) {
+        # -2147009290 == 0x80073D06 (newer version already installed)
+        Write-Host "A newer version of Microsoft.VCLibs.x64.14.00.Desktop is already installed. Skipping..." -ForegroundColor Yellow
+    }
+    else {
+        throw
+    }
+}
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 (x64)
