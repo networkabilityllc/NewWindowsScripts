@@ -1,58 +1,39 @@
 function Write-BoxedText {
     param (
         [string]$Text,
-        [int]$PaddingSize = 1,
-        [switch]$LeadingNewline
+        [char]$BorderChar = '-',
+        [int]$PaddingSize = 10
     )
-
-    # Extended ASCII box characters (safe in PS 5.1 code page 437/850)
-    $h  = [char]9552  # ═
-    $v  = [char]9553  # ║
-    $tl = [char]9556  # ╔
-    $tr = [char]9559  # ╗
-    $bl = [char]9562  # ╚
-    $br = [char]9565  # ╝
-
-    # Get console width safely
-    try { $consoleWidth = $Host.UI.RawUI.WindowSize.Width } catch { $consoleWidth = 80 }
-    $maxInnerWidth = $consoleWidth - 4 - ($PaddingSize * 2)
-    if ($maxInnerWidth -lt 10) { $maxInnerWidth = 10 }
-
-    # Word-aware wrapping
-    $words = $Text -split '\s+'
-    $TextLines = @()
-    $currentLine = ""
-    foreach ($word in $words) {
-        if (($currentLine.Length + $word.Length + 1) -le $maxInnerWidth) {
-            if ($currentLine.Length -eq 0) { $currentLine = $word } else { $currentLine += " $word" }
-        } else {
-            if ($currentLine.Length -gt 0) { $TextLines += $currentLine }
-            $currentLine = $word
-        }
+    
+    # Convert the BorderChar to a string
+    $BorderString = $BorderChar.ToString()
+    
+    # Calculate the total length of the boxed text
+    $totalLength = $Text.Length + ($PaddingSize * 2)
+    
+    # Ensure the total length is at least as long as the text
+    if ($totalLength -lt $Text.Length) {
+        $totalLength = $Text.Length
     }
-    if ($currentLine.Length -gt 0) { $TextLines += $currentLine }
-
-    # Determine box width
-    $maxLineLength = ($TextLines | Measure-Object -Property Length -Maximum).Maximum
-    if ($null -eq $maxLineLength) { $maxLineLength = 0 }
-    $innerWidth = $maxLineLength + ($PaddingSize * 2)
-
-    # Build borders
-    $top    = $tl + ($h * [int]$innerWidth) + $tr
-    $bottom = $bl + ($h * [int]$innerWidth) + $br
-
-
-    # Render
-    if ($LeadingNewline) { Write-Host "`n" }
-    Write-Host $top
-    foreach ($line in $TextLines) {
-        $trimmed = $line.Trim()
-        $leftPad  = [math]::Floor(($maxLineLength - $trimmed.Length) / 2)
-        $rightPad = $maxLineLength - $trimmed.Length - $leftPad
-        $padded = (' ' * $PaddingSize) + (' ' * $leftPad) + $trimmed + (' ' * $rightPad) + (' ' * $PaddingSize)
-        Write-Host "$v$padded$v"
-    }
-    Write-Host $bottom
+    
+    # Calculate the padding on both sides to center the text
+    $padding = ($totalLength - $Text.Length) / 2
+    
+    # Create the top border
+    $border = $BorderString * $totalLength
+    
+    # Create breaks above and below the boxed text
+    Write-Host "`n"
+    
+    # Create the boxed text with padding and center the text
+    $boxedText = (' ' * $padding) + $Text + (' ' * ($totalLength - $padding - $Text.Length))
+    
+    # Output the top border, boxed text, and bottom border
+    Write-Host $border -ForegroundColor White -BackgroundColor Green
+    Write-Host $boxedText -ForegroundColor White -BackgroundColor Green
+    Write-Host $border -ForegroundColor White -BackgroundColor Green
+    
+    # Create a break below the boxed text
     Write-Host "`n"
 }
 
