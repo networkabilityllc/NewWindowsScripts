@@ -5,8 +5,13 @@ function Write-BoxedText {
         [switch]$LeadingNewline
     )
 
-    # Box characters
-    $h='─'; $v='│'; $tl='┌'; $tr='┐'; $bl='└'; $br='┘'
+    # Extended ASCII box characters (safe in PS 5.1 code page 437/850)
+    $h  = [char]9552  # ═
+    $v  = [char]9553  # ║
+    $tl = [char]9556  # ╔
+    $tr = [char]9559  # ╗
+    $bl = [char]9562  # ╚
+    $br = [char]9565  # ╝
 
     # Get console width safely
     try { $consoleWidth = $Host.UI.RawUI.WindowSize.Width } catch { $consoleWidth = 80 }
@@ -27,17 +32,21 @@ function Write-BoxedText {
     }
     if ($currentLine.Length -gt 0) { $TextLines += $currentLine }
 
+    # Determine box width
     $maxLineLength = ($TextLines | Measure-Object -Property Length -Maximum).Maximum
     if ($null -eq $maxLineLength) { $maxLineLength = 0 }
     $innerWidth = $maxLineLength + ($PaddingSize * 2)
-    $top = $tl + ($h * $innerWidth) + $tr
+
+    # Build borders
+    $top    = $tl + ($h * $innerWidth) + $tr
     $bottom = $bl + ($h * $innerWidth) + $br
+
     # Render
     if ($LeadingNewline) { Write-Host "`n" }
     Write-Host $top
     foreach ($line in $TextLines) {
         $trimmed = $line.Trim()
-        $leftPad = [math]::Floor(($maxLineLength - $trimmed.Length) / 2)
+        $leftPad  = [math]::Floor(($maxLineLength - $trimmed.Length) / 2)
         $rightPad = $maxLineLength - $trimmed.Length - $leftPad
         $padded = (' ' * $PaddingSize) + (' ' * $leftPad) + $trimmed + (' ' * $rightPad) + (' ' * $PaddingSize)
         Write-Host "$v$padded$v"
@@ -45,6 +54,7 @@ function Write-BoxedText {
     Write-Host $bottom
     Write-Host "`n"
 }
+
 
 
 
