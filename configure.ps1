@@ -299,14 +299,17 @@ try {
     Add-AppxPackage "$env:TEMP\Microsoft.VCLibs.x64.14.00.Desktop.appx" -ErrorAction Stop
 }
 catch {
-    if ($_.Exception.HResult -eq -2147009290) {
-        # -2147009290 == 0x80073D06 (newer version already installed)
-        Write-Host "A newer version of Microsoft.VCLibs.x64.14.00.Desktop is already installed. Skipping..." -ForegroundColor Yellow
-    }
-    else {
-        throw
+    $hresult = $_.Exception.HResult
+    switch ($hresult) {
+        -2147009290 {  # 0x80073D06 – newer version already installed
+            Write-Host "A newer version of Microsoft.VCLibs.x64.14.00.Desktop is already installed. Skipping..." -ForegroundColor Yellow
+        }
+        default {
+            Write-Host "Non-critical Add-AppxPackage error ($([System.String]::Format('0x{0:X8}', $hresult))) encountered. Continuing..." -ForegroundColor DarkYellow
+        }
     }
 }
+
 
 #-------------------------------------------------------------
 # Install Microsoft.UI.Xaml.2.8 (x64)
