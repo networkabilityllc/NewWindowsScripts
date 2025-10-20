@@ -38,8 +38,9 @@ function Write-BoxedText {
     $innerWidth = $maxLineLength + ($PaddingSize * 2)
 
     # Build borders
-    $top    = $tl + ($h * $innerWidth) + $tr
-    $bottom = $bl + ($h * $innerWidth) + $br
+    $top    = $tl + ($h * [int]$innerWidth) + $tr
+    $bottom = $bl + ($h * [int]$innerWidth) + $br
+
 
     # Render
     if ($LeadingNewline) { Write-Host "`n" }
