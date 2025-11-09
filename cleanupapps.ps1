@@ -20,6 +20,7 @@ $excludedApps = @(
     '.*Microsoft.StorePurchaseApp.*',
     '.*Microsoft.Services.Store.Engagement.*',
     '.*Microsoft.WindowsStore.*',
+    '.*Microsoft.Winget.Source.*',                # Keep Winget integration
 
     # Core user apps
     '.*Microsoft.WindowsCalculator.*',
@@ -48,16 +49,66 @@ $excludedApps = @(
     '.*Microsoft.XboxIdentityProvider.*',
     '.*Microsoft.XboxSpeechToTextOverlay.*',
 
+    # Modern Windows 11 Apps (renamed after 23H2)
+    '.*Microsoft.WindowsNotepad.*',
+    '.*Microsoft.WindowsFeedbackHub.*',
+    '.*Microsoft.Windows.DevHome.*',
+    '.*Microsoft.ZuneMusic.*',
+    '.*Microsoft.SecHealthUI.*',
+    '.*Microsoft.Windows.ShellExperienceHost.*',
+    '.*Microsoft.Windows.StartMenuExperienceHost.*',
+    '.*MicrosoftWindows.Client.Core.*',
+    '.*MicrosoftWindows.Client.CBS.*',
+    '.*MicrosoftWindows.Client.WebExperience.*',
+    '.*MicrosoftWindows.Client.FileExp.*',
+    '.*MicrosoftWindows.Client.Photon.*',
+    '.*MicrosoftCorporationII.QuickAssist.*',
+    '.*Microsoft.Win32WebViewHost.*',
+    '.*Microsoft.AccountsControl.*',
+    '.*Microsoft.LockApp.*',
+    '.*Microsoft.CloudExperienceHost.*',
+    '.*Microsoft.Windows.PeopleExperienceHost.*',
+    '.*Microsoft.Windows.ContentDeliveryManager.*',
+    '.*Microsoft.Windows.Apprep.ChxApp.*',
+
+    # Core system and OOBE components
+    '.*Microsoft.AAD.BrokerPlugin.*',
+    '.*Microsoft.AsyncTextService.*',
+    '.*Microsoft.BioEnrollment.*',
+    '.*Microsoft.CredDialogHost.*',
+    '.*Microsoft.ECApp.*',
+    '.*Microsoft.Windows.AssignedAccessLockApp.*',
+    '.*Microsoft.Windows.CapturePicker.*',
+    '.*Microsoft.Windows.CloudExperienceHost.*',
+    '.*Microsoft.Windows.NarratorQuickStart.*',
+    '.*Microsoft.Windows.OOBENetworkCaptivePortal.*',
+    '.*Microsoft.Windows.OOBENetworkConnectionFlow.*',
+    '.*Microsoft.Windows.ParentalControls.*',
+    '.*Microsoft.Windows.PinningConfirmationDialog.*',
+    '.*Microsoft.Windows.SecureAssessmentBrowser.*',
+    '.*Microsoft.Windows.XGpuEjectDialog.*',
+    '.*MicrosoftWindows.Client.OOBE.*',
+    '.*MicrosoftWindows.UndockedDevKit.*',
+    '.*windows.immersivecontrolpanel.*',          # Modern Settings
+    '.*MicrosoftWindows.CrossDevice.*',
+
+    # Printing system (preserve Microsoft Print to PDF)
+    '.*Windows.PrintDialog.*',
+    '.*Microsoft.Windows.PrintQueueActionCenter.*',
+    '.*Microsoft.Print3D.*',
+
     # System utilities
     '.*Microsoft.WindowsTerminal.*',
     '.*Microsoft.WindowsFeedbackHub.*',
     '.*Microsoft.ZuneVideo.*',
     '.*Clipchamp.Clipchamp.*',
-    '.*Microsoft.Print3D.*'
+
+    # Browser
+    '.*Microsoft.MicrosoftEdge.Stable.*'          # Keep Edge browser
 ) -join '|'
 
-# Get only removable Appx bundles and filter them
-$unwantedApps = Get-AppxPackage -PackageTypeFilter Bundle | Where-Object { $_.Name -notmatch $excludedApps }
+# Get all installed Appx packages for all users and filter out whitelisted ones
+$unwantedApps = Get-AppxPackage -AllUsers | Where-Object { $_.Name -notmatch $excludedApps -and $_.IsFramework -eq $false }
 
 # Remove unwanted apps or notify if none found
 if ($unwantedApps) {
@@ -66,11 +117,12 @@ if ($unwantedApps) {
     
     $unwantedApps | ForEach-Object {
         Write-Output "Removing: $($_.Name)"
-        $_ | Remove-AppxPackage
+        $_ | Remove-AppxPackage -ErrorAction SilentlyContinue
     }
     
     Write-Output "App removal process completed."
 } else {
     Write-Output "No unwanted apps found. No removals needed."
 }
+
 # End of script
