@@ -431,33 +431,37 @@ C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 # error message.
 #-------------------------------------------------------------
 
-Write-BoxedText "Installing .NET 3.5 (Netfx3) using PowerShell."
-$featureName = "NetFx3"
-$sourcePath = "d:\sources\sxs"
+# Netfx3 is rarely needed now, so this section is commented out.
+# Uncomment if you need .NET 3.5 for legacy applications.
+# Or use the installer in Windows Features.
+
+# Write-BoxedText "Installing .NET 3.5 (Netfx3) using PowerShell."
+#$featureName = "NetFx3"
+# $sourcePath = "d:\sources\sxs"
 
 # Check if the feature is enabled
-$feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
-
-if ($feature -eq $null -or $feature.State -ne "Enabled") {
-    try {
-        # Try enabling the feature from local source
-        $enableFeature = Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess -ErrorAction Stop
-        Write-BoxedText "Feature '$featureName' enabled."
-    }
-    catch {
-        # Handle the error when local media is not found
-        
-        Write-BoxedText "Local Media not available: Checking for Online Source."
-        
-        # Try enabling the feature from online source
-        Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All
-    }
-} else {
-    # Feature is already enabled
-    
-    Write-BoxedText "Feature '$featureName' is already enabled."
-    
-}
+# $feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
+#
+#if ($feature -eq $null -or $feature.State -ne "Enabled") {
+#    try {
+#        # Try enabling the feature from local source
+#        $enableFeature = Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess -ErrorAction Stop
+#        Write-BoxedText "Feature '$featureName' enabled."
+#    }
+#    catch {
+#        # Handle the error when local media is not found
+#        
+#        Write-BoxedText "Local Media not available: Checking for Online Source."
+#        
+#        # Try enabling the feature from online source
+#        Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All
+#    }
+#} else {
+#    # Feature is already enabled
+#    
+#    Write-BoxedText "Feature '$featureName' is already enabled."
+#    
+#}
 
 
 #-------------------------------------------------------------
