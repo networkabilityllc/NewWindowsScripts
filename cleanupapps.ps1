@@ -104,7 +104,11 @@ $excludedApps = @(
     '.*Clipchamp.Clipchamp.*',
 
     # Browser
-    '.*Microsoft.MicrosoftEdge.Stable.*'          # Keep Edge browser
+    '.*Microsoft.MicrosoftEdge.Stable.*',         # Keep Edge browser
+    # Critical GUID-based system apps
+    '.*1527c705-839a-4832-9118-54d4bd6a0c89.*',
+    '.*c5e2524a-ea46-4f67-841f-6a9465d9d515.*',
+    '.*E2A4F912-2574-4A75-9BB0-0D023378592B.*',
 ) -join '|'
 
 # Get all installed Appx packages for all users and filter out whitelisted ones
