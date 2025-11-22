@@ -315,10 +315,31 @@ catch {
 # Install Microsoft.UI.Xaml.2.8 (x64)
 #-------------------------------------------------------------
 Write-Host "Downloading and installing Microsoft.UI.Xaml.2.8.x64..." -ForegroundColor Cyan
-Invoke-WebRequest -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx" -OutFile "$env:TEMP\Microsoft.UI.Xaml.2.8.x64.appx"
-Add-AppxPackage "$env:TEMP\Microsoft.UI.Xaml.2.8.x64.appx"
+$pkgPath = "$env:TEMP\Microsoft.UI.Xaml.2.8.x64.appx"
+
+Invoke-WebRequest `
+    -Uri "https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx" `
+    -OutFile $pkgPath
+
+try {
+    Add-AppxPackage -Path $pkgPath -ErrorAction Stop
+}
+catch {
+    $hresult = $_.Exception.HResult
+
+    switch ($hresult) {
+        -2147009290 {  # 0x80073D06 – newer version already installed
+            Write-Host "A newer version of Microsoft.UI.Xaml is already installed. Skipping..." -ForegroundColor Yellow
+        }
+        default {
+            $hex = [System.String]::Format("0x{0:X8}", $hresult)
+            Write-Host "Newer version already installed ($hex). Continuing..." -ForegroundColor DarkYellow
+        }
+    }
+}
 
 Write-BoxedText "Framework installation complete."
+
 
 
 #-------------------------------------------------------------
