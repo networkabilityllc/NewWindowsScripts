@@ -276,9 +276,9 @@ choco install microsoft-vclibs-140-00 -y --force
 #-------------------------------------------------------------
 # Start App Cleanup Script to remove Junk Windows Apps
 #-------------------------------------------------------------
-Write-BoxedText "Starting App Cleanup Script and removing Junk Windows Apps"
-$scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
-Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
+# Write-BoxedText "Starting App Cleanup Script and removing Junk Windows Apps"
+# $scriptPath = "C:\prep\NewWindowsScripts\cleanupapps.ps1"
+# Invoke-Expression -Command "powershell.exe -ExecutionPolicy Bypass -File `"$scriptPath`""
 
 #-------------------------------------------------------------
 # Install VCLibs and XAML frameworks required by modern MSIX apps
