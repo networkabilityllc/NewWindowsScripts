@@ -253,7 +253,7 @@ if ($wingetInstalled) {
                 # Remove any old copy of the internal source so this is idempotent.
                 & $chocoPath source remove -n=$internalChocoSourceName 2>$null
 
-                & $chocoPath source add -n=$internalChocoSourceName -s=$internalChocoSourceUrl
+                & $chocoPath source add --name="'$internalChocoSourceName'" --source="'$internalChocoSourceUrl'"
                 & $chocoPath source disable -n=chocolatey
             } else {
                 Write-Host "ProGet is not reachable over WireGuard. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
