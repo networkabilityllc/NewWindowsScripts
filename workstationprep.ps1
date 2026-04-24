@@ -183,33 +183,91 @@ Write-Host "    Checking for Choco and BoxStarter     " -ForegroundColor Black -
 Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
 
 # ------------------------------------------------------------
-# Set the path to the chocolatey executable as an environment variable
+# Chocolatey / ProGet / WireGuard settings for this branch
 # ------------------------------------------------------------
-# Path to default install of Chocolatey executable
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+$internalChocoSourceName = "internal"
+$internalChocoSourceUrl = "http://10.121.116.1:8624/nuget/choco"
+$wireGuardConfigPath = "C:\prep\wg\tech.conf"
+$wireGuardExePath = "C:\Program Files\WireGuard\wireguard.exe"
+$proGetHost = "10.121.116.1"
+$proGetPort = 8624
+
 # ------------------------------------------------------------
 # Install Chocolatey if not already installed
 # ------------------------------------------------------------
 $chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
 
 if (-not $chocoInstalled) {
-    # Install Chocolatey
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
     iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	# ------------------------------------------------------------
-	# Note: this path declaration has to be here because the previous iex command invokes a powershell
-	# session that does not have the previous declaration. Without it, the commands will fail
-	# ------------------------------------------------------------
-	$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
-    # Enable global confirmation for Chocolatey
-    & $chocoPath feature enable -n allowGlobalConfirmation
 }
 
 # ------------------------------------------------------------
-# Path to Chocolatey executable declared again because the 
-# previous iex sometimes flushes the declaration
+# Path to Chocolatey executable declared again because the
+# previous iex sometimes invokes a PowerShell session that does
+# not retain prior declarations.
 # ------------------------------------------------------------
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+
+# Enable global confirmation for Chocolatey
+& $chocoPath feature enable -n allowGlobalConfirmation
+
+# ------------------------------------------------------------
+# Configure WireGuard and point Chocolatey to the ProGet proxy
+# when the WireGuard tunnel and ProGet feed are reachable.
+#
+# Expected tech workflow:
+# 1. Copy tech.conf to C:\prep\wg\tech.conf before running this script.
+# 2. Run this branch of workstationprep.ps1.
+# 3. Script installs WireGuard with winget, imports the tunnel,
+#    verifies ProGet is reachable, then switches Chocolatey sources.
+#
+# If WireGuard, the config file, or ProGet is unavailable, the script
+# leaves the normal Chocolatey community source enabled so installs
+# do not get stranded.
+# ------------------------------------------------------------
+$wingetInstalled = (Get-Command winget -ErrorAction SilentlyContinue) -ne $null
+
+if ($wingetInstalled) {
+    Write-Host "Winget detected. Installing WireGuard..." -ForegroundColor Cyan
+
+    winget install --id WireGuard.WireGuard -e --silent --accept-package-agreements --accept-source-agreements
+
+    Start-Sleep -Seconds 5
+
+    if (Test-Path $wireGuardConfigPath) {
+        Write-Host "WireGuard config found at $wireGuardConfigPath" -ForegroundColor Cyan
+
+        if (Test-Path $wireGuardExePath) {
+            Write-Host "Importing and starting WireGuard tunnel..." -ForegroundColor Cyan
+            & $wireGuardExePath /installtunnelservice `"$wireGuardConfigPath`"
+
+            Start-Sleep -Seconds 8
+
+            $proGetReachable = Test-NetConnection -ComputerName $proGetHost -Port $proGetPort -InformationLevel Quiet
+
+            if ($proGetReachable) {
+                Write-Host "ProGet is reachable. Switching Chocolatey to internal ProGet source..." -ForegroundColor Cyan
+
+                # Remove any old copy of the internal source so this is idempotent.
+                & $chocoPath source remove -n=$internalChocoSourceName 2>$null
+
+                & $chocoPath source add -n=$internalChocoSourceName -s=$internalChocoSourceUrl
+                & $chocoPath source disable -n=chocolatey
+            } else {
+                Write-Host "ProGet is not reachable over WireGuard. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "WireGuard executable not found after install. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "WireGuard config not found at $wireGuardConfigPath. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "Winget not found. Skipping WireGuard and ProGet setup. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+}
+
 # Install Boxstarter using Chocolatey
 & $chocoPath install boxstarter --force
 
@@ -316,9 +374,10 @@ $gitPath = "C:\Program Files\Git\bin\git.exe"
 # ------------------------------------------------------------
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
-    # Clone the GitHub repository
+    # Clone the GitHub repository branch that contains ProGet/WireGuard changes
     $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
-    Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
+    $gitBranch = "proget-proxy-wireguard"
+    Start-Process -FilePath $gitPath -ArgumentList "clone", "--branch", $gitBranch, "--single-branch", $gitRepoUrl, $repoPath -Wait
 } else {
 	# ------------------------------------------------------------
 	# If already cloned, do a git pull to refresh it in case we 
@@ -327,6 +386,8 @@ if (-not (Test-Path -Path $repoPath)) {
     # Update the repository
 	
     Set-Location -Path $repoPath
+    & $gitPath fetch origin proget-proxy-wireguard
+    & $gitPath switch proget-proxy-wireguard
     & $gitPath pull
 }
 
