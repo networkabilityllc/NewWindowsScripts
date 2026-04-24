@@ -244,8 +244,26 @@ if ($wingetInstalled) {
             & $wireGuardExePath /installtunnelservice `"$wireGuardConfigPath`"
 
             Start-Sleep -Seconds 8
+            $proGetReachable = $false
+$tcpClient = New-Object System.Net.Sockets.TcpClient
 
-            $proGetReachable = Test-NetConnection -ComputerName $proGetHost -Port $proGetPort -InformationLevel Quiet
+try {
+    $connectTask = $tcpClient.BeginConnect($proGetHost, $proGetPort, $null, $null)
+
+    if ($connectTask.AsyncWaitHandle.WaitOne(3000, $false)) {
+        try {
+            $tcpClient.EndConnect($connectTask)
+            $proGetReachable = $true
+        }
+        catch {
+            $proGetReachable = $false
+            Write-Warning "Failed to connect to ProGet at ${proGetHost}:$proGetPort. $($_.Exception.Message)"
+        }
+    }
+}
+finally {
+    $tcpClient.Close()
+}
 
             if ($proGetReachable) {
                 Write-Host "ProGet is reachable. Switching Chocolatey to internal ProGet source..." -ForegroundColor Cyan
