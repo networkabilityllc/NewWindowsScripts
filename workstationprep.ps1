@@ -232,6 +232,12 @@ if (-not $chocoInstalled) {
     }
     if (-not (Test-Path $chocoPath)) {
         Write-Host "ERROR: Chocolatey install failed. Cannot continue." -ForegroundColor Red
+        Write-Host "ERROR: Chocolatey install failed. Cannot continue." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "ACTION REQUIRED:" -ForegroundColor Yellow
+        Write-Host "If this is Windows 10 without winget:" -ForegroundColor Yellow
+        Write-Host "1. Run install-winget.bat from the tech USB" -ForegroundColor Yellow
+        Write-Host "2. Rerun this script" -ForegroundColor Yellow
         exit 1
     }
 }
