@@ -196,13 +196,21 @@ $proGetPort = 8624
 # ------------------------------------------------------------
 # Install Chocolatey if not already installed
 # ------------------------------------------------------------
-$chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+$chocoInstalled = Test-Path $chocoPath
 
 if (-not $chocoInstalled) {
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-}
+    Write-Host "Chocolatey not found. Installing Chocolatey using winget..." -ForegroundColor Cyan
 
+    winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements
+
+    Start-Sleep -Seconds 5
+}
+else {
+    Write-Host "========================================" -ForegroundColor DarkGreen
+    Write-Host "      Chocolatey already installed      " -ForegroundColor Green
+    Write-Host "========================================" -ForegroundColor DarkGreen
+}
 # ------------------------------------------------------------
 # Path to Chocolatey executable declared again because the
 # previous iex sometimes invokes a PowerShell session that does
