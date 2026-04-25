@@ -196,20 +196,47 @@ $proGetPort = 8624
 # ------------------------------------------------------------
 # Install Chocolatey if not already installed
 # ------------------------------------------------------------
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
-$chocoInstalled = Test-Path $chocoPath
 
+$chocoInstalled = Test-Path $chocoPath
 if (-not $chocoInstalled) {
     Write-Host "Chocolatey not found. Installing Chocolatey using winget..." -ForegroundColor Cyan
 
-    winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements
+    $wingetCommand = Get-Command winget -ErrorAction SilentlyContinue
+    $wingetInstallExitCode = $null
+
+    if ($wingetCommand) {
+        winget source reset --force
+        winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements
+        $wingetInstallExitCode = $LASTEXITCODE
+    }
 
     Start-Sleep -Seconds 5
+
+    if (-not (Test-Path $chocoPath)) {
+        Write-Host "ERROR: Chocolatey install failed." -ForegroundColor Red
+        if (-not $wingetCommand) {
+            Write-Host "Reason: 'winget' is not available on this system." -ForegroundColor Yellow
+        }
+        elseif ($null -ne $wingetInstallExitCode) {
+            Write-Host "Reason: winget install exited with code $wingetInstallExitCode." -ForegroundColor Yellow
+        }
+        Write-Host "Troubleshooting steps:" -ForegroundColor Yellow
+        Write-Host " - Verify that winget is installed and available in PATH." -ForegroundColor Yellow
+        Write-Host " - Check internet/network connectivity and package source availability." -ForegroundColor Yellow
+        Write-Host " - Retry 'winget source reset --force' and then rerun this script." -ForegroundColor Yellow
+        Write-Host " - If winget is unavailable or continues to fail, install Chocolatey manually from https://chocolatey.org/install and rerun this script." -ForegroundColor Yellow
+    }
+        while ((-not (Test-Path $chocoPath)) -and ($chocoWaitElapsedSeconds -lt $chocoWaitTimeoutSeconds)) {
+        Start-Sleep -Seconds $chocoWaitIntervalSeconds
+        $chocoWaitElapsedSeconds += $chocoWaitIntervalSeconds
+    }
+    if (-not (Test-Path $chocoPath)) {
+        Write-Host "ERROR: Chocolatey install failed. Cannot continue." -ForegroundColor Red
+        exit 1
+    }
 }
 else {
-    Write-Host "========================================" -ForegroundColor DarkGreen
-    Write-Host "      Chocolatey already installed      " -ForegroundColor Green
-    Write-Host "========================================" -ForegroundColor DarkGreen
+    Write-Host "Chocolatey already installed." -ForegroundColor Green
 }
 # ------------------------------------------------------------
 # Path to Chocolatey executable declared again because the
