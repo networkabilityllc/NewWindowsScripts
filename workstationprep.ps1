@@ -206,7 +206,7 @@ if (-not $chocoInstalled) {
 
     if ($wingetCommand) {
         winget source reset --force
-        winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements
+        winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements --source winget
         $wingetInstallExitCode = $LASTEXITCODE
     }
 
@@ -273,7 +273,7 @@ $wingetInstalled = (Get-Command winget -ErrorAction SilentlyContinue) -ne $null
 if ($wingetInstalled) {
     Write-Host "Winget detected. Installing WireGuard..." -ForegroundColor Cyan
 
-    winget install --id WireGuard.WireGuard -e --silent --accept-package-agreements --accept-source-agreements
+    winget install --id WireGuard.WireGuard -e --silent --accept-package-agreements --accept-source-agreements --source winget
 
     Start-Sleep -Seconds 5
 
@@ -312,14 +312,25 @@ finally {
                 # Remove any old copy of the internal source so this is idempotent.
                 & $chocoPath source remove -n=$internalChocoSourceName 2>$null
 
-                & $chocoPath source add --name="'$internalChocoSourceName'" --source="'$internalChocoSourceUrl'"
+                & $chocoPath source add --name="$internalChocoSourceName" --source="$internalChocoSourceUrl"
                 & $chocoPath source disable -n=chocolatey
             } else {
                 Write-Host "ProGet is not reachable over WireGuard. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
             }
-        } else {
-            Write-Host "WireGuard executable not found after install. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
-        }
+       } else {
+    Write-Host "WireGuard executable not found after install." -ForegroundColor Yellow
+
+    do {
+        $fallbackChoice = Read-Host "Fallback to public Chocolatey repo? (Y/N)"
+    } while ($fallbackChoice -notin @('Y','y','N','n'))
+
+    if ($fallbackChoice -in @('N','n')) {
+        Write-Host "Aborting per user request." -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "Continuing with public Chocolatey source..." -ForegroundColor Cyan
+}
     } else {
         Write-Host "WireGuard config not found at $wireGuardConfigPath. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
     }
