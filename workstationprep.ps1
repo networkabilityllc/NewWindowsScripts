@@ -315,8 +315,20 @@ finally {
                 & $chocoPath source add --name="$internalChocoSourceName" --source="$internalChocoSourceUrl"
                 & $chocoPath source disable -n=chocolatey
             } else {
-                Write-Host "ProGet is not reachable over WireGuard. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
-            }
+    Write-Host "ProGet is not reachable over WireGuard." -ForegroundColor Yellow
+    Write-Host "Chocolatey will use the PUBLIC community repo if you continue." -ForegroundColor Yellow
+
+    do {
+        $fallbackChoice = Read-Host "Fallback to public Chocolatey repo? (Y/N)"
+    } while ($fallbackChoice -notin @('Y','y','N','n'))
+
+    if ($fallbackChoice -in @('N','n')) {
+        Write-Host "Aborting per user request." -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "Continuing with public Chocolatey source..." -ForegroundColor Cyan
+}
        } else {
     Write-Host "WireGuard executable not found after install." -ForegroundColor Yellow
 
