@@ -183,33 +183,150 @@ Write-Host "    Checking for Choco and BoxStarter     " -ForegroundColor Black -
 Write-Host "------------------------------------------" -ForegroundColor Black -BackgroundColor White
 
 # ------------------------------------------------------------
-# Set the path to the chocolatey executable as an environment variable
+# Chocolatey / ProGet / WireGuard settings for this branch
 # ------------------------------------------------------------
-# Path to default install of Chocolatey executable
-$chocoPath = "C:\ProgramData\chocolatey\choco.exe"  
+$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+$internalChocoSourceName = "internal"
+$internalChocoSourceUrl = "http://10.121.116.1:8624/nuget/choco"
+$wireGuardConfigPath = "C:\prep\wg\tech.conf"
+$wireGuardExePath = "C:\Program Files\WireGuard\wireguard.exe"
+$proGetHost = "10.121.116.1"
+$proGetPort = 8624
+
 # ------------------------------------------------------------
 # Install Chocolatey if not already installed
 # ------------------------------------------------------------
-$chocoInstalled = (Get-Command choco -ErrorAction SilentlyContinue) -ne $null
 
+$chocoInstalled = Test-Path $chocoPath
 if (-not $chocoInstalled) {
-    # Install Chocolatey
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-	# ------------------------------------------------------------
-	# Note: this path declaration has to be here because the previous iex command invokes a powershell
-	# session that does not have the previous declaration. Without it, the commands will fail
-	# ------------------------------------------------------------
-	$chocoPath = "C:\ProgramData\chocolatey\choco.exe"
-    # Enable global confirmation for Chocolatey
-    & $chocoPath feature enable -n allowGlobalConfirmation
-}
+    Write-Host "Chocolatey not found. Installing Chocolatey using winget..." -ForegroundColor Cyan
 
+    $wingetCommand = Get-Command winget -ErrorAction SilentlyContinue
+    $wingetInstallExitCode = $null
+
+    if ($wingetCommand) {
+        winget source reset --force
+        winget install --id Chocolatey.Chocolatey -e --silent --accept-package-agreements --accept-source-agreements
+        $wingetInstallExitCode = $LASTEXITCODE
+    }
+
+    Start-Sleep -Seconds 5
+
+    if (-not (Test-Path $chocoPath)) {
+        Write-Host "ERROR: Chocolatey install failed." -ForegroundColor Red
+        if (-not $wingetCommand) {
+            Write-Host "Reason: 'winget' is not available on this system." -ForegroundColor Yellow
+        }
+        elseif ($null -ne $wingetInstallExitCode) {
+            Write-Host "Reason: winget install exited with code $wingetInstallExitCode." -ForegroundColor Yellow
+        }
+        Write-Host "Troubleshooting steps:" -ForegroundColor Yellow
+        Write-Host " - Verify that winget is installed and available in PATH." -ForegroundColor Yellow
+        Write-Host " - Check internet/network connectivity and package source availability." -ForegroundColor Yellow
+        Write-Host " - Retry 'winget source reset --force' and then rerun this script." -ForegroundColor Yellow
+        Write-Host " - If winget is unavailable or continues to fail, install Chocolatey manually from https://chocolatey.org/install and rerun this script." -ForegroundColor Yellow
+    }
+        while ((-not (Test-Path $chocoPath)) -and ($chocoWaitElapsedSeconds -lt $chocoWaitTimeoutSeconds)) {
+        Start-Sleep -Seconds $chocoWaitIntervalSeconds
+        $chocoWaitElapsedSeconds += $chocoWaitIntervalSeconds
+    }
+    if (-not (Test-Path $chocoPath)) {
+        Write-Host "ERROR: Chocolatey install failed. Cannot continue." -ForegroundColor Red
+        Write-Host "ERROR: Chocolatey install failed. Cannot continue." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "ACTION REQUIRED:" -ForegroundColor Yellow
+        Write-Host "If this is Windows 10 without winget:" -ForegroundColor Yellow
+        Write-Host "1. Run install-winget.bat from the tech USB" -ForegroundColor Yellow
+        Write-Host "2. Rerun this script" -ForegroundColor Yellow
+        exit 1
+    }
+}
+else {
+    Write-Host "Chocolatey already installed." -ForegroundColor Green
+}
 # ------------------------------------------------------------
-# Path to Chocolatey executable declared again because the 
-# previous iex sometimes flushes the declaration
+# Path to Chocolatey executable declared again because the
+# previous iex sometimes invokes a PowerShell session that does
+# not retain prior declarations.
 # ------------------------------------------------------------
 $chocoPath = "C:\ProgramData\chocolatey\choco.exe"
+
+# Enable global confirmation for Chocolatey
+& $chocoPath feature enable -n allowGlobalConfirmation
+
+# ------------------------------------------------------------
+# Configure WireGuard and point Chocolatey to the ProGet proxy
+# when the WireGuard tunnel and ProGet feed are reachable.
+#
+# Expected tech workflow:
+# 1. Copy tech.conf to C:\prep\wg\tech.conf before running this script.
+# 2. Run this branch of workstationprep.ps1.
+# 3. Script installs WireGuard with winget, imports the tunnel,
+#    verifies ProGet is reachable, then switches Chocolatey sources.
+#
+# If WireGuard, the config file, or ProGet is unavailable, the script
+# leaves the normal Chocolatey community source enabled so installs
+# do not get stranded.
+# ------------------------------------------------------------
+$wingetInstalled = (Get-Command winget -ErrorAction SilentlyContinue) -ne $null
+
+if ($wingetInstalled) {
+    Write-Host "Winget detected. Installing WireGuard..." -ForegroundColor Cyan
+
+    winget install --id WireGuard.WireGuard -e --silent --accept-package-agreements --accept-source-agreements
+
+    Start-Sleep -Seconds 5
+
+    if (Test-Path $wireGuardConfigPath) {
+        Write-Host "WireGuard config found at $wireGuardConfigPath" -ForegroundColor Cyan
+
+        if (Test-Path $wireGuardExePath) {
+            Write-Host "Importing and starting WireGuard tunnel..." -ForegroundColor Cyan
+            & $wireGuardExePath /installtunnelservice `"$wireGuardConfigPath`"
+
+            Start-Sleep -Seconds 8
+            $proGetReachable = $false
+$tcpClient = New-Object System.Net.Sockets.TcpClient
+
+try {
+    $connectTask = $tcpClient.BeginConnect($proGetHost, $proGetPort, $null, $null)
+
+    if ($connectTask.AsyncWaitHandle.WaitOne(3000, $false)) {
+        try {
+            $tcpClient.EndConnect($connectTask)
+            $proGetReachable = $true
+        }
+        catch {
+            $proGetReachable = $false
+            Write-Warning "Failed to connect to ProGet at ${proGetHost}:$proGetPort. $($_.Exception.Message)"
+        }
+    }
+}
+finally {
+    $tcpClient.Close()
+}
+
+            if ($proGetReachable) {
+                Write-Host "ProGet is reachable. Switching Chocolatey to internal ProGet source..." -ForegroundColor Cyan
+
+                # Remove any old copy of the internal source so this is idempotent.
+                & $chocoPath source remove -n=$internalChocoSourceName 2>$null
+
+                & $chocoPath source add --name="'$internalChocoSourceName'" --source="'$internalChocoSourceUrl'"
+                & $chocoPath source disable -n=chocolatey
+            } else {
+                Write-Host "ProGet is not reachable over WireGuard. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+            }
+        } else {
+            Write-Host "WireGuard executable not found after install. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "WireGuard config not found at $wireGuardConfigPath. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "Winget not found. Skipping WireGuard and ProGet setup. Leaving Chocolatey community source enabled." -ForegroundColor Yellow
+}
+
 # Install Boxstarter using Chocolatey
 & $chocoPath install boxstarter --force
 
@@ -316,9 +433,10 @@ $gitPath = "C:\Program Files\Git\bin\git.exe"
 # ------------------------------------------------------------
 $repoPath = "c:\prep\NewWindowsScripts"
 if (-not (Test-Path -Path $repoPath)) {
-    # Clone the GitHub repository
+    # Clone the GitHub repository branch that contains ProGet/WireGuard changes
     $gitRepoUrl = "https://github.com/networkabilityllc/NewWindowsScripts"
-    Start-Process -FilePath $gitPath -ArgumentList "clone", $gitRepoUrl, $repoPath
+    $gitBranch = "proget-proxy-wireguard"
+    Start-Process -FilePath $gitPath -ArgumentList "clone", "--branch", $gitBranch, "--single-branch", $gitRepoUrl, $repoPath -Wait
 } else {
 	# ------------------------------------------------------------
 	# If already cloned, do a git pull to refresh it in case we 
@@ -327,6 +445,8 @@ if (-not (Test-Path -Path $repoPath)) {
     # Update the repository
 	
     Set-Location -Path $repoPath
+    & $gitPath fetch origin proget-proxy-wireguard
+    & $gitPath switch proget-proxy-wireguard
     & $gitPath pull
 }
 
