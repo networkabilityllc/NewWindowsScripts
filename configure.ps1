@@ -127,7 +127,8 @@ Write-BoxedText "Disabling Open File Explorer to Quick Access."
 Write-BoxedText "Disabling Show Recent Files in Quick Access."
 Write-BoxedText "Disabling Show Frequent Folders in Quick Access." 
 Write-BoxedText "Disabling Expand to Open Folder."
-Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess -DisableExpandToOpenFolder
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -DisableOpenFileExplorerToQuickAccess -DisableShowRecentFilesInQuickAccess -DisableShowFrequentFoldersInQuickAccess 
+# -DisableExpandToOpenFolder
 Write-BoxedText "Setting Taskbar size Large."
 Set-BoxstarterTaskbarOptions -Size Large 
 Write-BoxedText "Setting Taskbar Dock Bottom."
@@ -157,10 +158,11 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\"
 
 Write-BoxedText "Restoring the classic right-click context menu."
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
-# Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
 
-Write-BoxedText "Setting Mouse Hover Time for Taskbar to a very long time to prevent hover text" 
+# Set Mouse Hover Time for Taskbar to a very long time to prevent hover text
+Write-BoxedText "Setting Mouse Hover Time for Taskbar to a very long time to delay hover text" 
 Set-ItemProperty -Path "HKCU:\Control Panel\Mouse" -Name "MouseHoverTime" -Value 10000
+
 # Set the registry value to show hidden files and folders for the current user
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "Hidden" -Value 1
 
