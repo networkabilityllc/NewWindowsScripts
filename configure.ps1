@@ -345,37 +345,6 @@ Write-BoxedText "Framework installation complete."
 
 
 #-------------------------------------------------------------
-# Uninstall Windows 11 Personal Teams
-#-------------------------------------------------------------
-
-Write-BoxedText "Uninstalling Windows 11 Personal Teams."
-
-Get-AppxPackage -Name MicrosoftTeams -AllUsers | Remove-AppxPackage -AllUsers -ErrorAction SilentlyContinue
-
-Write-BoxedText "Uninstalling Teams machine-wide installer."
-
-#-------------------------------------------------------------
-# Credit for code snippet to r/powershell on Reddit
-# https://www.reddit.com/r/PowerShell/comments/yqt1o0/making_a_script_to_uninstall_teams_for_all_users/
-#-------------------------------------------------------------
-
-$AppName = "Teams Machine-Wide Installer"
-$Process = "Teams*"
-ForEach ( $Architecture in "SOFTWARE", "SOFTWARE\Wow6432Node" ) { $UninstallKeys = "HKLM:$Architecture\Microsoft\Windows\CurrentVersion\Uninstall" 
-if (Test-path $UninstallKeys) { Write-Output "Checking for $AppName installation in $UninstallKeys" $GUID = Get-ItemProperty -Path "$UninstallKeys*" | Where-Object -FilterScript { $_.DisplayName -like $AppName } | Select-Object PSChildName -ExpandProperty PSChildName
-    If ( $GUID ) {
-        Write-Output "Stopping $AppName Processes"
-        Get-Process $Process | Stop-Process -Force
-        $GUID | ForEach-Object {
-            Write-Output "Uninstalling: $(( Get-ItemProperty "$UninstallKeys\$_" ).DisplayName) " 
-            Start-Process -Wait -FilePath "MsiExec.exe" -ArgumentList "/X$_ /qn /norestart"
-        }
-    }
-}
-}
-
-
-#-------------------------------------------------------------
 # Check for and Disable Hibernation
 #-------------------------------------------------------------
 
@@ -424,47 +393,6 @@ Write-BoxedText "Starting Chocolatey App Installer."
 
 C:\Python310\python.exe c:\prep\NewWindowsScripts\install_apps.py
 
-#-------------------------------------------------------------
-# Install .Net 3.5 (Netfx3) using PowerShell
-#-------------------------------------------------------------
-#-------------------------------------------------------------
-# Check for the presence of .NET 3.5 and install it if 
-# it's not already installed. Suppress Local Media Missing
-# error message.
-#-------------------------------------------------------------
-
-# Netfx3 is rarely needed now, so this section is commented out.
-# Uncomment if you need .NET 3.5 for legacy applications.
-# Or use the installer in Windows Features.
-
-# Write-BoxedText "Installing .NET 3.5 (Netfx3) using PowerShell."
-#$featureName = "NetFx3"
-# $sourcePath = "d:\sources\sxs"
-
-# Check if the feature is enabled
-# $feature = Get-WindowsOptionalFeature -Online | Where-Object { $_.FeatureName -eq $featureName }
-#
-#if ($feature -eq $null -or $feature.State -ne "Enabled") {
-#    try {
-#        # Try enabling the feature from local source
-#        $enableFeature = Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All -Source $sourcePath -LimitAccess -ErrorAction Stop
-#        Write-BoxedText "Feature '$featureName' enabled."
-#    }
-#    catch {
-#        # Handle the error when local media is not found
-#        
-#        Write-BoxedText "Local Media not available: Checking for Online Source."
-#        
-#        # Try enabling the feature from online source
-#        Enable-WindowsOptionalFeature -FeatureName $featureName -Online -All
-#    }
-#} else {
-#    # Feature is already enabled
-#    
-#    Write-BoxedText "Feature '$featureName' is already enabled."
-#    
-#}
-
 
 #-------------------------------------------------------------
 # Add Boxstart Icon to the Default and the current User's Desktops
@@ -511,12 +439,12 @@ $ShortcutCurrentUser.Save()
 # that was created during the Boxstarter installation
 #-------------------------------------------------------------
 
-Write-BoxedText "Removing Boxstarter Shell shortcut from Public Desktop."
+# Write-BoxedText "Removing Boxstarter Shell shortcut from Public Desktop."
 
 
-if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
+# if (Test-Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Boxstarter Shell.lnk" }
 
-Write-BoxedText "Boxstarter Shell shortcut removed from Public Desktop."
+# Write-BoxedText "Boxstarter Shell shortcut removed from Public Desktop."
 
 
 #-------------------------------------------------------------
