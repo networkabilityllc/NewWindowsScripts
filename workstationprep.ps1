@@ -100,10 +100,10 @@ function Prompt-DownloadSplashtopSOS {
     version of SplashtopSOS to the Default Desktop 
     for new users.
 
-    Note: This will only download the installer
-    for new users. It will not install SplashtopSOS
+    Note: This will only download the runtime
+    for new users. It will not download SplashtopSOS
     for the current user. There is another function later
-    on that will install SplashtopSOS for the current user.
+    on that will download SplashtopSOS for the current user.
 "@
 
     $choice = $null
@@ -444,21 +444,21 @@ $ShortcutCurrentUserChocoApps.Save()
 # Copy a pristine start.bin to the default user profile
 #-------------------------------------------------------------
 # Define source and destination paths
-$sourceFile = "C:\prep\NewWindowsScripts\start2.bin"
-$destinationDir = "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
+# $sourceFile = "C:\prep\NewWindowsScripts\start2.bin"
+# $destinationDir = "C:\Users\Default\AppData\Local\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
 
 # Check if the source file exists
-if (Test-Path $sourceFile) {
-    # Check if the destination directory exists, if not create it
-    if (-Not (Test-Path $destinationDir)) {
-        New-Item -Path $destinationDir -ItemType Directory
-    }
-
-    # Copy the file
-    Copy-Item -Path $sourceFile -Destination $destinationDir -Force
-} else {
-    Write-Host "Source file does not exist."
-}
+# if (Test-Path $sourceFile) {
+#     # Check if the destination directory exists, if not create it
+#     if (-Not (Test-Path $destinationDir)) {
+#         New-Item -Path $destinationDir -ItemType Directory
+#    }
+#
+#    # Copy the file
+#    Copy-Item -Path $sourceFile -Destination $destinationDir -Force
+#} else {
+#    Write-Host "Source file does not exist."
+#}
 
 
 
