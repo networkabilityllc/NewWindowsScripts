@@ -11,7 +11,7 @@ if %errorLevel% neq 0 (
 :: Change directory to c:\prep\NewWindowsScripts
 cd /d "C:\prep\NewWindowsScripts"
 
-:: Execute git pull
+:: Execute fresh git pull
 git pull
 
 :: Run install_apps.py
