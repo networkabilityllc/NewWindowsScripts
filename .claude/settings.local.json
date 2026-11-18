@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(COLUMNS=90 LINES=22 python -c ' *)",
+      "Bash(powershell -NoProfile -Command \"[int[]][char[]]\\(Get-Clipboard\\) -join ','\")",
+      "PowerShell($env:PYTHONIOENCODING='utf-8'; python -m py_compile \"C:\\\\Users\\\\Tom Davidson\\\\OneDrive\\\\Desktop\\\\Coding WIP\\\\MobaCreds\\\\search_mobacreds.py\"; python \"C:\\\\Users\\\\TOMDAV~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Tom-Davidson-OneDrive-Documents-GitHub-NewWindowsScripts\\\\c20bba94-ec4b-450e-a111-9867f8dd1e49\\\\scratchpad\\\\smoke.py\" \"C:\\\\Users\\\\Tom Davidson\\\\OneDrive\\\\Desktop\\\\Coding WIP\\\\MobaCreds\")",
+      "PowerShell(py -0p 2>$null)",
+      "PowerShell(Get-Command python -All)",
+      "PowerShell(powershell.exe -NoProfile -Command \"Add-Type -AssemblyName System.Runtime.WindowsRuntime; `$null=[Windows.ApplicationModel.DataTransfer.Clipboard,Windows.ApplicationModel.DataTransfer,ContentType=WindowsRuntime]; 'IsHistoryEnabled: ' + [Windows.ApplicationModel.DataTransfer.Clipboard]::IsHistoryEnabled\\(\\); 'IsRoamingEnabled: ' + [Windows.ApplicationModel.DataTransfer.Clipboard]::IsRoamingEnabled\\(\\)\")",
+      "PowerShell(python -m py_compile \"C:\\\\Users\\\\Tom Davidson\\\\OneDrive\\\\Desktop\\\\Coding WIP\\\\MobaCreds\\\\search_mobacreds.py\")"
+    ]
+  }
+}
